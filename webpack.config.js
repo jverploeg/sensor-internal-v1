@@ -17,7 +17,7 @@ module.exports = {
     // output bundle won't be optimized for production, but suitable for development
     mode: 'development',
     // ENTRY POINT
-    entry: path.resolve(__dirname, 'src', index.jsx),
+    entry: path.resolve(__dirname, 'src', 'index.jsx'),
     // PLUGINS
     plugins: [
         new CleanWebpackPlugin(), // clears dist folder after each build

@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server-test": "node server/index.js"
+    "server-test": "node server/index.js",
+    "start-server": "nodemon server/index.js",
+    "build": "webpack",
+    "watch": "webpack -w"
   },
   "repository": {
     "type": "git",
@@ -33,8 +36,13 @@
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "css-loader": "^5.2.6",
+    "file-loader": "^6.2.0",
+    "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",
     "mini-css-extract-plugin": "^1.6.0",
+    "node-sass": "^6.0.0",
+    "nodemon": "^2.0.7",
+    "sass-loader": "^12.1.0",
     "style-loader": "^2.0.0",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.2",
