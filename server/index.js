@@ -15,6 +15,9 @@ app.use(express.static(path.resolve(__dirname, '..', 'src', 'dist')));
 app.use(express.json());
 app.use(cors());
 
+// import controller functions
+const route = require('./controller');
+
 // set port
 const port = 3000;
 
