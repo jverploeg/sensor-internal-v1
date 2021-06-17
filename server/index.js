@@ -11,12 +11,14 @@ const app = express();
 app.use(express.static(path.resolve(__dirname, '..', 'src', 'dist')));
 
 
-// setup any middleware
+// setup middleware for parsing
 app.use(express.json());
 app.use(cors());
 
 // import controller functions
 const route = require('./controller');
+// link to the database pool
+const db = require('../database/index');
 
 // set port
 const port = 3000;
@@ -27,6 +29,17 @@ app.listen(port, () => {
 });
 
 // *************ROUTES****************
+// GET for the tables
+// sample query to test our communication logic between server, db, cient
+// app.get('/sample', (req, res, next) => {
+//   db.query('SELECT * FROM sample', [req.params.id], (err, res) => {
+//     if (err) {
+//       return next(err)
+//     }
+//     res.send(res.rows[0])
+//   })
+// })
+app.get('/sample', route.getSample);
 
 //template (CRUD -> get, post, delete, update)
 // app.get('path', (request, response) => {
