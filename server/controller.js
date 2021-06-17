@@ -38,9 +38,21 @@ const changeSample = (req, res) => {
 
 
 
+
+const getHeaders = (req, res) => {
+    db.getHeaders()
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error)
+    })
+}
+
 module.exports = {
     getSample,
     addSample,
-    changeSample
+    changeSample,
+    getHeaders
 
 }

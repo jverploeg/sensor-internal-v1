@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 // STYLING DEPENDENCIES
-
+import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@material-ui/data-grid';
 
 // SUBCOMPONENTS/HELPERS/CUSTOM HOOKS
 import useToggle from './toggle';
@@ -14,7 +14,58 @@ const App = () => {
     //declare state
     const [sample, setSample] = useState([]);
     const [inputs, setInputs] = useState({});
+    const [columns, setColumns] = useState([]);
+    const [rows, setRows] = useState([]);
     const [options, setOptions] = useState(false);
+
+    //get data on initial page load and if inputs change?
+    useEffect(() => {
+        getData()
+    },[]);
+
+    //useEffect to get table columns on initial page load... change later to specific table_name
+    useEffect(() => {
+        getColumns();
+        getRows();
+    },[sample])
+    const getColumns = () => {
+        let temp = [];
+        let format = {
+            field: '',
+            headerName: '',
+            width: 150
+        }
+        //iterate through any object and get the key names
+        if(sample[0]){
+            let focus = sample[0];
+            let arrayKeys = Object.keys(focus);
+            arrayKeys.forEach(item => {
+                format.field = item; 
+                format.headerName = item;
+                temp.push(format);
+            })
+        }
+        
+        //set the column state now
+        setColumns(temp);
+    }
+
+    ////////////////////////////////////////
+    /*
+    TODO: figure out logic to map each database table row to the row format needed to use the Material DATAGRID.....
+    */
+    ///////////////////////////////////////
+    const getRows = () => {
+        //set up template
+        let format = {
+            id: null,
+        }
+    }
+    // const rows = [
+    //     { id: 1, col1: 'Hello', col2: 'World' },
+    //     { id: 2, col1: 'XGrid', col2: 'is Awesome' },
+    //     { id: 3, col1: 'Material-UI', col2: 'is Amazing' },
+    // ];
 
     // Call the toggle hook which returns, current value and the toggler function
     const [isTextChanged, setIsTextChanged] = useToggle();
@@ -41,6 +92,7 @@ const App = () => {
         }
     }
 
+
     //useEffect to render/rerender
     // useEffect(() => {
     //     getData();
@@ -52,7 +104,7 @@ const App = () => {
     //event handlers
     const showData = () => {
         setIsTextChanged();
-        getData();
+        // getData();
     }
     const handleSubmit = () => {
         console.log({inputs});

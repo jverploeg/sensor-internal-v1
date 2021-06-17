@@ -20,3 +20,15 @@ module.exports.addSample = async(values) => {
         console.log(err.stack)
     }
 }
+
+
+module.exports.getHeaders = async() => {
+    let qString = `SELECT * FROM sample where false;`;
+    try {
+        const response = await pool.query(qString);
+        return response;
+    }
+    catch(error) {
+        return error;
+    }
+}

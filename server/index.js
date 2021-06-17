@@ -52,6 +52,7 @@ app.get('/sample', route.getSample);
 app.post('/sample', route.addSample);
 app.put('/sample', route.changeSample);
 // app.delete('/sample', route.deleteSample);
+app.get('/headers', route.getHeaders);
 
 //template (CRUD -> get, post, delete, update)
 // app.get('path', (request, response) => {
