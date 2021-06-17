@@ -1,8 +1,13 @@
+// FUNCTIONAL DEPENDENCIES
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import EditableLabel from 'react-inline-editing';
-//import subcomponents below
+
+// STYLING DEPENDENCIES
+
+
+// SUBCOMPONENTS/HELPERS/CUSTOM HOOKS
 import useToggle from './toggle';
+import RowModelControlGrid from './dataGrid';
 
 
 const App = () => {
@@ -46,9 +51,6 @@ const App = () => {
 
     //event handlers
     const showData = () => {
-        //when button is pressed, execute this function
-        //call toggle
-        //{setIsTextChanged}>{isTextChanged ? 'Toggled' : 'Click to Toggle'}
         setIsTextChanged();
         getData();
     }
@@ -82,9 +84,6 @@ const App = () => {
                 <h1>SENSOR SOLUTIONS</h1>
             </div>
             <div className = "body">
-                {/* <button onClick = {(e) => showData(e)}>
-                    Show Sample Data
-                </button> */}
                 <button onClick={showData}>{isTextChanged ? 'Hide Data' : 'Show Data'}</button>
             </div>
             <div className = "table">
