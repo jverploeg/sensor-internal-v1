@@ -19,11 +19,23 @@ const getSample = (req, res) => {
         res.status(500).send(error)
     })
 }
-
+const addSample = (req, res) => {
+    const entry = req.body;
+    console.log({entry}); //{ entry: { count: '1', val: 'testing' } }
+    let values = [entry.count, entry.val]
+    db.addSample(values)
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error)
+    })
+}
 
 
 
 module.exports = {
     getSample,
+    addSample
 
 }

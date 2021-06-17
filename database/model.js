@@ -10,3 +10,13 @@ module.exports.getSample = async() => {
         return error;
     }
 }
+module.exports.addSample = async(values) => {
+    const text = 'INSERT INTO sample(count, val) VALUES($1, $2)'
+    // async/await
+    try {
+        const res = await pool.query(text, values)
+        console.log(res.rows[0])
+    } catch (err) {
+        console.log(err.stack)
+    }
+}

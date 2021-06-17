@@ -14,6 +14,14 @@ app.use(express.static(path.resolve(__dirname, '..', 'src', 'dist')));
 // setup middleware for parsing
 app.use(express.json());
 app.use(cors());
+//Configure cors so other computers can access 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 // import controller functions
 const route = require('./controller');
@@ -39,7 +47,11 @@ app.listen(port, () => {
 //     res.send(res.rows[0])
 //   })
 // })
+//READ, INSERT, UPDATE, DELETE
 app.get('/sample', route.getSample);
+app.post('/sample', route.addSample);
+// app.put('/sample', route.updateSample);
+// app.delete('/sample', route.deleteSample);
 
 //template (CRUD -> get, post, delete, update)
 // app.get('path', (request, response) => {
