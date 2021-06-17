@@ -50,7 +50,7 @@ app.listen(port, () => {
 //READ, INSERT, UPDATE, DELETE
 app.get('/sample', route.getSample);
 app.post('/sample', route.addSample);
-// app.put('/sample', route.updateSample);
+app.put('/sample', route.changeSample);
 // app.delete('/sample', route.deleteSample);
 
 //template (CRUD -> get, post, delete, update)

@@ -31,11 +31,16 @@ const addSample = (req, res) => {
         res.status(500).send(error)
     })
 }
+const changeSample = (req, res) => {
+    const entry = req.body;
+    console.log({entry});
+}
 
 
 
 module.exports = {
     getSample,
-    addSample
+    addSample,
+    changeSample
 
 }

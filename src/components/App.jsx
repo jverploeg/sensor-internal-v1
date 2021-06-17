@@ -1,18 +1,27 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import EditableLabel from 'react-inline-editing';
 //import subcomponents below
+import useToggle from './toggle';
+
 
 const App = () => {
     //declare state
     const [sample, setSample] = useState([]);
     const [inputs, setInputs] = useState({});
+    const [options, setOptions] = useState(false);
 
+    // Call the toggle hook which returns, current value and the toggler function
+    const [isTextChanged, setIsTextChanged] = useToggle();
+
+    // Universal input bar handler
     const onChangeHandler = useCallback(
         ({target:{name,value}}) => setInputs(state => ({ ...state, [name]:value }), [])
     );
 
     //header for cors requests
     //const header = {'Content-Type', undefined}
+    // set host to ip rather than localhost --> running into cors issues. come back and fix later
     const host = `http://192.168.1.118:3000`;
 
     //define Set Functions
@@ -28,15 +37,19 @@ const App = () => {
     }
 
     //useEffect to render/rerender
+    // useEffect(() => {
+    //     getData();
+    // },[inputs, options])
     
     //sample axios call on initial render
 
 
     //event handlers
-    const showData = (event) => {
+    const showData = () => {
         //when button is pressed, execute this function
-        //e.preventDefault();
-        console.log({event});
+        //call toggle
+        //{setIsTextChanged}>{isTextChanged ? 'Toggled' : 'Click to Toggle'}
+        setIsTextChanged();
         getData();
     }
     const handleSubmit = () => {
@@ -56,6 +69,11 @@ const App = () => {
         //clear input fields
         setInputs({})  
     }
+    const changeData = (event) => {
+        console.log({event});
+        // let target = getElementById(event);
+        // console.log({target})
+    }
 
     //DOM
     return(
@@ -64,15 +82,24 @@ const App = () => {
                 <h1>SENSOR SOLUTIONS</h1>
             </div>
             <div className = "body">
-                <button onClick = {(e) => showData(e)}>
+                {/* <button onClick = {(e) => showData(e)}>
                     Show Sample Data
-                </button>
+                </button> */}
+                <button onClick={showData}>{isTextChanged ? 'Hide Data' : 'Show Data'}</button>
             </div>
             <div className = "table">
                 <ul>
-                    {!!sample && sample.map((item, index) => (
-                        <li>
-                            {item.count} --`{'>'}` {item.val}
+                    {!!isTextChanged && sample.map((item, index) => (
+                        <li id="index">
+                            {item.count}  {item.val}
+                            {/* <button onClick={(id) => changeData(id)}>
+                                Change entry
+                            </button> */}
+                            {/* {!!options &&
+                            <input key="field1" name="field1" onChange={onChangeHandler} value={inputs.field1}/>
+                            <input key="field2" name="field2" onChange={onChangeHandler} value={inputs.field2}/>
+                            <button type="submit" onClick={handleSubmit}>ADD DATA</button>
+                            } */}
                         </li>
                     ))}
                 </ul>
@@ -85,7 +112,7 @@ const App = () => {
                 </form> */}
                 <input key="field1" name="field1" onChange={onChangeHandler} value={inputs.field1}/>
                 <input key="field2" name="field2" onChange={onChangeHandler} value={inputs.field2}/>
-                <button type="submit" onClick={handleSubmit}>ADD DATA</button>
+                <button key="text1" type="submit" onClick={handleSubmit}>ADD DATA</button>
             </div>
 
             <div className = "foot">
