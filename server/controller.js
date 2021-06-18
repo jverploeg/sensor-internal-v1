@@ -33,7 +33,19 @@ const addSample = (req, res) => {
 }
 const changeSample = (req, res) => {
     const entry = req.body;
-    console.log({entry});
+    console.log({entry});//{ id: 1, field: 'count', props: { value: '100' } } }
+    let id = entry.id;
+    let col = entry.field;
+    let val = entry.props.value;
+    console.log({id, col, val})
+    let values = [id, col, val];
+    db.changeSample(values)
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error)
+    })
 }
 
 

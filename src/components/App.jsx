@@ -20,7 +20,48 @@ const App = () => {
     // Call the toggle hook which returns, current value and the toggler function
     const [isTextChanged, setIsTextChanged] = useToggle();
 
-    //get data on initial page load and if inputs change?
+    const [editRowsModel, setEditRowsModel] = useState({});
+
+    const handleEditRowModelChange = useCallback((params) => {
+        console.log({params})
+      setEditRowsModel(params.model);
+      //setRows(params.model);
+      //console.log({editRowsModel})
+      console.log({params})
+      console.log({rows})
+    }, []);
+    const handleEditCellChangeCommitted = useCallback(
+        ({ id, field, props }) => {
+            console.log({id, field, props})
+            console.log({rows})
+            // let old = [rows[id - 1]];
+            // //old = old.value;
+            // let col = old[0];//[field];
+            // let key = col[field];
+            //console.log({old, col, field, key}, col[field])
+            axios.put(`${host}/sample`, {id, field, props})
+            .then(response => {
+              console.log(response);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        //   if (field === 'fullName') {
+        //     const data = props; // Fix eslint value is missing in prop-types for JS files
+        //     const [firstName, lastName] = data.value.toString().split(' ');
+        //     const updatedRows = rows.map((row) => {
+        //       if (row.id === id) {
+        //         return { ...row, firstName, lastName };
+        //       }
+        //       return row;
+        //     });
+        //     setRows(updatedRows);
+        //   }
+        // },
+        //[rows],
+        });
+
+    //get data on initial page load? and if inputs change?
     useEffect(() => {
         getData()
     },[]);
@@ -42,7 +83,8 @@ const App = () => {
                 let format = {
                     field: '',
                     headerName: '',
-                    width: 150
+                    width: 150,
+                    editable: true,
                 }
                 format.field = item; 
                 format.headerName = item;
@@ -73,9 +115,7 @@ const App = () => {
         let length = columns.length;
         //console.log('size', {length})
         // iterate 0-length and set up col key definitions....
-        let format = {
-            id: 0,
-        }
+        let format = {};
         let rowsTemp = [];
         // for(let i = 0; i < length; i++){
         //     let numToString = (i+1).toString();
@@ -88,7 +128,7 @@ const App = () => {
         for(let i = 0; i < sample.length; i++) {
             //format = sample[i]; NOOOOOOOO, this is a shallow copy!!!!!!!
             format = JSON.parse(JSON.stringify(sample[i]));
-            format.id = (i+1);
+            //format.id = (i+1);
             //console.log(sample[i], format)
             rowsTemp.push(format);
         }
@@ -102,7 +142,9 @@ const App = () => {
         // ];
         // setRows(rows1);
     }
-
+    const rowEdit = (event) => {
+        console.log(event)
+    }
 
 
 
@@ -144,8 +186,10 @@ const App = () => {
     }
     const handleSubmit = () => {
         console.log({inputs});
+        let num = parseInt(inputs.field1);
+        console.log({num})
         let temp = {
-            count: inputs.field1,
+            count: num,
             val: inputs.field2
         };
         axios.post(`${host}/sample`, temp)
@@ -174,22 +218,22 @@ const App = () => {
             <div className = "body">
                 <button onClick={showData}>{isTextChanged ? 'Hide Data' : 'Show Data'}</button>
             </div>
+            {/* <code>editRowsModel: {JSON.stringify(editRowsModel)}</code> */}
             <div className = "table">
-                <ul>
-                    {!!isTextChanged && sample.map((item, index) => (
-                        <li id="index">
-                            {item.count}  {item.val}
-                            {/* <button onClick={(id) => changeData(id)}>
-                                Change entry
-                            </button> */}
-                            {/* {!!options &&
-                            <input key="field1" name="field1" onChange={onChangeHandler} value={inputs.field1}/>
-                            <input key="field2" name="field2" onChange={onChangeHandler} value={inputs.field2}/>
-                            <button type="submit" onClick={handleSubmit}>ADD DATA</button>
-                            } */}
-                        </li>
-                    ))}
-                </ul>
+                {!!isTextChanged &&
+                    <div className = "foot" style={{ height: 400, width: '100%' }}>
+                        {!!rows &&
+                            <DataGrid
+                                columns={columns}
+                                rows={rows}
+                                onEditCellChangeCommitted={handleEditCellChangeCommitted}
+                                //onChange={(e) => rowEdit(e)}
+                                // editRowsModel={editRowsModel}
+                                // onEditRowModelChange={handleEditRowModelChange}
+                            />
+                        }
+                    </div>
+                }
             </div>
             <div className = "addData">
                 {/* <form onSubmit={handleSubmit}>
@@ -202,14 +246,7 @@ const App = () => {
                 <button key="text1" type="submit" onClick={handleSubmit}>ADD DATA</button>
             </div>
 
-            <div className = "foot" style={{ height: 400, width: '100%' }}>
-                {!!rows &&
-                    <DataGrid
-                        columns={columns}
-                        rows={rows}
-                    />
-                }
-            </div>
+
         </div>
     )
 };
