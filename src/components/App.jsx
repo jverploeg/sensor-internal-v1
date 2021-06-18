@@ -17,6 +17,8 @@ const App = () => {
     const [columns, setColumns] = useState([]);
     const [rows, setRows] = useState([]);
     const [options, setOptions] = useState(false);
+    // Call the toggle hook which returns, current value and the toggler function
+    const [isTextChanged, setIsTextChanged] = useToggle();
 
     //get data on initial page load and if inputs change?
     useEffect(() => {
@@ -27,23 +29,33 @@ const App = () => {
     useEffect(() => {
         getColumns();
         getRows();
-    },[sample])
+        console.log({columns, rows})
+    },[isTextChanged])
     const getColumns = () => {
         let temp = [];
-        let format = {
-            field: '',
-            headerName: '',
-            width: 150
-        }
         //iterate through any object and get the key names
         if(sample[0]){
             let focus = sample[0];
             let arrayKeys = Object.keys(focus);
-            arrayKeys.forEach(item => {
+            for(let i = 0; i < arrayKeys.length; i++) {
+                let item = arrayKeys[i];
+                let format = {
+                    field: '',
+                    headerName: '',
+                    width: 150
+                }
                 format.field = item; 
                 format.headerName = item;
+                // format.field = JSON.parse(JSON.stringify(arrayKeys[i]));
+                // format.headerName = JSON.parse(JSON.stringify(arrayKeys[i]));
                 temp.push(format);
-            })
+            }
+            // arrayKeys.forEach(item => {
+            //     //console.log()
+            //     format.field = item; 
+            //     format.headerName = item;
+            //     temp.push(format);
+            // })
         }
         
         //set the column state now
@@ -57,18 +69,42 @@ const App = () => {
     ///////////////////////////////////////
     const getRows = () => {
         //set up template
+        // need to get size of columns...
+        let length = columns.length;
+        //console.log('size', {length})
+        // iterate 0-length and set up col key definitions....
         let format = {
-            id: null,
+            id: 0,
         }
-    }
-    // const rows = [
-    //     { id: 1, col1: 'Hello', col2: 'World' },
-    //     { id: 2, col1: 'XGrid', col2: 'is Awesome' },
-    //     { id: 3, col1: 'Material-UI', col2: 'is Amazing' },
-    // ];
+        let rowsTemp = [];
+        // for(let i = 0; i < length; i++){
+        //     let numToString = (i+1).toString();
+        //     let temp = 'col' + numToString;
+        //     format[temp] = '';
+        // }
+        //console.log({format});
+        //now map the sample array to a rows state
+        //console.log(sample.length)
+        for(let i = 0; i < sample.length; i++) {
+            //format = sample[i]; NOOOOOOOO, this is a shallow copy!!!!!!!
+            format = JSON.parse(JSON.stringify(sample[i]));
+            format.id = (i+1);
+            //console.log(sample[i], format)
+            rowsTemp.push(format);
+        }
+        setRows(rowsTemp);
+        //console.log({rows})
 
-    // Call the toggle hook which returns, current value and the toggler function
-    const [isTextChanged, setIsTextChanged] = useToggle();
+        // const rows1 = [
+        //     { id: 1, count: 1, val: 'World' },
+        //     { id: 2, count: 2, val: 'is Awesome' },
+        //     { id: 3, count: 3, val: 'is Amazing' },
+        // ];
+        // setRows(rows1);
+    }
+
+
+
 
     // Universal input bar handler
     const onChangeHandler = useCallback(
@@ -104,7 +140,7 @@ const App = () => {
     //event handlers
     const showData = () => {
         setIsTextChanged();
-        // getData();
+        //getData();
     }
     const handleSubmit = () => {
         console.log({inputs});
@@ -166,8 +202,13 @@ const App = () => {
                 <button key="text1" type="submit" onClick={handleSubmit}>ADD DATA</button>
             </div>
 
-            <div className = "foot">
-
+            <div className = "foot" style={{ height: 400, width: '100%' }}>
+                {!!rows &&
+                    <DataGrid
+                        columns={columns}
+                        rows={rows}
+                    />
+                }
             </div>
         </div>
     )
