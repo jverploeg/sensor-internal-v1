@@ -1,7 +1,7 @@
 const pool = require('./index');
 
 module.exports.getSample = async() => {
-    let qString = `SELECT * FROM sample;`;
+    let qString = `SELECT * FROM sample ORDER BY id asc;`;
     try {
         const response = await pool.query(qString);
         return response;
@@ -31,11 +31,13 @@ module.exports.changeSample = async(values) => {
     let value = values[2];
     let id = values[0];
     console.log({col_name, value, id})
-    const text = `UPDATE sample set ${col_name}=${value} where id=${id}`
+    const text = `UPDATE sample set ${col_name} = '${value}' where id = ${id}`
+    console.log({text})
     // async/await
     try {
         const res = await pool.query(text)
-        console.log(res.rows[0])
+        //console.log(res.rows[0])
+        console.log({res})
     } catch (err) {
         console.log(err.stack)
     }

@@ -41,11 +41,15 @@ const App = () => {
             //console.log({old, col, field, key}, col[field])
             axios.put(`${host}/sample`, {id, field, props})
             .then(response => {
-              console.log(response);
+              console.log('axios in app response',response);
             })
             .catch(error => {
               console.log(error);
             });
+
+            //now call get to update or state here...
+            //OR JUST SET THE ROW CHANGED HERE?????
+            //getData();
         //   if (field === 'fullName') {
         //     const data = props; // Fix eslint value is missing in prop-types for JS files
         //     const [firstName, lastName] = data.value.toString().split(' ');
@@ -70,6 +74,7 @@ const App = () => {
     useEffect(() => {
         getColumns();
         getRows();
+        getData();
         console.log({columns, rows})
     },[isTextChanged])
     const getColumns = () => {
