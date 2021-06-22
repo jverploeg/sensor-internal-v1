@@ -7,7 +7,7 @@ import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@mat
 
 // SUBCOMPONENTS/HELPERS/CUSTOM HOOKS
 import useToggle from './toggle';
-import RowModelControlGrid from './dataGrid';
+import ControlGrid from './dataGrid';
 
 
 const App = () => {
@@ -186,6 +186,11 @@ const App = () => {
                 {!!isTextChanged &&
                     <div className = "foot" style={{ height: 400, width: '100%' }}>
                         {!!rows &&
+                            // <ControlGrid
+                            //     columns={columns}
+                            //     rows={rows}
+                            //     //onEditCellChangeCommitted={handleEditCellChangeCommitted}
+                            // />
                             <DataGrid
                                 columns={columns}
                                 rows={rows}

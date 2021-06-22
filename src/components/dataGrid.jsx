@@ -24,32 +24,31 @@ import { DataGrid, GridRowsProp, GridColDef } from '@material-ui/data-grid';
 //   );
 
   
-const RowModelControlGrid = (rows, columns) => {
-    const [editRowsModel, setEditRowsModel] = useState({});
+const ControlGrid = (rows, columns) => {
   
-    const handleEditCellChange = useCallback(
+    const handleEditCellChangeCommitted = useCallback(
       ({ id, field, props }) => {
-          const data = props; // Fix eslint value is missing in prop-types for JS files
-          const newState = {};
-          newState[id] = {
-            ...editRowsModel[id],
-          };
-          setEditRowsModel((state) => ({ ...state, ...newState }));
-        },
-      [editRowsModel],
-    );
+          // pass the col_name, row_id, and new_value to the router. will Update accordingly
+          axios.put(`${host}/sample`, {id, field, props})
+          .then(response => {
+            console.log('axios in app response',response);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      });
   
     return (
-      <div style={{ height: 400, width: '100%' }}>
-        <DataGrid
-          // className={classes.root}
-          rows={rows}
-          columns={columns}
-          editRowsModel={editRowsModel}
-          onEditCellChange={handleEditCellChange}
-        />
+      <div className = "foot" style={{ height: 400, width: '100%' }}>
+        {!!rows &&
+            <DataGrid
+                columns={columns}
+                rows={rows}
+                onEditCellChangeCommitted={handleEditCellChangeCommitted}
+            />
+        }
       </div>
     );
 }
 
-export default RowModelControlGrid;
+export default ControlGrid;
