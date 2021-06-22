@@ -1,34 +1,52 @@
 // FUNCTIONAL DEPENDENCIES
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 
 // STYLING DEPENDENCIES
 import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@material-ui/data-grid';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+//import Grid from '@material-ui/core/Grid';
+//import Button from '@material-ui/core/Button';
 
 // SUBCOMPONENTS/HELPERS/CUSTOM HOOKS
 import useToggle from './toggle';
-import ControlGrid from './dataGrid';
+import usePageSwitch from './pageSwitch';
+import useReferredState from './ref';
+//import ControlGrid from './dataGrid';
+
+//useref
+// export default function useReferredState(initialValue) {
+//     const [state, setState] = useState(initialValue);
+//     const reference = useRef(state);
+
+//     const setReferredState = value => {
+//         reference.current = value;
+//         setState(value);
+//     };
+
+//     return [reference, setReferredState];
+// }
 
 
 const App = () => {
     let viewports = ['Home', 'sample']; //array of view options. tables with all have similar setup, home is different
+    var currentPage = viewports[0];
     //DEFINE STATE//////////////////
-    const [page, setPage] = useState(viewports[0]); //initialize to homepage
+    const [page, setPage] = useReferredState(); //initialize to homepage
     const [sample, setSample] = useState([]); //data from database
     const [inputs, setInputs] = useState({}); // inputs from submission fields
     const [columns, setColumns] = useState([]); // column name for tables
     const [rows, setRows] = useState([]); // formatted rows from data so dataGrid can be filled correctly 
     // custom state/hooks
     const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
+    // const [page, setPage] = usePageSwitch(); //initialize to homepage
 
 
     //USEEFFECT AND PAGE RERENDERING?////////////
     //TODO: fix useeffect logic below, get rid of repetitive calls
     //get data on initial page load? and if inputs change?
     useEffect(() => {
-        getData()
+        getData();
+        //setPage('Home');
     },[]);
 
     //useEffect to get table columns on initial page load... change later to specific table_name
@@ -41,6 +59,10 @@ const App = () => {
         getColumns();
         getRows();
     },[sample])
+    // useEffect(() => {
+    //     setPage(currentPage);
+    //     console.log({page, currentPage})
+    // },[currentPage])
 
 
 
@@ -178,6 +200,49 @@ const App = () => {
         //getData({});  
     }
 
+    // const usePageSwitch = (old, input) => {
+    //     // Initialize the state
+    //     const [state, setState] = useState(old);
+        
+    //     // This function change the boolean value to it's opposite value
+    //     const toggle = useCallback(() => setState(input), []);
+        
+    //     return [state, toggle]
+    // }
+
+    const handlePageChange = (e) => {
+        console.log(e.target.attributes.value.value)
+        let focus = e.target.attributes.value.value;
+        console.log({focus})
+        // currentPage = focus;
+        //set the page
+        console.log({page, currentPage})
+        // setPage(focus => {
+        //     console.log({focus});
+        //     return focus;
+        // }) nooooooooooooooooooooooooo
+
+
+        // usePageSwitch(page, focus)
+        setPage(focus);
+        //setPage(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
+        console.log({page, currentPage})
+    }
+    // useEffect(() => {
+    //     function handlePageChange(event) {
+    //         console.log(e.target.attributes.value.value)
+    //         let focus = e.target.attributes.value.value;
+    //         console.log({focus})
+    //         // currentPage = focus;
+    //         //set the page
+    //         console.log({page, currentPage})
+    //         // usePageSwitch(page, focus)
+    //         //setPage(focus);
+    //         //setPage(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
+    //         console.log({page, currentPage})
+    //     }
+    // })
+
     //DOM
     return(
         <div className = "page">
@@ -187,8 +252,8 @@ const App = () => {
             
             <div className="navbar">
                 <div>
-                    <Button variant="contained">Home</Button>
-                    <Button variant="contained">Sample</Button>
+                    <button onClick={(e) => handlePageChange(e)} name='page1' value={viewports[0]} variant="contained">Home</button>
+                    <button onClick={handlePageChange} name='page2' value={viewports[1]} variant="contained">Sample</button>
                 </div>
             </div>
 
