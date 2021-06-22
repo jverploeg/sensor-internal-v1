@@ -4,6 +4,8 @@ import axios from 'axios';
 
 // STYLING DEPENDENCIES
 import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@material-ui/data-grid';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 // SUBCOMPONENTS/HELPERS/CUSTOM HOOKS
 import useToggle from './toggle';
@@ -11,7 +13,9 @@ import ControlGrid from './dataGrid';
 
 
 const App = () => {
+    let viewports = ['Home', 'sample']; //array of view options. tables with all have similar setup, home is different
     //DEFINE STATE//////////////////
+    const [page, setPage] = useState(viewports[0]); //initialize to homepage
     const [sample, setSample] = useState([]); //data from database
     const [inputs, setInputs] = useState({}); // inputs from submission fields
     const [columns, setColumns] = useState([]); // column name for tables
@@ -40,7 +44,7 @@ const App = () => {
 
 
 
-    
+
     //header for cors requests
     //const header = {'Content-Type', undefined}
     // set host to ip rather than localhost --> running into cors issues. come back and fix later
@@ -180,6 +184,14 @@ const App = () => {
             <div className = "top">
                 <h1>SENSOR SOLUTIONS</h1>
             </div>
+            
+            <div className="navbar">
+                <div>
+                    <Button variant="contained">Home</Button>
+                    <Button variant="contained">Sample</Button>
+                </div>
+            </div>
+
             <div className = "body">
                 <button onClick={showData}>{isTextChanged ? 'Hide Data' : 'Show Data'}</button>
             </div>
