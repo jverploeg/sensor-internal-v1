@@ -40,6 +40,7 @@ const App = () => {
 
 
 
+    
     //header for cors requests
     //const header = {'Content-Type', undefined}
     // set host to ip rather than localhost --> running into cors issues. come back and fix later
