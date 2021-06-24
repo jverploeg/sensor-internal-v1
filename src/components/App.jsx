@@ -13,19 +13,6 @@ import usePageSwitch from './pageSwitch';
 import useReferredState from './ref';
 //import ControlGrid from './dataGrid';
 
-//useref
-// export default function useReferredState(initialValue) {
-//     const [state, setState] = useState(initialValue);
-//     const reference = useRef(state);
-
-//     const setReferredState = value => {
-//         reference.current = value;
-//         setState(value);
-//     };
-
-//     return [reference, setReferredState];
-// }
-
 
 const App = () => {
     let viewports = ['Home', 'sample']; //array of view options. tables with all have similar setup, home is different
@@ -45,6 +32,7 @@ const App = () => {
     //TODO: fix useeffect logic below, get rid of repetitive calls
     //get data on initial page load? and if inputs change?
     //set pageView to Home on initial load
+    //TODO: when multiple table tabs added, want to call getDATA (and modify how route is chosen) with useEffect[pageChange]...
     useEffect(() => {
         getData();
         setPage('Home');
@@ -172,13 +160,15 @@ const App = () => {
         //set the page
         setPage(focus);
     }
-    useEffect(() => {
-        console.log({page})
-    },[page])
+
+    // USEEFFECT TO CHECK IF STATE HAS CHANGED PROPERLY
+    // useEffect(() => {
+    //     console.log({page})
+    // },[page])
 
 
 
-    
+
     //DOM
     return(
         <div className = "page">
@@ -194,35 +184,46 @@ const App = () => {
             </div>
 
             <div className = "body">
-                <button onClick={showData}>{isTextChanged ? 'Hide Data' : 'Show Data'}</button>
-            </div>
-            <div className = "table">
-                {!!isTextChanged &&
-                    <div className = "foot" style={{ height: 400, width: '100%' }}>
-                        {!!rows &&
-                            // <ControlGrid
-                            //     columns={columns}
-                            //     rows={rows}
-                            //     //onEditCellChangeCommitted={handleEditCellChangeCommitted}
-                            // />
-                            <DataGrid
-                                columns={columns}
-                                rows={rows}
-                                onEditCellChangeCommitted={handleEditCellChangeCommitted}
-                            />
-                        }
+                {(page === "Home") && 
+                    <div>
+                        <h1>HOME</h1>
+                    </div>    
+                }
+
+
+                {(page !== "Home") && 
+                    <div className="data">    
+                        <div className = "table">
+                            <button onClick={showData}>{isTextChanged ? 'Hide Data' : 'Show Data'}</button>
+                            {!!isTextChanged &&
+                                <div className = "foot" style={{ height: 400, width: '100%' }}>
+                                    {!!rows &&
+                                        // <ControlGrid
+                                        //     columns={columns}
+                                        //     rows={rows}
+                                        //     //onEditCellChangeCommitted={handleEditCellChangeCommitted}
+                                        // />
+                                        <DataGrid
+                                            columns={columns}
+                                            rows={rows}
+                                            onEditCellChangeCommitted={handleEditCellChangeCommitted}
+                                        />
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <div className = "addData">
+                            {/* <input key="field1" name="field1" onChange={onChangeHandler} value={inputs.field1 || ''}/>
+                            <input key="field2" name="field2" onChange={onChangeHandler} value={inputs.field2 || ''}/> */}
+                            <input name="field1" value={inputs.field1 || ''} onChange={handleChange} />
+                            <input name="field2" value={inputs.field2 || ''} onChange={handleChange} />
+                            <button key="text1" type="submit" onClick={handleSubmit}>ADD DATA</button>
+                        </div>
                     </div>
                 }
+                
             </div>
-            <div className = "addData">
-                {/* <input key="field1" name="field1" onChange={onChangeHandler} value={inputs.field1 || ''}/>
-                <input key="field2" name="field2" onChange={onChangeHandler} value={inputs.field2 || ''}/> */}
-                <input name="field1" value={inputs.field1 || ''} onChange={handleChange} />
-                <input name="field2" value={inputs.field2 || ''} onChange={handleChange} />
-                <button key="text1" type="submit" onClick={handleSubmit}>ADD DATA</button>
-            </div>
-
-
         </div>
     )
 };
