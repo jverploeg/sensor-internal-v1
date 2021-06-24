@@ -1,3 +1,11 @@
-node_modules
-database/config.js
+#dependencies
+/node_modules
+
+#database authentication
+/database/config.js
+
+#distribution
+/src/distribution
+
+#misc
 package-lock.json

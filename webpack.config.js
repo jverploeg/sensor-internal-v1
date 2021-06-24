@@ -70,6 +70,15 @@ module.exports = {
     extensions: ['.js', '.jsx'],
   },
 
+  // watch files and recompile whenever they change
+  //   delay to aggregate any other changes made during this time period into one rebuild
+  //   watching many files can result in a lot of CPU or memory usage -> exclude a huge folder like node_modules
+  watchOptions: {
+    aggregateTimeout: 300,
+    //poll: 1000,
+    ignored: /node_modules/
+  }
+
 //   performance: {
 //     maxAssetSize: 200000, // int (in bytes),
 //     maxEntrypointSize: 400000, // int (in bytes)

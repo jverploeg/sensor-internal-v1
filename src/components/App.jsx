@@ -29,24 +29,25 @@ import useReferredState from './ref';
 
 const App = () => {
     let viewports = ['Home', 'sample']; //array of view options. tables with all have similar setup, home is different
-    var currentPage = viewports[0];
+
     //DEFINE STATE//////////////////
-    const [page, setPage] = useReferredState(); //initialize to homepage
+    const [page, setPage] = useState({}); //initialize to homepage on initial render
     const [sample, setSample] = useState([]); //data from database
     const [inputs, setInputs] = useState({}); // inputs from submission fields
     const [columns, setColumns] = useState([]); // column name for tables
     const [rows, setRows] = useState([]); // formatted rows from data so dataGrid can be filled correctly 
     // custom state/hooks
     const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
-    // const [page, setPage] = usePageSwitch(); //initialize to homepage
+    
 
 
     //USEEFFECT AND PAGE RERENDERING?////////////
     //TODO: fix useeffect logic below, get rid of repetitive calls
     //get data on initial page load? and if inputs change?
+    //set pageView to Home on initial load
     useEffect(() => {
         getData();
-        //setPage('Home');
+        setPage('Home');
     },[]);
 
     //useEffect to get table columns on initial page load... change later to specific table_name
@@ -55,14 +56,11 @@ const App = () => {
         // getRows();
         getData();
     },[isTextChanged])
+    //get new row values whenever data is modified in database
     useEffect(() => {
         getColumns();
         getRows();
     },[sample])
-    // useEffect(() => {
-    //     setPage(currentPage);
-    //     console.log({page, currentPage})
-    // },[currentPage])
 
 
 
@@ -83,41 +81,9 @@ const App = () => {
             console.log(error)
         }
     }
-
-
-
-    const handleEditCellChangeCommitted = useCallback(
-        ({ id, field, props }) => {
-            // pass the col_name, row_id, and new_value to the router. will Update accordingly
-            axios.put(`${host}/sample`, {id, field, props})
-            .then(response => {
-              console.log('axios in app response',response);
-            })
-            .catch(error => {
-              console.log(error);
-            });
-
-            //now call get to update or state here...
-            //OR JUST SET THE ROW CHANGED HERE?????
-            //getData();
-        //   if (field === 'fullName') {
-        //     const data = props; // Fix eslint value is missing in prop-types for JS files
-        //     const [firstName, lastName] = data.value.toString().split(' ');
-        //     const updatedRows = rows.map((row) => {
-        //       if (row.id === id) {
-        //         return { ...row, firstName, lastName };
-        //       }
-        //       return row;
-        //     });
-        //     setRows(updatedRows);
-        //   }
-        // },
-        //[rows],
-        });
-
-
-
-
+    const showData = () => {
+        setIsTextChanged();
+    }
     const getColumns = () => {
         let temp = [];
         //iterate through any object and get the key names
@@ -140,7 +106,6 @@ const App = () => {
         //set the column state now
         setColumns(temp);
     }
-
     ////////////////////////////////////////
     /*
     TODO: figure out logic to map each database table row to the row format needed to use the Material DATAGRID.....
@@ -161,24 +126,27 @@ const App = () => {
     }
 
 
+
+    ////////EVENT HANDLERS////////////
     // Universal input bar handler
     // const onChangeHandler = useCallback(
     //     ({target:{name,value}}) => setInputs(state => ({ ...state, [name]:value }), [])
     // );
-    const handleChange = e => {
+    const handleChange = (e) => {
         setInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
     }    
-
-
-
-
-
-
-    //event handlers
-    const showData = () => {
-        setIsTextChanged();
-    }
-
+    //edit table data handler
+    const handleEditCellChangeCommitted = useCallback(
+        ({ id, field, props }) => {
+            // pass the col_name, row_id, and new_value to the router. will Update accordingly
+            axios.put(`${host}/sample`, {id, field, props})
+            .then(response => {
+              console.log('axios in app response',response);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        });
     //TODO: this is hard coded for now...Make dynamic for any table later on
     const handleSubmit = () => {
         let num = parseInt(inputs.field1);
@@ -197,52 +165,20 @@ const App = () => {
 
         //clear input fields
         setInputs({});
-        //getData({});  
     }
-
-    // const usePageSwitch = (old, input) => {
-    //     // Initialize the state
-    //     const [state, setState] = useState(old);
-        
-    //     // This function change the boolean value to it's opposite value
-    //     const toggle = useCallback(() => setState(input), []);
-        
-    //     return [state, toggle]
-    // }
-
     const handlePageChange = (e) => {
-        console.log(e.target.attributes.value.value)
+        //define the page we want to change to
         let focus = e.target.attributes.value.value;
-        console.log({focus})
-        // currentPage = focus;
         //set the page
-        console.log({page, currentPage})
-        // setPage(focus => {
-        //     console.log({focus});
-        //     return focus;
-        // }) nooooooooooooooooooooooooo
-
-
-        // usePageSwitch(page, focus)
         setPage(focus);
-        //setPage(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
-        console.log({page, currentPage})
     }
-    // useEffect(() => {
-    //     function handlePageChange(event) {
-    //         console.log(e.target.attributes.value.value)
-    //         let focus = e.target.attributes.value.value;
-    //         console.log({focus})
-    //         // currentPage = focus;
-    //         //set the page
-    //         console.log({page, currentPage})
-    //         // usePageSwitch(page, focus)
-    //         //setPage(focus);
-    //         //setPage(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
-    //         console.log({page, currentPage})
-    //     }
-    // })
+    useEffect(() => {
+        console.log({page})
+    },[page])
 
+
+
+    
     //DOM
     return(
         <div className = "page">
