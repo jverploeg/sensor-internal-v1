@@ -33,7 +33,7 @@ const addSample = (req, res) => {
 }
 const changeSample = (req, res) => {
     const entry = req.body;
-    let id = { entry };
+    let id = entry.id;
     let col = entry.field;
     let val = entry.props.value;
     console.log({id, col, val})
