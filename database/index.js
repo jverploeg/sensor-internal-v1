@@ -9,7 +9,8 @@ const { Pool, Client } = require('pg');
 // Pool allows you to do several in parallel (independent from each other) queries
 
 // import dependencies
-const login = require('./config');
+//const login = require('./config');
+const login = require('./config2');
 
 // create an instance of a pool
 const pool = new Pool({

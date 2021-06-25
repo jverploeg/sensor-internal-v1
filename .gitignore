@@ -3,6 +3,9 @@
 
 #database authentication
 /database/config.js
+/database/config2.js
+.env
+/scripts
 
 #distribution
 /src/distribution
