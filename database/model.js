@@ -1,7 +1,9 @@
 const pool = require('./index');
 
-module.exports.getSample = async() => {
-    let qString = `SELECT * FROM sample ORDER BY id asc;`;
+module.exports.getData = async(path) => {
+
+    let qString = `SELECT * FROM ${path} ORDER BY char_id asc;`;
+    console.log({qString});
     try {
         const response = await pool.query(qString);
         return response;

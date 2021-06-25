@@ -15,7 +15,7 @@ import useToggle from './toggle';
 
 
 const App = () => {
-    let viewports = ['Home', 'sample']; //array of view options. tables with all have similar setup, home is different
+    let viewports = ['Home', 'char']; //array of view options. tables with all have similar setup, home is different
 
     //DEFINE STATE//////////////////
     const [page, setPage] = useState({}); //initialize to homepage on initial render
@@ -49,6 +49,10 @@ const App = () => {
         getColumns();
         getRows();
     },[sample])
+        // USEEFFECT TO CHECK IF STATE HAS CHANGED PROPERLY
+    useEffect(() => {
+        console.log({rows, columns})
+    },[sample])
 
 
 
@@ -60,8 +64,10 @@ const App = () => {
 
     //define Set Functions
     const getData = async() => {
+        //determine route -> db table based on pageSelection
+        let route = page;
         try {
-            const response = await axios.get(`${host}/sample`);
+            const response = await axios.get(`${host}/${route}`);
             //console.log({response})
             setSample(response.data);
         }
@@ -74,11 +80,19 @@ const App = () => {
     }
     const getColumns = () => {
         let temp = [];
+        let table = page;
         //iterate through any object and get the key names
         if(sample[0]){
             let focus = sample[0];
             let arrayKeys = Object.keys(focus);
-            for(let i = 0; i < arrayKeys.length; i++) {
+            let format = {
+                field: 'id',
+                headerName: `${table}_id`,
+                width: 150,
+                editable: true,
+            }
+            temp.push(format);
+            for(let i = 1; i < arrayKeys.length; i++) {
                 let item = arrayKeys[i];
                 let format = {
                     field: '',
@@ -106,9 +120,27 @@ const App = () => {
         let rowsTemp = [];
         //now map the sample array to a rows state
         for(let i = 0; i < sample.length; i++) {
-            //format = sample[i]; NOOOOOOOO, this is a shallow copy!!!!!!!
-            format = JSON.parse(JSON.stringify(sample[i]));
+            //need to get the first key from data object
+            let temp = sample[i];
+            let keys = Object.keys(temp);
+            let oldKey = keys[0];
+            format.id = JSON.parse(JSON.stringify(temp[oldKey]));
+            let partial = JSON.parse(JSON.stringify(sample[i]));
+            delete partial[oldKey];
+            // spread operator to combine
+            format = {...format, ...partial};
             rowsTemp.push(format);
+            
+            //old attempt at formatting for id
+            // let keys = Object.keys(temp);
+            // let oldKey = keys[0];
+            // //format = sample[i]; NOOOOOOOO, this is a shallow copy!!!!!!!
+            // format = JSON.parse(JSON.stringify(sample[i]));
+            // //Replace oldKey with newKey so that the object follows formatting rules for dataGrid rows
+            // let newKey = 'id';
+            // delete Object.assign(format, {[newKey]: format[oldKey]  })[oldKey]
+            // rowsTemp.push(format);
+            //console.log({format})
         }
         setRows(rowsTemp);
     }
@@ -127,6 +159,9 @@ const App = () => {
     const handleEditCellChangeCommitted = useCallback(
         ({ id, field, props }) => {
             // pass the col_name, row_id, and new_value to the router. will Update accordingly
+            //determine route -> db table based on pageSelection
+            //let route = page;
+            //axios.put(`${host}/${route}`, {id, field, props})
             axios.put(`${host}/sample`, {id, field, props})
             .then(response => {
               console.log('axios in app response',response);
@@ -142,6 +177,9 @@ const App = () => {
             count: num,
             val: inputs.field2
         };
+        //determine route -> db table based on pageSelection
+        let route = page;
+        //axios.post(`${host}/${route}`, temp)
         axios.post(`${host}/sample`, temp)
           .then(response => {
             console.log(response);
@@ -179,7 +217,7 @@ const App = () => {
             <div className="navbar">
                 <div>
                     <button onClick={(e) => handlePageChange(e)} name='page1' value={viewports[0]} variant="contained">Home</button>
-                    <button onClick={handlePageChange} name='page2' value={viewports[1]} variant="contained">Sample</button>
+                    <button onClick={handlePageChange} name='page2' value={viewports[1]} variant="contained">char</button>
                 </div>
             </div>
 

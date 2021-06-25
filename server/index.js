@@ -48,11 +48,17 @@ app.listen(port, () => {
 //   })
 // })
 //READ, INSERT, UPDATE, DELETE
-app.get('/sample', route.getSample);
-app.post('/sample', route.addSample);
-app.put('/sample', route.changeSample);
-// app.delete('/sample', route.deleteSample);
-app.get('/headers', route.getHeaders);
+// app.get('/sample', route.getData);
+// app.post('/sample', route.addSample);
+// app.put('/sample', route.changeSample);
+// // app.delete('/sample', route.deleteSample);
+// app.get('/headers', route.getHeaders);
+
+//char routes
+app.get('/char', route.getData);
+app.post('/char', route.addSample);
+app.put('/char', route.changeSample);
+
 
 //template (CRUD -> get, post, delete, update)
 // app.get('path', (request, response) => {

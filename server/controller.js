@@ -10,8 +10,13 @@ const db = require('../database/model.js');
 //         res.status(500).send(error);
 //     }
 // }
-const getSample = (req, res) => {
-    db.getSample()
+
+//ADAPTIVE FUNCTIONS THAT WORK FOR ANY TABLE//
+const getData = (req, res) => {
+    //remove the / from the req.url
+    let route = req.url.slice(1); // '/route' --> 'route'
+
+    db.getData(route)
     .then(result => {
         res.status(200).send(result.rows);
     })
@@ -61,7 +66,7 @@ const getHeaders = (req, res) => {
 }
 
 module.exports = {
-    getSample,
+    getData,
     addSample,
     changeSample,
     getHeaders
