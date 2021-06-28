@@ -14,11 +14,22 @@ module.exports.getData = async(path) => {
         return error;
     }
 }
-module.exports.addSample = async(values) => {
-    const text = 'INSERT INTO sample(count, val) VALUES($1, $2)'
+
+// module.exports.addSample = async(values) => {
+//     const text = 'INSERT INTO sample(count, val) VALUES($1, $2)'
+module.exports.addSample = async(path, cols, values) => {
+    console.log({values})
+    
+    // for(let i = 0; i < values.length; i++) {
+    //     let temp = values[i];
+    //     values[i] = "" + temp + "";
+    // }
+    console.log({values})
+    const text = `INSERT INTO ${path} (${cols}) VALUES('${values[0]}', '${values[1]}', '${values[2]}', '${values[3]}', '${values[4]}')`
+    console.log({text})
     // async/await
     try {
-        const res = await pool.query(text, values)
+        const res = await pool.query(text)
         console.log(res.rows[0])
     } catch (err) {
         console.log(err.stack)

@@ -25,10 +25,23 @@ const getData = (req, res) => {
     })
 }
 const addSample = (req, res) => {
+    //get path
+    //remove the / from the req.url
+    let route = req.url.slice(1); // '/route' --> 'route'
     const entry = req.body;
-    console.log({entry}); //{ entry: { count: '1', val: 'testing' } }
-    let values = [entry.count, entry.val]
-    db.addSample(values)
+    // entry: {
+    //     char_code: '1',
+    //     title: '2',
+    //     description: '3',
+    //     description_path: '4',
+    //     image_path: '5'
+    //   }
+    //console.log({entry}); //{ entry: { count: '1', val: 'testing' } }
+    let keys = Object.keys(entry);
+    let values = Object.values(entry);
+    // console.log({values})
+    //let values = [entry.count, entry.val]
+    db.addSample(route, keys, values)
     .then(result => {
         res.status(200).send(result.rows);
     })

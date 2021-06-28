@@ -22,7 +22,8 @@ const App = () => {
     const [data, setData] = useState([]); //data from database
     const [inputs, setInputs] = useState({}); // inputs from submission fields
     const [columns, setColumns] = useState([]); // column name for tables
-    const [rows, setRows] = useState([]); // formatted rows from data so dataGrid can be filled correctly 
+    const [rows, setRows] = useState([]); // formatted rows from data so dataGrid can be filled correctly
+    const [inputCols, setInputCols] = useState([]); // need to make a deep copy of cols and then shift so we dont alter cols 
     // custom state/hooks
     const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
     const [currentPage, setCurrentPage] = useToggle();
@@ -48,19 +49,19 @@ const App = () => {
     //     getData();
     // },[isTextChanged])
     useEffect(() => {
-        // getColumns();
-        // getRows();
+        getColumns();
+        getRows();
         getData();
-    },[page])
+    },[page, isTextChanged])
     //get new row values whenever data is modified in database
     useEffect(() => {
         getColumns();
         getRows();
     },[data])
         // USEEFFECT TO CHECK IF STATE HAS CHANGED PROPERLY
-    // useEffect(() => {
-    //     console.log({rows, columns})
-    // },[data])
+    useEffect(() => {
+        console.log({data, rows, columns})
+    },[data, isTextChanged])
 
 
 
@@ -114,6 +115,9 @@ const App = () => {
         }
         //set the column state now
         setColumns(temp);
+        let inputs = JSON.parse(JSON.stringify(temp));
+        inputs.shift();
+        setInputCols(inputs);
     }
     ////////////////////////////////////////
     /*
@@ -122,13 +126,14 @@ const App = () => {
     ///////////////////////////////////////
     const getRows = () => {
         // need to get size of columns...
-        let length = columns.length;
+        //let length = columns.length;
         let format = {};
         let rowsTemp = [];
         //now map the sample array to a rows state
         for(let i = 0; i < data.length; i++) {
             //need to get the first key from data object
             let temp = data[i];
+            console.log({temp})
             let keys = Object.keys(temp);
             let oldKey = keys[0];
             format.id = JSON.parse(JSON.stringify(temp[oldKey]));
@@ -136,7 +141,11 @@ const App = () => {
             delete partial[oldKey];
             // spread operator to combine
             format = {...format, ...partial};
+            console.log({format})
             rowsTemp.push(format);
+            //clear the format object
+            
+            format = {};
             
             //old attempt at formatting for id
             // let keys = Object.keys(temp);
@@ -149,6 +158,7 @@ const App = () => {
             // rowsTemp.push(format);
             //console.log({format})
         }
+        console.log({rowsTemp})
         setRows(rowsTemp);
     }
 
@@ -160,6 +170,8 @@ const App = () => {
     //     ({target:{name,value}}) => setInputs(state => ({ ...state, [name]:value }), [])
     // );
     const handleChange = (e) => {
+        console.log('targetName',e.target.name,'targetVal', e.target.value)
+        console.log({inputs})
         setInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
     }    
     //edit table data handler
@@ -179,15 +191,16 @@ const App = () => {
         });
     //TODO: this is hard coded for now...Make dynamic for any table later on
     const handleSubmit = () => {
-        let num = parseInt(inputs.field1);
-        let temp = {
-            count: num,
-            val: inputs.field2
-        };
+        // let num = parseInt(inputs.field1);
+        // let temp = {
+        //     count: num,
+        //     val: inputs.field2
+        // };
+
         //determine route -> db table based on pageSelection
         let route = page;
-        //axios.post(`${host}/${route}`, temp)
-        axios.post(`${host}/sample`, temp)
+        axios.post(`${host}/${route}`, inputs)
+        //axios.post(`${host}/sample`, temp)
           .then(response => {
             console.log(response);
             //setInputs({})
@@ -197,8 +210,12 @@ const App = () => {
           });
 
         //clear input fields
+        document.getElementById("data-form").reset();
         setInputs({});
     }
+    // useEffect(() => {
+    //     console.log({columns})
+    // },[isTextChanged])
 
     //TODO: implement toggle logic/incorporate selected function below into handle page change...
     const handlePageChange = (e) => {
@@ -297,7 +314,7 @@ const App = () => {
                                         <DataGrid
                                             columns={columns}
                                             rows={rows}
-                                            checkboxSelection
+                                            //checkboxSelection
                                             //onRowClick={handleRowClick}
                                             onEditCellChangeCommitted={handleEditCellChangeCommitted}
                                         />
@@ -309,9 +326,26 @@ const App = () => {
                         <div className = "addData">
                             {/* <input key="field1" name="field1" onChange={onChangeHandler} value={inputs.field1 || ''}/>
                             <input key="field2" name="field2" onChange={onChangeHandler} value={inputs.field2 || ''}/> */}
-                            <input name="field1" value={inputs.field1 || ''} onChange={handleChange} />
-                            <input name="field2" value={inputs.field2 || ''} onChange={handleChange} />
-                            <button key="text1" type="submit" onClick={handleSubmit}>ADD DATA</button>
+                            {/* <input name="field1" value={inputs.field1 || ''} onChange={handleChange} />
+                            <input name="field2" value={inputs.field2 || ''} onChange={handleChange} /> */}
+                            {/* <div> */}
+                            <form id="data-form">
+                                {!!inputCols && inputCols.map((item, index) => (
+                                    <input
+                                        className="data-input"
+                                        name={item.field}
+                                        placeholder={item.field}
+                                        value={inputs.name}
+                                        //value={inputs.name || ''}
+                                        //onfocus="this.value=''"
+                                        onChange={handleChange}
+                                        //onChange={onChangeHandler}
+                                    />
+                                ))}
+                            </form>
+
+                            {/* </div> */}
+                            <button type="submit" onClick={handleSubmit}>ADD NEW DATA</button>
                         </div>
                     </div>
                 }
