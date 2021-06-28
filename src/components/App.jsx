@@ -38,6 +38,7 @@ const App = () => {
     useEffect(() => {
         getData();
         setPage('Home');
+        selected();
     },[]);
 
     //useEffect to get table columns on initial page load... change later to specific table_name
@@ -198,6 +199,8 @@ const App = () => {
         //clear input fields
         setInputs({});
     }
+
+    //TODO: implement toggle logic/incorporate selected function below into handle page change...
     const handlePageChange = (e) => {
         //get current page
         let current = page;
@@ -218,20 +221,26 @@ const App = () => {
     }
     // const [select, setButton] = useState(''); // sets the state for styling currentStyle
     const selected = (e) => {
-        const target = e.currentTarget;
-        console.log({target})
+
         // if nothing selected yet
         if (!select) {
+          let target = document.getElementById('Home');
+          console.log({target})  
           setButton(target);
           target.classList.toggle('selected');
-        } else if (select !== target) {
-          // toggle off old
-          select.classList.toggle('selected');
-          // update state
-          setButton(target);
-          // toggle new
-          target.classList.toggle('selected');
-        }
+        } else {
+            let target = e.currentTarget;
+            console.log({target})
+            if (select !== target) {
+                // toggle off old
+                select.classList.toggle('selected');
+                // update state
+                setButton(target);
+                // toggle new
+                target.classList.toggle('selected');
+            }
+        } 
+
       };
 
 
@@ -253,7 +262,7 @@ const App = () => {
                         <figure className="nav-container" onClick={(e) => selected(e)}>
                             <button
                                 className="nav-button"
-                                id={index}
+                                id={item}
                                 value={item}
                                 onClick={handlePageChange}
                             >{item}
@@ -288,6 +297,8 @@ const App = () => {
                                         <DataGrid
                                             columns={columns}
                                             rows={rows}
+                                            checkboxSelection
+                                            //onRowClick={handleRowClick}
                                             onEditCellChangeCommitted={handleEditCellChangeCommitted}
                                         />
                                     }
