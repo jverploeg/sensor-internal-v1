@@ -15,7 +15,7 @@ const db = require('../database/model.js');
 const getData = (req, res) => {
     //remove the / from the req.url
     let route = req.url.slice(1); // '/route' --> 'route'
-
+    console.log({route})
     db.getData(route)
     .then(result => {
         res.status(200).send(result.rows);

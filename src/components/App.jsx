@@ -15,7 +15,7 @@ import useToggle from './toggle';
 
 
 const App = () => {
-    let viewports = ['Home', 'char']; //array of view options. tables with all have similar setup, home is different
+    let viewports = ['Home', 'char', 'housing']; //array of view options. tables with all have similar setup, home is different
 
     //DEFINE STATE//////////////////
     const [page, setPage] = useState({}); //initialize to homepage on initial render
@@ -217,7 +217,8 @@ const App = () => {
             <div className="navbar">
                 <div>
                     <button onClick={(e) => handlePageChange(e)} name='page1' value={viewports[0]} variant="contained">Home</button>
-                    <button onClick={handlePageChange} name='page2' value={viewports[1]} variant="contained">char</button>
+                    <button onClick={handlePageChange} name='page2' value={viewports[1]} variant="contained">Char</button>
+                    <button onClick={handlePageChange} name='page3' value={viewports[2]} variant="contained">Housing</button>
                 </div>
             </div>
 

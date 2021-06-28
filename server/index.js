@@ -59,6 +59,11 @@ app.get('/char', route.getData);
 app.post('/char', route.addSample);
 app.put('/char', route.changeSample);
 
+//char routes
+app.get('/housing', route.getData);
+app.post('/housing', route.addSample);
+app.put('/housing', route.changeSample);
+
 
 //template (CRUD -> get, post, delete, update)
 // app.get('path', (request, response) => {

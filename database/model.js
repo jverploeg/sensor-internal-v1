@@ -5,7 +5,7 @@ module.exports.getData = async(path) => {
     let id = path.concat('_id');
     //let qString = `SELECT * FROM ${path} ORDER BY char_id asc;`;
     let qString = `SELECT * FROM ${path} ORDER BY ${id} asc;`;
-    //console.log({qString});
+    console.log({qString});
     try {
         const response = await pool.query(qString);
         return response;
