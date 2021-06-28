@@ -36,6 +36,23 @@ app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
 
+
+//char routes
+app.get('/char', route.getData);
+app.post('/char', route.addData);
+app.put('/char', route.changeData);
+
+//housing routes
+app.get('/housing', route.getData);
+app.post('/housing', route.addData);
+app.put('/housing', route.changeData);
+
+
+
+
+
+
+
 // *************ROUTES****************
 // GET for the tables
 // sample query to test our communication logic between server, db, cient
@@ -54,15 +71,6 @@ app.listen(port, () => {
 // // app.delete('/sample', route.deleteSample);
 // app.get('/headers', route.getHeaders);
 
-//char routes
-app.get('/char', route.getData);
-app.post('/char', route.addSample);
-app.put('/char', route.changeSample);
-
-//char routes
-app.get('/housing', route.getData);
-app.post('/housing', route.addSample);
-app.put('/housing', route.changeSample);
 
 
 //template (CRUD -> get, post, delete, update)

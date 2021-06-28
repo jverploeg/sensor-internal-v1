@@ -62,3 +62,18 @@ VALUES
 ;
 
 -- C:\Users\senadmin\WebApps\sensor-internal-v1\database\schema.sql
+-- DROP TABLE IF EXISTS housing CASCADE;
+-- CREATE TABLE options
+-- (
+--     options_id integer GENERATED ALWAYS AS IDENTITY,
+--     options_code varchar NOT NULL,
+--     title  varchar NOT NULL,
+--     description varchar NOT NULL, not used
+--     image_path varchar NOT NULL,
+--     revision varchar NOT NULL,
+--     PRIMARY KEY (housing_id)
+-- );
+-- INSERT INTO options (options_code, title, description, image_path, revision)
+-- VALUES
+--     ('TEST', 'Sample data option', 'this is a sample data piece', 'Sample-Model.png', 'A') --,
+-- ;

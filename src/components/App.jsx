@@ -42,12 +42,6 @@ const App = () => {
         selected();
     },[]);
 
-    //useEffect to get table columns on initial page load... change later to specific table_name
-    // useEffect(() => {
-    //     // getColumns();
-    //     // getRows();
-    //     getData();
-    // },[isTextChanged])
     useEffect(() => {
         getColumns();
         getRows();
@@ -59,9 +53,9 @@ const App = () => {
         getRows();
     },[data])
         // USEEFFECT TO CHECK IF STATE HAS CHANGED PROPERLY
-    useEffect(() => {
-        console.log({data, rows, columns})
-    },[data, isTextChanged])
+    // useEffect(() => {
+    //     console.log({data, rows, columns})
+    // },[data, isTextChanged])
 
 
 
@@ -125,15 +119,12 @@ const App = () => {
     */
     ///////////////////////////////////////
     const getRows = () => {
-        // need to get size of columns...
-        //let length = columns.length;
         let format = {};
         let rowsTemp = [];
         //now map the sample array to a rows state
         for(let i = 0; i < data.length; i++) {
             //need to get the first key from data object
             let temp = data[i];
-            console.log({temp})
             let keys = Object.keys(temp);
             let oldKey = keys[0];
             format.id = JSON.parse(JSON.stringify(temp[oldKey]));
@@ -141,24 +132,11 @@ const App = () => {
             delete partial[oldKey];
             // spread operator to combine
             format = {...format, ...partial};
-            console.log({format})
             rowsTemp.push(format);
             //clear the format object
-            
             format = {};
-            
-            //old attempt at formatting for id
-            // let keys = Object.keys(temp);
-            // let oldKey = keys[0];
-            // //format = sample[i]; NOOOOOOOO, this is a shallow copy!!!!!!!
-            // format = JSON.parse(JSON.stringify(sample[i]));
-            // //Replace oldKey with newKey so that the object follows formatting rules for dataGrid rows
-            // let newKey = 'id';
-            // delete Object.assign(format, {[newKey]: format[oldKey]  })[oldKey]
-            // rowsTemp.push(format);
-            //console.log({format})
         }
-        console.log({rowsTemp})
+        //set state
         setRows(rowsTemp);
     }
 
@@ -170,8 +148,6 @@ const App = () => {
     //     ({target:{name,value}}) => setInputs(state => ({ ...state, [name]:value }), [])
     // );
     const handleChange = (e) => {
-        console.log('targetName',e.target.name,'targetVal', e.target.value)
-        console.log({inputs})
         setInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
     }    
     //edit table data handler
@@ -189,21 +165,13 @@ const App = () => {
               console.log(error);
             });
         });
-    //TODO: this is hard coded for now...Make dynamic for any table later on
     const handleSubmit = () => {
-        // let num = parseInt(inputs.field1);
-        // let temp = {
-        //     count: num,
-        //     val: inputs.field2
-        // };
-
         //determine route -> db table based on pageSelection
         let route = page;
         axios.post(`${host}/${route}`, inputs)
         //axios.post(`${host}/sample`, temp)
           .then(response => {
             console.log(response);
-            //setInputs({})
           })
           .catch(error => {
             console.log(error);
@@ -212,59 +180,42 @@ const App = () => {
         //clear input fields
         document.getElementById("data-form").reset();
         setInputs({});
+        //update data
+        getData();
     }
-    // useEffect(() => {
-    //     console.log({columns})
-    // },[isTextChanged])
 
-    //TODO: implement toggle logic/incorporate selected function below into handle page change...
+    const handleRowClick = (e) => {
+        let target = e.target;
+        console.log(target)
+    }
+
     const handlePageChange = (e) => {
         //get current page
         let current = page;
         //define the page we want to change to
         let newPage = e.target.attributes.value.value;
-    
-        //call setCurrentPageChange to toggle
-        //onClick={showData}>{isTextChanged ? 'Hide Data' : 'Show Data'}
-        // const showData = () => {
-        //     setIsTextChanged();
-        // }
-        // const [isTextChanged, setIsTextChanged] = useToggle();
-        //style={{ height: 400, width: '100%' }}
-
-
         //set the page
         setPage(newPage);
     }
     // const [select, setButton] = useState(''); // sets the state for styling currentStyle
     const selected = (e) => {
-
-        // if nothing selected yet
+        // if nothing selected yet, focus on home page
         if (!select) {
           let target = document.getElementById('Home');
-          console.log({target})  
           setButton(target);
           target.classList.toggle('selected');
         } else {
             let target = e.currentTarget;
-            console.log({target})
             if (select !== target) {
                 // toggle off old
                 select.classList.toggle('selected');
                 // update state
                 setButton(target);
-                // toggle new
+                // toggle on new
                 target.classList.toggle('selected');
             }
         } 
-
       };
-
-
-    // USEEFFECT TO CHECK IF STATE HAS CHANGED PROPERLY
-    // useEffect(() => {
-    //     console.log({page})
-    // },[page])
 
 
     //DOM
@@ -306,16 +257,9 @@ const App = () => {
                             {!!isTextChanged &&
                                 <div className = "foot" style={{ height: 400, width: '100%' }}>
                                     {!!rows &&
-                                        // <ControlGrid
-                                        //     columns={columns}
-                                        //     rows={rows}
-                                        //     //onEditCellChangeCommitted={handleEditCellChangeCommitted}
-                                        // />
                                         <DataGrid
                                             columns={columns}
                                             rows={rows}
-                                            //checkboxSelection
-                                            //onRowClick={handleRowClick}
                                             onEditCellChangeCommitted={handleEditCellChangeCommitted}
                                         />
                                     }
@@ -328,7 +272,7 @@ const App = () => {
                             <input key="field2" name="field2" onChange={onChangeHandler} value={inputs.field2 || ''}/> */}
                             {/* <input name="field1" value={inputs.field1 || ''} onChange={handleChange} />
                             <input name="field2" value={inputs.field2 || ''} onChange={handleChange} /> */}
-                            {/* <div> */}
+
                             <form id="data-form">
                                 {!!inputCols && inputCols.map((item, index) => (
                                     <input
@@ -336,15 +280,10 @@ const App = () => {
                                         name={item.field}
                                         placeholder={item.field}
                                         value={inputs.name}
-                                        //value={inputs.name || ''}
-                                        //onfocus="this.value=''"
                                         onChange={handleChange}
-                                        //onChange={onChangeHandler}
                                     />
                                 ))}
                             </form>
-
-                            {/* </div> */}
                             <button type="submit" onClick={handleSubmit}>ADD NEW DATA</button>
                         </div>
                     </div>
