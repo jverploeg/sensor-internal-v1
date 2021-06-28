@@ -15,7 +15,7 @@ const db = require('../database/model.js');
 const getData = (req, res) => {
     //remove the / from the req.url
     let route = req.url.slice(1); // '/route' --> 'route'
-    console.log({route})
+    //console.log({route})
     db.getData(route)
     .then(result => {
         res.status(200).send(result.rows);
@@ -37,13 +37,16 @@ const addSample = (req, res) => {
     })
 }
 const changeSample = (req, res) => {
+    //get path
+    //remove the / from the req.url
+    let route = req.url.slice(1); // '/route' --> 'route'
     const entry = req.body;
     let id = entry.id;
     let col = entry.field;
     let val = entry.props.value;
-    console.log({id, col, val})
+    //console.log({id, col, val})
     let values = [id, col, val];
-    db.changeSample(values)
+    db.changeSample(route, values)
     .then(result => {
         res.status(200).send(result.rows);
     })

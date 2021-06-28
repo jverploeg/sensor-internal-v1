@@ -19,7 +19,7 @@ const App = () => {
 
     //DEFINE STATE//////////////////
     const [page, setPage] = useState({}); //initialize to homepage on initial render
-    const [sample, setSample] = useState([]); //data from database
+    const [data, setData] = useState([]); //data from database
     const [inputs, setInputs] = useState({}); // inputs from submission fields
     const [columns, setColumns] = useState([]); // column name for tables
     const [rows, setRows] = useState([]); // formatted rows from data so dataGrid can be filled correctly 
@@ -39,20 +39,25 @@ const App = () => {
     },[]);
 
     //useEffect to get table columns on initial page load... change later to specific table_name
+    // useEffect(() => {
+    //     // getColumns();
+    //     // getRows();
+    //     getData();
+    // },[isTextChanged])
     useEffect(() => {
         // getColumns();
         // getRows();
         getData();
-    },[isTextChanged])
+    },[page])
     //get new row values whenever data is modified in database
     useEffect(() => {
         getColumns();
         getRows();
-    },[sample])
+    },[data])
         // USEEFFECT TO CHECK IF STATE HAS CHANGED PROPERLY
-    useEffect(() => {
-        console.log({rows, columns})
-    },[sample])
+    // useEffect(() => {
+    //     console.log({rows, columns})
+    // },[data])
 
 
 
@@ -68,8 +73,7 @@ const App = () => {
         let route = page;
         try {
             const response = await axios.get(`${host}/${route}`);
-            //console.log({response})
-            setSample(response.data);
+            setData(response.data);
         }
         catch (error) {
             console.log(error)
@@ -82,8 +86,8 @@ const App = () => {
         let temp = [];
         let table = page;
         //iterate through any object and get the key names
-        if(sample[0]){
-            let focus = sample[0];
+        if(data[0]){
+            let focus = data[0];
             let arrayKeys = Object.keys(focus);
             let format = {
                 field: 'id',
@@ -119,13 +123,13 @@ const App = () => {
         let format = {};
         let rowsTemp = [];
         //now map the sample array to a rows state
-        for(let i = 0; i < sample.length; i++) {
+        for(let i = 0; i < data.length; i++) {
             //need to get the first key from data object
-            let temp = sample[i];
+            let temp = data[i];
             let keys = Object.keys(temp);
             let oldKey = keys[0];
             format.id = JSON.parse(JSON.stringify(temp[oldKey]));
-            let partial = JSON.parse(JSON.stringify(sample[i]));
+            let partial = JSON.parse(JSON.stringify(data[i]));
             delete partial[oldKey];
             // spread operator to combine
             format = {...format, ...partial};
@@ -160,9 +164,9 @@ const App = () => {
         ({ id, field, props }) => {
             // pass the col_name, row_id, and new_value to the router. will Update accordingly
             //determine route -> db table based on pageSelection
-            //let route = page;
-            //axios.put(`${host}/${route}`, {id, field, props})
-            axios.put(`${host}/sample`, {id, field, props})
+            let route = page;
+            axios.put(`${host}/${route}`, {id, field, props})
+            //axios.put(`${host}/sample`, {id, field, props})
             .then(response => {
               console.log('axios in app response',response);
             })

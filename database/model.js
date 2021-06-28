@@ -5,7 +5,7 @@ module.exports.getData = async(path) => {
     let id = path.concat('_id');
     //let qString = `SELECT * FROM ${path} ORDER BY char_id asc;`;
     let qString = `SELECT * FROM ${path} ORDER BY ${id} asc;`;
-    console.log({qString});
+    //console.log({qString});
     try {
         const response = await pool.query(qString);
         return response;
@@ -24,12 +24,15 @@ module.exports.addSample = async(values) => {
         console.log(err.stack)
     }
 }
-module.exports.changeSample = async(values) => {
+module.exports.changeSample = async(path, values) => {
     let col_name = values[1];
     let value = values[2];
     let id = values[0];
+    //add tablename to id field
+    let table_id = path.concat('_id');
     //console.log({col_name, value, id})
-    const text = `UPDATE sample set ${col_name} = '${value}' where id = ${id}`
+    //const text = `UPDATE sample set ${col_name} = '${value}' where id = ${id}`
+    const text = `UPDATE ${path} set ${col_name} = '${value}' where ${table_id} = ${id}`;
     // async/await
     try {
         const res = await pool.query(text)
