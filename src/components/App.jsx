@@ -25,6 +25,8 @@ const App = () => {
     const [rows, setRows] = useState([]); // formatted rows from data so dataGrid can be filled correctly 
     // custom state/hooks
     const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
+    const [currentPage, setCurrentPage] = useToggle();
+    const [select, setButton] = useState(''); // sets the state for styling currentPage in navbar
     
 
 
@@ -197,18 +199,46 @@ const App = () => {
         setInputs({});
     }
     const handlePageChange = (e) => {
+        //get current page
+        let current = page;
         //define the page we want to change to
-        let focus = e.target.attributes.value.value;
+        let newPage = e.target.attributes.value.value;
+    
+        //call setCurrentPageChange to toggle
+        //onClick={showData}>{isTextChanged ? 'Hide Data' : 'Show Data'}
+        // const showData = () => {
+        //     setIsTextChanged();
+        // }
+        // const [isTextChanged, setIsTextChanged] = useToggle();
+        //style={{ height: 400, width: '100%' }}
+
+
         //set the page
-        setPage(focus);
+        setPage(newPage);
     }
+    // const [select, setButton] = useState(''); // sets the state for styling currentStyle
+    const selected = (e) => {
+        const target = e.currentTarget;
+        console.log({target})
+        // if nothing selected yet
+        if (!select) {
+          setButton(target);
+          target.classList.toggle('selected');
+        } else if (select !== target) {
+          // toggle off old
+          select.classList.toggle('selected');
+          // update state
+          setButton(target);
+          // toggle new
+          target.classList.toggle('selected');
+        }
+      };
+
 
     // USEEFFECT TO CHECK IF STATE HAS CHANGED PROPERLY
     // useEffect(() => {
     //     console.log({page})
     // },[page])
-
-
 
 
     //DOM
@@ -218,12 +248,21 @@ const App = () => {
                 <h1>SENSOR SOLUTIONS</h1>
             </div>
             
-            <div className="navbar">
-                <div>
-                    <button onClick={(e) => handlePageChange(e)} name='page1' value={viewports[0]} variant="contained">Home</button>
+            <div className="nav-bar">
+                    {viewports && viewports.map((item, index) => (
+                        <figure className="nav-container" onClick={(e) => selected(e)}>
+                            <button
+                                className="nav-button"
+                                id={index}
+                                value={item}
+                                onClick={handlePageChange}
+                            >{item}
+                            </button>
+                        </figure>
+                    ))}
+                    {/* <button onClick={handlePageChange} name='page1' value={viewports[0]} variant="contained">Home</button>
                     <button onClick={handlePageChange} name='page2' value={viewports[1]} variant="contained">Char</button>
-                    <button onClick={handlePageChange} name='page3' value={viewports[2]} variant="contained">Housing</button>
-                </div>
+                    <button onClick={handlePageChange} name='page3' value={viewports[2]} variant="contained">Housing</button> */}
             </div>
 
             <div className = "body">

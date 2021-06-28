@@ -1,0 +1,23 @@
+$transition-duration: .5s;
+
+.nav-bar {
+    display: flex;
+    flex-direction: row;
+    position:relative;
+}
+.nav-button {
+    object-fit: cover;
+    flex: 1;
+    //margin: 1rem;
+    overflow: hidden;
+    border: 1px solid black;
+    // height: 64px;
+    // width: 64px;
+}
+.selected {
+    border: 1px solid black;
+    // background-color: #555;
+    transform: scale(1.4);
+    opacity: 1;
+    transition: all $transition-duration;
+}
