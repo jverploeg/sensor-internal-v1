@@ -9,6 +9,7 @@ import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@mat
 
 // SUBCOMPONENTS/HELPERS/CUSTOM HOOKS
 import useToggle from './toggle';
+import Search from './search';
 // import usePageSwitch from './pageSwitch';
 // import useReferredState from './ref';
 //import ControlGrid from './dataGrid';
@@ -245,7 +246,7 @@ const App = () => {
             <div className = "body">
                 {(page === "Home") && 
                     <div>
-                        <h1>HOME</h1>
+                        <Search/>
                     </div>    
                 }
 

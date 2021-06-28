@@ -36,13 +36,14 @@ app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
 
+////////////ROUTES//////////////////////
 
-//char routes
+//CHAR
 app.get('/char', route.getData);
 app.post('/char', route.addData);
 app.put('/char', route.changeData);
 
-//housing routes
+//HOUSING
 app.get('/housing', route.getData);
 app.post('/housing', route.addData);
 app.put('/housing', route.changeData);
