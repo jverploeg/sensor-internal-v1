@@ -25,7 +25,54 @@ CREATE TABLE char
 -- DROP INDEX if EXISTS char_key;
 -- CREATE UNIQUE INDEX char_key ON char (char_code);
 copy char (char_code, Title, Type, Type_Description, Web_Valid, png_file, Bullet_file) from 'D:\DATA\Sensor\webApp\char.csv'  delimiter ',' csv header;
--- D:\DATA\Sensor\webApp
+
+DROP TABLE IF EXISTS option CASCADE;
+CREATE TABLE option
+(
+    option_id           integer GENERATED ALWAYS AS IDENTITY,
+    option_code         varchar UNIQUE,
+    rev                 varchar,
+    Title               varchar NOT NULL,
+    web_valid           varchar,
+    png_file            varchar NOT NULL,
+    output_type         varchar, 
+    output_type_2       varchar,
+    PRIMARY KEY (option_id, option_code)
+);
+DROP INDEX if EXISTS option_key;
+CREATE INDEX option_key ON option (option_id);
+copy option (option_code, rev, Title, web_valid, png_file, output_type, output_type_2) from 'D:\DATA\Sensor\webApp\options.csv'  delimiter ',' csv header;
+
+
+DROP TABLE IF EXISTS char_op CASCADE;
+CREATE TABLE char_op
+(
+    char_op_id          integer GENERATED ALWAYS AS IDENTITY,
+    char_op_code        varchar UNIQUE,
+    option_code         varchar,
+    rev                 varchar,
+    Title               varchar NOT NULL,
+    web_valid           varchar,
+    png_file            varchar NOT NULL,
+    wires               integer, 
+    supply_voltage      varchar,
+    PRIMARY KEY (char_op_id)--,
+    -- ERROR:  insert or update on table "char_op" violates foreign key constraint "fk_option"
+    -- DETAIL:  Key (option_code)=(xx) is not present in table "option"
+    -- GMRS-xx	xx	pre	N/A	no	GMRS-xx-Model.png	4
+    --TODO: fix this FK issue with xx option codes
+    -- CONSTRAINT fk_option FOREIGN KEY ( option_code ) REFERENCES option ( option_code )
+    --FOREIGN KEY (option_code)
+);
+-- DROP INDEX if EXISTS char_op_key;
+-- CREATE INDEX char_op_key ON char_op (char_op_id);
+copy char_op (char_op_code, option_code, rev, Title, web_valid, png_file, wires, supply_voltage) from 'D:\DATA\Sensor\webApp\char_op.csv'  delimiter ',' csv header;
+
+
+
+
+
+
 
 -- -- characteristics
 -- -- DROP TABLE IF EXISTS characteristics CASCADE;

@@ -49,6 +49,10 @@ app.put('/char', route.changeData);
 app.get('/option', route.getData);
 app.post('/option', route.addData);
 app.put('/option', route.changeData);
+//char_op
+app.get('/char_op', route.getData);
+app.post('/char_op', route.addData);
+app.put('/char_op', route.changeData);
 //CONNECTION
 // rename to conn?
 app.get('/connection', route.getData);
