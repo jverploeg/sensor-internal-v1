@@ -37,18 +37,28 @@ app.listen(port, () => {
 });
 
 ////////////ROUTES//////////////////////
-
-//CHAR
-app.get('/char', route.getData);
-app.post('/char', route.addData);
-app.put('/char', route.changeData);
-
 //HOUSING
 app.get('/housing', route.getData);
 app.post('/housing', route.addData);
 app.put('/housing', route.changeData);
+//CHAR
+app.get('/char', route.getData);
+app.post('/char', route.addData);
+app.put('/char', route.changeData);
+//OPTION
+app.get('/option', route.getData);
+app.post('/option', route.addData);
+app.put('/option', route.changeData);
+//CONNECTION
+// rename to conn?
+app.get('/connection', route.getData);
+app.post('/connection', route.addData);
+app.put('/connection', route.changeData);
 
 
+////VALID SENSOR////////
+app.get('/sensor', route.getSensor);
+app.get('/custom', route.getCustom);
 
 
 

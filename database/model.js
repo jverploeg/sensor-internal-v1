@@ -42,3 +42,40 @@ module.exports.changeData = async(path, values) => {
         console.log(err.stack)
     }
 }
+
+
+///////////SENSOR SPEC SEARCHES////////////////////
+module.exports.getSensor = async(data) => {
+    //split data into tables, part_ids
+    //multiple queries
+    //promisify/sequelize????
+
+    let hString = `SELECT * FROM housing where housing_id = ${something}`;
+    let chString = `SELECT * FROM char where char_id = ${something}`;
+    let oString = `SELECT * FROM option where option_id = ${something}`;
+    let cnString = `SELECT * FROM conn where conn_id = ${something}`;
+    try {
+        const response = await pool.query(qString);
+        return response;
+    }
+    catch(error) {
+        return error;
+    }
+}
+module.exports.getCustom = async(data) => {
+    //split data into tables, part_ids
+    //multiple queries
+    //promisify/sequelize????
+
+    let hString = `SELECT * FROM housing where housing_id = ${something}`;
+    let chString = `SELECT * FROM char where char_id = ${something}`;
+    let oString = `SELECT * FROM option where option_id = ${something}`;
+    let cnString = `SELECT * FROM conn where conn_id = ${something}`;
+    try {
+        const response = await pool.query(qString);
+        return response;
+    }
+    catch(error) {
+        return error;
+    }
+}

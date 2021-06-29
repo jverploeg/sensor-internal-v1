@@ -16,7 +16,7 @@ import Search from './search';
 
 
 const App = () => {
-    let viewports = ['Home', 'char', 'housing']; //array of view options. tables with all have similar setup, home is different
+    let viewports = ['Home', 'housing', 'char', 'option', 'connection']; //array of view options. tables with all have similar setup, home is different
 
     //DEFINE STATE//////////////////
     const [page, setPage] = useState({}); //initialize to homepage on initial render

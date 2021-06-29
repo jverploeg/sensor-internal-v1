@@ -58,10 +58,35 @@ const changeData = (req, res) => {
     })
 }
 
+const getSensor = (req, res) => {
+    console.log(req.body)
+    let data = ''; //define what this is later
+    db.getSensor(data)
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error)
+    })
+}
+const getCustom = (req, res) => {
+    console.log(req.body)
+    let data = ''; //define what this is later
+    db.getCustom(data)
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error)
+    })
+}
+
 
 module.exports = {
     getData,
     addData,
     changeData,
+    getSensor,
+    getCustom
 
 }
