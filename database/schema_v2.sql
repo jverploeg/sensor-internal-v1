@@ -26,6 +26,10 @@ CREATE TABLE char
 -- CREATE UNIQUE INDEX char_key ON char (char_code);
 copy char (char_code, Title, Type, Type_Description, Web_Valid, png_file, Bullet_file) from 'D:\DATA\Sensor\webApp\char.csv'  delimiter ',' csv header;
 
+
+
+
+
 DROP TABLE IF EXISTS option CASCADE;
 CREATE TABLE option
 (
@@ -70,6 +74,28 @@ copy char_op (char_op_code, option_code, rev, Title, web_valid, png_file, wires,
 
 
 
+
+DROP TABLE IF EXISTS connection CASCADE;
+CREATE TABLE connection
+(
+    connection_id       integer GENERATED ALWAYS AS IDENTITY,
+    connection_code     varchar,
+    web_code            varchar, --UNIQUE
+    rev                 varchar,
+    Title               varchar,
+    web_valid           varchar,
+    part_number         varchar,
+    png_file            varchar,
+    wires               integer,
+    connection_type     varchar,
+    wire_guage          varchar,
+    length              varchar,
+    insulation_material varchar,
+    PRIMARY KEY (connection_id) --, connection_code, web_code)
+);
+-- DROP INDEX if EXISTS connection_key;
+-- CREATE INDEX connection_key ON connection (connection_id);
+copy connection (connection_code, web_code, rev, Title, web_valid, part_number, png_file, wires, connection_type, wire_guage, length, insulation_material) from 'D:\DATA\Sensor\webApp\connections.csv'  delimiter ',' csv header;
 
 
 
