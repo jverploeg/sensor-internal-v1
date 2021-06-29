@@ -97,6 +97,33 @@ CREATE TABLE connection
 -- CREATE INDEX connection_key ON connection (connection_id);
 copy connection (connection_code, web_code, rev, Title, web_valid, part_number, png_file, wires, connection_type, wire_guage, length, insulation_material) from 'D:\DATA\Sensor\webApp\connections.csv'  delimiter ',' csv header;
 
+DROP TABLE IF EXISTS housing CASCADE;
+CREATE TABLE housing
+(
+    housing_id          integer GENERATED ALWAYS AS IDENTITY,
+    housing_code        varchar, --UNIQUE,
+    part_number         varchar, --UNIQUE
+    rev                 varchar,
+    Title               varchar,
+    web_valid           varchar,
+    png_file            varchar,
+    mech_file           varchar,
+    material            varchar,
+    mount_type          varchar,
+    thread_pitch        varchar,
+    length              varchar,
+    integral_connector  varchar,
+    integral_connector2 varchar,
+    PRIMARY KEY (housing_id)--, housing_code)
+);
+-- DROP INDEX if EXISTS housing_key;
+-- CREATE INDEX housing_key ON housing (housing_id);
+copy housing (housing_code, part_number, rev, Title, web_valid, png_file, mech_file, material, mount_type, thread_pitch, length, integral_connector, integral_connector2) from 'D:\DATA\Sensor\webApp\housings.csv'  delimiter ',' csv header;
+
+
+
+
+
 
 
 
