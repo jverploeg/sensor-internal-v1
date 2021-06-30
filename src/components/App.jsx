@@ -16,7 +16,7 @@ import Search from './search';
 
 
 const App = () => {
-    let viewports = ['Home', 'housing', 'char', 'option', 'char_op', 'connection', 'sensor']; //array of view options. tables with all have similar setup, home is different
+    let viewports = ['Home', 'housing', 'char', 'option', 'char_op', 'connection', 'sensor', 'custom']; //array of view options. tables with all have similar setup, home is different
 
     //DEFINE STATE//////////////////
     const [page, setPage] = useState({}); //initialize to homepage on initial render
@@ -256,7 +256,7 @@ const App = () => {
                         <div className = "table">
                             <button onClick={showData}>{isTextChanged ? 'Hide Data' : 'Show Data'}</button>
                             {!!isTextChanged &&
-                                <div className = "foot" style={{ height: 400, width: '100%' }}>
+                                <div className = "foot" style={{ height: 500, width: '100%' }}>
                                     {!!rows &&
                                         <DataGrid
                                             columns={columns}

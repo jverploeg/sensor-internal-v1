@@ -62,6 +62,7 @@ app.put('/connection', route.changeData);
 
 ////VALID SENSOR////////
 app.get('/sensor', route.getData);//for displaying sensors in the table selections
+app.get('/custom', route.getData);//for displaying sensors in the table selections
 app.get('/sensor', route.getSensor);
 app.get('/custom', route.getCustom);
 

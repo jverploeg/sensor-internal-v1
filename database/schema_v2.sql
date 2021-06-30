@@ -156,3 +156,36 @@ copy sensor (sensor_code, part_number, rev, Title, char, type, wizard_part) from
 
 
 
+DROP TABLE IF EXISTS custom CASCADE;
+CREATE TABLE custom
+(
+    custom_id           integer GENERATED ALWAYS AS IDENTITY,
+    custom_sensor_code  varchar, -- UNIQUE, issues with fish board codes n/a
+    part_number         varchar, -- UNIQUE, csNumbers have multiple entries with variations...
+    rev                 varchar,
+    Title               varchar, -- NOT NULL,
+    config_level        varchar,
+    closest_housing     varchar,
+    closest_char        varchar,
+    closest_option      varchar,
+    closest_connection  varchar,
+    notes               varchar,
+    customer            varchar,
+    gear                varchar,
+    --customer_pn         varchar, --UNIQUE? careful with escape character \ on P\N notes...
+    --customer_dwg_rev    varchar,
+    --probably more columns than we need right now...
+    PRIMARY KEY (custom_id)--, part_number) --, custom_sensor_code)
+);
+-- DROP INDEX if EXISTS custom_key;
+-- CREATE INDEX custom_key ON custom (part_number);
+copy custom (custom_sensor_code, part_number, rev, Title, config_level, closest_housing, closest_char, closest_option, closest_connection, notes, customer, gear) from 'D:\DATA\Sensor\webApp\custom_fixed.csv'  delimiter ',' csv header;-- encoding 'latin1';
+
+
+--PM-HCS63N-01025S, Potted Magnet Bolt, 0.5” long 5/8-11 Thread, Nylon with NEO35 Cylinder .50" diameter x .25" long, S Pole Field. Trimble P/N 58141 
+--Custom Sensor, Dual 37ADSO-2K in 5/8-18 Housing 5” long, with ½ in NPT. Sensor provided with Union and Crouse & Hinds GUAB16 Enclosure, Free End Shielded 3 Wire PVC, 22AWG, 20 foot
+
+
+--  0.5” long 5/8-11 Thread,
+--  0.5”
+
