@@ -44,7 +44,7 @@ CREATE TABLE option
     PRIMARY KEY (option_id, option_code)
 );
 DROP INDEX if EXISTS option_key;
-CREATE INDEX option_key ON option (option_id);
+CREATE INDEX option_key ON option (option_code);
 copy option (option_code, rev, Title, web_valid, png_file, output_type, output_type_2) from 'D:\DATA\Sensor\webApp\options.csv'  delimiter ',' csv header;
 
 
@@ -60,7 +60,7 @@ CREATE TABLE char_op
     png_file            varchar NOT NULL,
     wires               integer, 
     supply_voltage      varchar,
-    PRIMARY KEY (char_op_id)--,
+    PRIMARY KEY (char_op_id, char_op_code)--,
     -- ERROR:  insert or update on table "char_op" violates foreign key constraint "fk_option"
     -- DETAIL:  Key (option_code)=(xx) is not present in table "option"
     -- GMRS-xx	xx	pre	N/A	no	GMRS-xx-Model.png	4
@@ -68,8 +68,8 @@ CREATE TABLE char_op
     -- CONSTRAINT fk_option FOREIGN KEY ( option_code ) REFERENCES option ( option_code )
     --FOREIGN KEY (option_code)
 );
--- DROP INDEX if EXISTS char_op_key;
--- CREATE INDEX char_op_key ON char_op (char_op_id);
+DROP INDEX if EXISTS char_op_key;
+CREATE INDEX char_op_key ON char_op (char_op_code);
 copy char_op (char_op_code, option_code, rev, Title, web_valid, png_file, wires, supply_voltage) from 'D:\DATA\Sensor\webApp\char_op.csv'  delimiter ',' csv header;
 
 
@@ -80,7 +80,7 @@ CREATE TABLE connection
 (
     connection_id       integer GENERATED ALWAYS AS IDENTITY,
     connection_code     varchar,
-    web_code            varchar, --UNIQUE
+    web_code            varchar,-- UNIQUE,
     rev                 varchar,
     Title               varchar,
     web_valid           varchar,
@@ -179,7 +179,34 @@ CREATE TABLE custom
 );
 -- DROP INDEX if EXISTS custom_key;
 -- CREATE INDEX custom_key ON custom (part_number);
-copy custom (custom_sensor_code, part_number, rev, Title, config_level, closest_housing, closest_char, closest_option, closest_connection, notes, customer, gear) from 'D:\DATA\Sensor\webApp\custom_fixed.csv'  delimiter ',' csv header;-- encoding 'latin1';
+copy custom (custom_sensor_code, part_number, rev, Title, config_level, closest_housing, closest_char, closest_option, closest_connection, notes, customer, gear) from 'D:\DATA\Sensor\webApp\custom.csv'  delimiter ',' csv header;-- encoding 'latin1';
+
+
+
+DROP TABLE IF EXISTS xproto CASCADE;
+CREATE TABLE xproto
+(
+    xproto_id           integer GENERATED ALWAYS AS IDENTITY,
+    xproto_code         varchar, -- UNIQUE,
+    xproto_part_number  varchar, -- UNIQUE, multiple entries with variations...
+    rev                 varchar,
+    Description         varchar, -- NOT NULL,
+    notes               varchar,
+    housing             varchar,
+    char                varchar,
+    opt                 varchar,
+    connection          varchar,
+    notes_additional    varchar,
+    customer            varchar,
+    PRIMARY KEY (xproto_id)--, part_number) --, custom_sensor_code)
+);
+-- DROP INDEX if EXISTS xproto_key;
+-- CREATE INDEX xproto_key ON xproto (xproto_part_number);
+copy xproto (xproto_code, xproto_part_number, rev, Description, notes, housing, char, opt, connection, notes_additional, customer) from 'D:\DATA\Sensor\webApp\xproto_edit.csv'  delimiter ',' csv header encoding 'latin1';
+
+
+
+
 
 
 --PM-HCS63N-01025S, Potted Magnet Bolt, 0.5” long 5/8-11 Thread, Nylon with NEO35 Cylinder .50" diameter x .25" long, S Pole Field. Trimble P/N 58141 
