@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 //import { PDFDownloadLink } from '@react-pdf/renderer';
 //import MyDocument from './pdf';
+import generatePDF from './pdfGenerator';
 
 
 const Search = () => {
@@ -86,10 +87,7 @@ const Search = () => {
             <div className = "results">
                 {!!searchTerm &&
                 <div>
-                <h1
-                    value={searchTerm}
-                />
-                <button type="submit">{searchTerm}</button>
+                    <button onClick={() => generatePDF(searchTerm)}>{searchTerm}</button>
                 </div>
                 }
             </div>
