@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+//import { PDFDownloadLink } from '@react-pdf/renderer';
+import MyDocument from './pdf';
 
 
 const Search = () => {
@@ -12,12 +13,16 @@ const Search = () => {
     //declare state for keyboard input. initialize to empty string
     const [sensor, setSensor] = useState({});
     const [type, setType] = useState({});
+    const [searchTerm, setSearchTerm] = useState('');
     const [inputs, setInputs] = useState({}); // inputs from submission fields
 
 
     const host = `http://192.168.1.118:3000`;
 
     //useEffect declarations
+    useEffect(() => {
+
+    })
 
     //EVENT HANDLERS WITH AXIOS REQUESTS
     const getSensor = async(sensor) => {
@@ -32,14 +37,21 @@ const Search = () => {
         }
     }
     const handleSubmit = () => {
+        //set search term
+        console.log({inputs})
+        let val = Object.values(inputs);
+        console.log({val})
+        setSearchTerm(val[0]);
         //format inputs into an object here
         //cs or regular sensor
-        let sensorFormat = stringParser(inputs);
+
+        //let sensorFormat = stringParser(inputs);
+        console.log({inputs})
         //clear input fields
         document.getElementById("search-form").reset();
         setInputs({});
         //update data
-        getSensor(sensorFormat);
+        //getSensor(sensorFormat);
     }
     //EVENT HANDLERS
     const handleChange = (e) => {
@@ -56,19 +68,33 @@ const Search = () => {
 
 
     return(
-        <div className = "searchBox">
-            <form id="search-form">
-                    <input
-                        className="sensor"
-                        name="sensor"
-                        placeholder="Sensor Specification Code"
-                        //maxLength='4' not relavent right now
-                        value={inputs.name}
-                        onChange={handleChange}
-                    />
-            </form>
-            <button type="submit" onClick={handleSubmit}>Search</button>
+        <div>
+            <div className = "searchBox">
+                <form id="search-form">
+                        <input
+                            className="housing"
+                            name="housing"
+                            placeholder="housing Code"
+                            //maxLength='4' not relavent right now
+                            value={inputs.name}
+                            onChange={handleChange}
+                        />
+                </form>
+                <button type="submit" onClick={handleSubmit}>Search</button>
+            </div>
+
+            <div className = "results">
+                {!!searchTerm &&
+                <div>
+                <h1
+                    value={searchTerm}
+                />
+                <button type="submit">{searchTerm}</button>
+                </div>
+                }
+            </div>
         </div>
+
     )
 }
 

@@ -5,15 +5,11 @@ CREATE DATABASE IF NOT EXISTS senadmin;
 
 -- create tables
 -- cascade allows subsequent dropping on tables with master dependencies
-
--- TODO: rename column names to match .xlsx file for ETL convenience
-
 DROP TABLE IF EXISTS char CASCADE;
 CREATE TABLE char
 (
     char_id             integer GENERATED ALWAYS AS IDENTITY,
-    -- char_code           varchar UNIQUE, 37ads appears twice, maybe delete from excel and come back
-    char_code           varchar NOT NULL, --temporary fix for UNIQUE declaration issues
+    char_code           varchar NOT NULL, --UNIQUE --repeated codes with variations... can't be unique
     Title               varchar NOT NULL,
     Type                varchar NOT NULL,
     Type_Description    varchar NOT NULL,
@@ -22,9 +18,9 @@ CREATE TABLE char
     Bullet_file         varchar NOT NULL,
     PRIMARY KEY (char_id)
 );
--- DROP INDEX if EXISTS char_key;
--- CREATE UNIQUE INDEX char_key ON char (char_code);
-copy char (char_code, Title, Type, Type_Description, Web_Valid, png_file, Bullet_file) from 'D:\DATA\Sensor\webApp\char.csv'  delimiter ',' csv header;
+DROP INDEX if EXISTS char_key;
+CREATE UNIQUE INDEX char_key ON char (char_id);
+copy char (char_code, Title, Type, Type_Description, Web_Valid, png_file, Bullet_file) from 'D:\DATA\Sensor\webApp\csv_files\char.csv'  delimiter ',' csv header;
 
 
 
@@ -45,7 +41,7 @@ CREATE TABLE option
 );
 DROP INDEX if EXISTS option_key;
 CREATE INDEX option_key ON option (option_code);
-copy option (option_code, rev, Title, web_valid, png_file, output_type, output_type_2) from 'D:\DATA\Sensor\webApp\options.csv'  delimiter ',' csv header;
+copy option (option_code, rev, Title, web_valid, png_file, output_type, output_type_2) from 'D:\DATA\Sensor\webApp\csv_files\options.csv'  delimiter ',' csv header;
 
 
 DROP TABLE IF EXISTS char_op CASCADE;
@@ -70,7 +66,7 @@ CREATE TABLE char_op
 );
 DROP INDEX if EXISTS char_op_key;
 CREATE INDEX char_op_key ON char_op (char_op_code);
-copy char_op (char_op_code, option_code, rev, Title, web_valid, png_file, wires, supply_voltage) from 'D:\DATA\Sensor\webApp\char_op.csv'  delimiter ',' csv header;
+copy char_op (char_op_code, option_code, rev, Title, web_valid, png_file, wires, supply_voltage) from 'D:\DATA\Sensor\webApp\csv_files\char_op.csv'  delimiter ',' csv header;
 
 
 
@@ -95,7 +91,7 @@ CREATE TABLE connection
 );
 -- DROP INDEX if EXISTS connection_key;
 -- CREATE INDEX connection_key ON connection (connection_id);
-copy connection (connection_code, web_code, rev, Title, web_valid, part_number, png_file, wires, connection_type, wire_guage, length, insulation_material) from 'D:\DATA\Sensor\webApp\connections.csv'  delimiter ',' csv header;
+copy connection (connection_code, web_code, rev, Title, web_valid, part_number, png_file, wires, connection_type, wire_guage, length, insulation_material) from 'D:\DATA\Sensor\webApp\csv_files\connections.csv'  delimiter ',' csv header;
 
 DROP TABLE IF EXISTS housing CASCADE;
 CREATE TABLE housing
@@ -118,7 +114,7 @@ CREATE TABLE housing
 );
 -- DROP INDEX if EXISTS housing_key;
 -- CREATE INDEX housing_key ON housing (housing_id);
-copy housing (housing_code, part_number, rev, Title, web_valid, png_file, mech_file, material, mount_type, thread_pitch, length, integral_connector, integral_connector2) from 'D:\DATA\Sensor\webApp\housings.csv'  delimiter ',' csv header;
+copy housing (housing_code, part_number, rev, Title, web_valid, png_file, mech_file, material, mount_type, thread_pitch, length, integral_connector, integral_connector2) from 'D:\DATA\Sensor\webApp\csv_files\housings.csv'  delimiter ',' csv header;
 
 
 
@@ -137,21 +133,9 @@ CREATE TABLE sensor
     wizard_part         varchar, 
     PRIMARY KEY (sensor_id, sensor_code) --, part_number)
 );
--- ERROR:  duplicate key value violates unique constraint "sensor_part_number_key"
--- DETAIL:  Key (part_number)=(MFM7-EHS1-F5CP2) already exists.
--- EHS1F5MFM7CP2	MFM7-EHS1-F5CP2	ADE	Sensitive Either Pole Hall Switch, 38 G, supply filter, npn 5k pull up resistor, Plastic .7" flange mount 1.5" long housing, 3 pin Packard 280 with 6" 20AWG TXL	EHS1	HS	yes
--- EHS1BZ2MFM7ACP2A	MFM7-EHS1-F5CP2	xAA	Micro Power Either Pole Hall Switch, 38 G, Battery Operated, 10V zener output clamp, Plastic .7" flange mount no O ring 1" long housing, 3 pin Packard 280 with 6" 20AWG TXL and corrugated tube	EHS1	HS	yes
-
-
--- ERROR:  duplicate key value violates unique constraint "sensor_sensor_code_key"
--- DETAIL:  Key (sensor_code)=(EHS1B3OS63BP21) already exists. --> changed to 3T (as it should be)
---changed these as well m12 -> s12
--- HL1POS12CD3	S12-HL1-POCD3	ACD	Hall Latch with 35 gauss operate point, pnp open collector output, Plastic 12x1mm x 35mm housing, 3 pin Deutsch DT with 5 inch 20 AWG XLPE	HL1	HL	yes
--- HL1POS12CP2	S12-HL1-POCP2	ACE	Hall Latch with 35 gauss operate point, pnp open collector output, Plastic 12x1mm x 35mm housing, 3 pin Packard 280 with 6" 20AWG TXL	HL1	HL	yes
------------------CANT INDEX SENSOR_CODE OR PARTNUMBER ----> RUNNING INTO REPEATED VALUES
 DROP INDEX if EXISTS sensor_key;
 CREATE INDEX sensor_key ON sensor (sensor_code);
-copy sensor (sensor_code, part_number, rev, Title, char, type, wizard_part) from 'D:\DATA\Sensor\webApp\sensors(web&nonWiz).csv'  delimiter ',' csv header;
+copy sensor (sensor_code, part_number, rev, Title, char, type, wizard_part) from 'D:\DATA\Sensor\webApp\csv_files\sensors(web&nonWiz).csv'  delimiter ',' csv header;
 
 
 
@@ -179,7 +163,7 @@ CREATE TABLE custom
 );
 -- DROP INDEX if EXISTS custom_key;
 -- CREATE INDEX custom_key ON custom (part_number);
-copy custom (custom_sensor_code, part_number, rev, Title, config_level, closest_housing, closest_char, closest_option, closest_connection, notes, customer, gear) from 'D:\DATA\Sensor\webApp\custom.csv'  delimiter ',' csv header;-- encoding 'latin1';
+copy custom (custom_sensor_code, part_number, rev, Title, config_level, closest_housing, closest_char, closest_option, closest_connection, notes, customer, gear) from 'D:\DATA\Sensor\webApp\csv_files\custom.csv'  delimiter ',' csv header;-- encoding 'latin1';
 
 
 
@@ -202,17 +186,4 @@ CREATE TABLE xproto
 );
 -- DROP INDEX if EXISTS xproto_key;
 -- CREATE INDEX xproto_key ON xproto (xproto_part_number);
-copy xproto (xproto_code, xproto_part_number, rev, Description, notes, housing, char, opt, connection, notes_additional, customer) from 'D:\DATA\Sensor\webApp\xproto_edit.csv'  delimiter ',' csv header encoding 'latin1';
-
-
-
-
-
-
---PM-HCS63N-01025S, Potted Magnet Bolt, 0.5” long 5/8-11 Thread, Nylon with NEO35 Cylinder .50" diameter x .25" long, S Pole Field. Trimble P/N 58141 
---Custom Sensor, Dual 37ADSO-2K in 5/8-18 Housing 5” long, with ½ in NPT. Sensor provided with Union and Crouse & Hinds GUAB16 Enclosure, Free End Shielded 3 Wire PVC, 22AWG, 20 foot
-
-
---  0.5” long 5/8-11 Thread,
---  0.5”
-
+copy xproto (xproto_code, xproto_part_number, rev, Description, notes, housing, char, opt, connection, notes_additional, customer) from 'D:\DATA\Sensor\webApp\csv_files\xproto.csv'  delimiter ',' csv header encoding 'latin1';
