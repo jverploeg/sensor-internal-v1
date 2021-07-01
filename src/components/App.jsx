@@ -254,8 +254,8 @@ const App = () => {
                 {(page !== "Home") && 
                     <div className="data">    
                         <div className = "table">
-                            <button onClick={showData}>{isTextChanged ? 'Hide Data' : 'Show Data'}</button>
-                            {!!isTextChanged &&
+                            {/* <button onClick={showData}>{isTextChanged ? 'Hide Data' : 'Show Data'}</button> */}
+                            {!!data &&
                                 <div className = "foot" style={{ height: 600, width: '100%' }}>
                                     {!!rows &&
                                         <DataGrid

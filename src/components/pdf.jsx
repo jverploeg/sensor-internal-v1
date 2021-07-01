@@ -1,7 +1,7 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+//import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import path from 'path';
-import fs from 'fs'; //functionality to access and interact with the file system
+
 
 //path shortcut
 //const path = `D:/DATA/Sensor/webApp/images/`;

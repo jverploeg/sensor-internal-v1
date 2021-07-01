@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 //import { PDFDownloadLink } from '@react-pdf/renderer';
-import MyDocument from './pdf';
+//import MyDocument from './pdf';
 
 
 const Search = () => {

@@ -69,18 +69,18 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
     //BREAKING CHANGE: webpack < 5 used to include polyfills for node.js core modules by default.
-    fallback: {
-        "fs": false,
-        "tls": false,
-        "net": false,
-        "path": false,
-        "zlib": false,
-        "http": false,
-        "https": false,
-        "stream": false,
-        "crypto": false,
-        //"crypto-browserify": require.resolve('crypto-browserify'), //if you want to use this module also don't forget npm i crypto-browserify 
-      }, 
+    // fallback: {
+    //     "fs": false,
+    //     "tls": false,
+    //     "net": false,
+    //     "path": false,
+    //     "zlib": false,
+    //     "http": false,
+    //     "https": false,
+    //     "stream": false,
+    //     "crypto": false,
+    //     //"crypto-browserify": require.resolve('crypto-browserify'), //if you want to use this module also don't forget npm i crypto-browserify 
+    //   }, 
   },
 
   // watch files and recompile whenever they change
