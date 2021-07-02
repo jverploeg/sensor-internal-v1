@@ -10,11 +10,12 @@ const db = require('../database/model.js');
 //         res.status(500).send(error);
 //     }
 // }
-// const getImage = (req, res) => {
-//     console.log(req.body)
+const getImage = (req, res) => {
+    console.log({req})
+    let path = `file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`
 
-//     res.sendFile(__dirname + '/index.html');
-// }
+    res.sendFile(path);
+}
 
 //ADAPTIVE FUNCTIONS THAT WORK FOR ANY TABLE//
 const getData = (req, res) => {
@@ -93,6 +94,6 @@ module.exports = {
     changeData,
     getSensor,
     getCustom,
-    //getImage
+    getImage
 
 }

@@ -9,10 +9,11 @@ const generatePDF = (data) => {
     //const doc = new jsPDF();
     //destructure redefine data/props
     console.log({data})
-    let imagePath = `${localPath}/housing/${data}-Model.png`
+    //{require(`file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`).default}
+    let imagePath = `file:///${localPath}/housing/${data}-Model.png`
     console.log({imagePath})
     var image = new Image();
-    image.src = imagePath; //path.resolve(imagePath)
+    image.src = require(imagePath).default; //path.resolve(imagePath)
     console.log({image})
     //initialize
     const doc = new jsPDF();
