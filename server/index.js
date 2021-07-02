@@ -10,6 +10,9 @@ const app = express();
 // render static files
 app.use(express.static(path.resolve(__dirname, '..', 'src', 'dist')));
 
+//local files
+//app.use('/images', express.static('file:///D:/DATA/Sensor/webApp/images'))
+//https://www.geeksforgeeks.org/how-to-fetch-images-from-node-server/
 
 // setup middleware for parsing
 app.use(express.json());
@@ -32,10 +35,12 @@ const db = require('../database/index');
 const port = 3000;
 
 // connect server
+//app.listen(port, '192.168.1.118', () => {
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
 
+//app.get('/images', route.getImage);
 ////////////ROUTES//////////////////////
 //HOUSING
 app.get('/housing', route.getData);

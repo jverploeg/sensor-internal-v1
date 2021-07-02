@@ -66,6 +66,33 @@ const Search = () => {
         //update type state
     }
 
+    // const imageSource = () => {
+    //     console.log({__dirname})
+    //     win.loadURL('file:///' + __dirname + "/index.html");
+    // }
+    const getImage = (input) => {
+        try {
+            const res = axios.get(`${host}/images/housing/${input}-Model.png`);
+            let data = res.data;
+        }
+        catch (error) {
+            console.log(error)
+        }
+
+        //let data = res.data;
+        console.log(data);
+    }
+    // const getData = async() => {
+    //     //determine route -> db table based on pageSelection
+    //     let route = page;
+    //     try {
+    //         const response = await axios.get(`${host}/${route}`);
+    //         setData(response.data);
+    //     }
+    //     catch (error) {
+    //         console.log(error)
+    //     }
+    // }
 
 
     return(
@@ -87,7 +114,12 @@ const Search = () => {
             <div className = "results">
                 {!!searchTerm &&
                 <div>
-                    <button onClick={() => generatePDF(searchTerm)}>{searchTerm}</button>
+                    {/* <input type='file'> */}
+                        {/* <img src={require(`file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`)}></img> */}
+                        <img src={getImage(searchTerm)}></img>
+                    {/* </input> */}
+                    {/* <button onClick={() => generatePDF(searchTerm)}>{searchTerm}</button> */}
+
                 </div>
                 }
             </div>

@@ -1,18 +1,23 @@
 import React from 'react';
 import jsPDF from 'jspdf';
+//import path from 'path';
 
-const path = `D:/DATA/Sensor/webApp/images`;
+const localPath = `D:/DATA/Sensor/webApp/images`;
 
 //define generator function
 const generatePDF = (data) => {
+    //const doc = new jsPDF();
     //destructure redefine data/props
     console.log({data})
-    let imagePath = `${path}/${data}.png`
+    let imagePath = `${localPath}/housing/${data}-Model.png`
     console.log({imagePath})
+    var image = new Image();
+    image.src = imagePath; //path.resolve(imagePath)
+    console.log({image})
     //initialize
     const doc = new jsPDF();
-    doc.text("Hello world!", 10, 10);
-    doc.addImage(`${path}/${data}.png`, 'png', 5, 5, 720, 324);
+    //doc.text("Hello world!", 10, 10);
+    doc.addImage(image, 'png', 5, 5, 720, 324);
     doc.save("a4.pdf");
     //startY is margin-top
 
@@ -20,6 +25,7 @@ const generatePDF = (data) => {
 export default generatePDF;
 
 // Not allowed to load local resource: file:///D:/DATA/Sensor/webApp/images/S8.png
+
 
 
 

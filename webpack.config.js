@@ -61,6 +61,15 @@ module.exports = {
                     },
                 ],
             },
+            // image loader
+            {
+                test: /\.(png|jpg|jpeg)$/,
+                use: [{
+                    //loader: 'file-loader',
+                    loader: 'url-loader',
+                    options: {}
+                }]
+            },
         ],    
     },
 
