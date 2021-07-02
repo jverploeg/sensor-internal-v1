@@ -116,10 +116,10 @@ const Search = () => {
                 {!!searchTerm &&
                 <div>
                     {/* <input type='file'> */}
-                        <img src={require(`file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`).default}></img>
+                        {/* <img src={require(`file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`).default}></img> */}
                         {/* <img src={getImage(searchTerm)}></img> */}
                     {/* </input> */}
-                    {/* <button onClick={() => generatePDF(searchTerm)}>{searchTerm}</button> */}
+                    <button onClick={() => generatePDF(searchTerm)}>{searchTerm}</button>
 
                 </div>
                 }
