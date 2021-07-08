@@ -72,7 +72,7 @@ app.get('/xproto', route.getData);//for displaying sensors in the table selectio
 // app.get('/custom', route.getData);//for displaying sensors in the table selections
 // app.get('/xproto', route.getData);//for displaying sensors in the table selections
 
-app.get('/sensorValid', route.getSensor);
+app.get('/sensor', route.getSensor);
 app.get('/custom', route.getCustom);
 
 

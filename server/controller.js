@@ -65,9 +65,8 @@ const changeData = (req, res) => {
 }
 
 const getSensor = (req, res) => {
-    //console.log({req})
-    let data = req.query.sensor; //define what the sensor number is from the axios request
-    //console.log({data}); //{ data: 'asdf' }
+    console.log(req.body)
+    let data = ''; //define what this is later
     db.getSensor(data)
     .then(result => {
         res.status(200).send(result.rows);

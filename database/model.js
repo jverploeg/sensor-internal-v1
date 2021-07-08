@@ -49,12 +49,11 @@ module.exports.getSensor = async(data) => {
     //split data into tables, part_ids
     //multiple queries
     //promisify/sequelize????
-    console.log({data})
-    let qString = `SELECT * FROM sensor where part_number = '${data}'`;
-    // let hString = `SELECT * FROM housing where housing_id = ${something}`;
-    // let chString = `SELECT * FROM char where char_id = ${something}`;
-    // let oString = `SELECT * FROM option where option_id = ${something}`;
-    // let cnString = `SELECT * FROM conn where conn_id = ${something}`;
+
+    let hString = `SELECT * FROM housing where housing_id = ${something}`;
+    let chString = `SELECT * FROM char where char_id = ${something}`;
+    let oString = `SELECT * FROM option where option_id = ${something}`;
+    let cnString = `SELECT * FROM conn where conn_id = ${something}`;
     try {
         const response = await pool.query(qString);
         return response;
