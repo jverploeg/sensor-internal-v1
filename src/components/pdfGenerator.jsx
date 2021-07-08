@@ -10,23 +10,35 @@ const generatePDF = (sensor, data) => {
     //destructure redefine data/props
     console.log({data})
     // allow dynamic access to image folders
-    const images = require.context('../images', true);
+    // const images = require.context('../images', true);
     //break the search term down accordingly
     let segments = sensor.split('-');
     let housing = segments[0];
     let char = segments[1];
     let optConn = segments[2];
     let type = data[0].type;
+    let sensor_code = data[0].sensor_code;
+    let splitOps = sensor_code.split(housing)
+    let connect = splitOps[1];
+    let option = splitOps[0].slice(3)
+    // splitOps[0].split(char);
+    console.log(connect, option)
     //define needed images
-    const h = images('./housing/A47-Model.png')
-
+    // const typeImage = images(`./type/Type-${type}-Model.png`);
+    // const mechImage = images(`./mech/${housing}-Mech-Model.png`);
+    // const housingImage = images(`./housing/${housing}-Model.png`);
+    const test = require(`../images/housing/${housing}-Model.png`);
+    const test2 = require(`D:/DATA/Sensor/webApp/images/housing/S8-Model.png`);
+    // const optionImage = images(`./option/${housing}-Model.png`);
+    // const housingImage = images(`./housing/${housing}-Model.png`);
+    // const housingImage = images(`./housing/${housing}-Model.png`);
+    // const housingImage = images(`./housing/${housing}-Model.png`);
+    // const housingImage = images(`./housing/${housing}-Model.png`);
+    console.log({test2})
     //initialize
     const doc = new jsPDF('p', 'in');
 
-    //this works..........
-    //const h = images('./S8-Model.png')
-    console.log({h})
-    doc.addImage(h.default, 'png', 0, 2.25, 5.0, 2.25);
+    doc.addImage(test2.default, 'png', 0, 2.25, 5.0, 2.25);
     doc.save("a4.pdf");
     //startY is margin-top
 
