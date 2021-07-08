@@ -3,6 +3,8 @@ import jsPDF from 'jspdf';
 //import path from 'path';
 import S8 from '../images/S8-Model.png'
 
+
+
 const localPath = `D:/DATA/Sensor/webApp/images`;
 
 //define generator function
@@ -10,6 +12,8 @@ const generatePDF = (data) => {
     //const doc = new jsPDF();
     //destructure redefine data/props
     console.log({data})
+
+    const images = require.context('../images', true);
     //{require(`file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`).default}
     //let imagePath = `file:///${localPath}/housing/${data}-Model.png`
     //let imagePath = `file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`
@@ -41,7 +45,9 @@ const generatePDF = (data) => {
     // doc.addImage(img, 'png', 0, 0, 5.0, 2.25);//, 5, 5, 720, 324);
 
     //this works..........
-    doc.addImage(S8, 'png', 0, 0, 5.0, 2.25);
+    const h = images('./S8-Model.png')
+    console.log({S8, h})
+    doc.addImage(h.default, 'png', 0, 2.25, 5.0, 2.25);
     doc.save("a4.pdf");
     //startY is margin-top
 
