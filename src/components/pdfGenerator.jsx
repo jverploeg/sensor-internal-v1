@@ -1,52 +1,31 @@
 import React from 'react';
 import jsPDF from 'jspdf';
-//import path from 'path';
-import S8 from '../images/S8-Model.png'
 
 
 
-const localPath = `D:/DATA/Sensor/webApp/images`;
 
 //define generator function
-const generatePDF = (data) => {
+const generatePDF = (sensor, data) => {
     //const doc = new jsPDF();
     //destructure redefine data/props
     console.log({data})
-
+    // allow dynamic access to image folders
     const images = require.context('../images', true);
-    //{require(`file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`).default}
-    //let imagePath = `file:///${localPath}/housing/${data}-Model.png`
-    //let imagePath = `file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`
+    //break the search term down accordingly
+    let segments = sensor.split('-');
+    let housing = segments[0];
+    let char = segments[1];
+    let optConn = segments[2];
+    let type = data[0].type;
+    //define needed images
+    const h = images('./housing/A47-Model.png')
 
-    //https://stackoverflow.com/questions/19065562/add-image-in-pdf-using-jspdf
-    //https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img
-
-    let imagePath = `D:/DATA/Sensor/webApp/images/housing/S8-Model.png`;
-    let imagePath2 = `file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`;
-    console.log({imagePath2})
     //initialize
     const doc = new jsPDF('p', 'in');
-    // var img = new Image();
-    // //The Image() constructor creates a new HTMLImageElement instance. 
-    // console.log({img})
-    // img.crossOrigin = ""
-    // //img.src = imagePath; //path.resolve(imagePath)
-    // img.src = S8; //path.resolve(imagePath)
-    // img.onload = function() {
-    //     doc.addImage(img, 'png', 5, 5, 5.0, 2.25);
-    //     //(imageData, format x, y, width, height)
-    //     //imageData 	string | HTMLImageElement | HTMLCanvasElement | Uint8Array imageData as base64 encoded DataUrl or Image-HTMLElement or Canvas-HTMLElement
-    // };
-    //const test = doc.getImageProperties(img);
-    // console.log({test})
-    // doc.addImage(imagePath, 'png', 5, 5, 5.0, 2.25);
-    // var img = new Image();
-    // img.src = '../images/S8-Model.png';
-    // doc.addImage(img, 'png', 0, 0, 5.0, 2.25);//, 5, 5, 720, 324);
 
     //this works..........
-    const h = images('./S8-Model.png')
-    console.log({S8, h})
+    //const h = images('./S8-Model.png')
+    console.log({h})
     doc.addImage(h.default, 'png', 0, 2.25, 5.0, 2.25);
     doc.save("a4.pdf");
     //startY is margin-top

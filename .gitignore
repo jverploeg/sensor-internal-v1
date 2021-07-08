@@ -10,6 +10,10 @@
 #distribution
 /src/distribution
 
+#spec sheet images
+/src/images
+/src/bullets
+
 #misc
 package-lock.json
 excel.txt

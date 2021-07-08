@@ -3,6 +3,7 @@ import axios from 'axios';
 //import { PDFDownloadLink } from '@react-pdf/renderer';
 //import MyDocument from './pdf';
 import generatePDF from './pdfGenerator';
+import Parser from './parse';
 
 
 const Search = () => {
@@ -119,8 +120,8 @@ const Search = () => {
                         {/* <img src={require(`file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`).default}></img> */}
                         {/* <img src={getImage(searchTerm)}></img> */}
                     {/* </input> */}
-                    <button onClick={() => generatePDF(searchTerm)}>{searchTerm}</button>
-
+                    {/* <button onClick={() => generatePDF(searchTerm)}>{searchTerm}</button> */}
+                    <button onClick={() => Parser(searchTerm)}>{searchTerm}</button>
                 </div>
                 }
             </div>
