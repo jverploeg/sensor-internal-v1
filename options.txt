@@ -6,3 +6,5 @@ full-featured query and schema builders, transaction support (with savepoints),
 connection pooling and standardized responses between different query clients and dialects.
 
 
+https://medium.com/@ipenywis/how-to-reduce-your-webpack-bundle-size-for-web-app-optimization-02-9b7086e30a6d
+

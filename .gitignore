@@ -13,6 +13,8 @@
 
 # Distribution directories
 dist/
+dist/bundle.js
+
 
 
 #spec sheet images
