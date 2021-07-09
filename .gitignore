@@ -8,7 +8,12 @@
 /scripts
 
 #distribution
-/src/distribution
+/src/dist
+/src/dist/bundle.js
+
+# Distribution directories
+dist/
+
 
 #spec sheet images
 /src/images

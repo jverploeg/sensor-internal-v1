@@ -1,6 +1,6 @@
 import React from 'react';
 import jsPDF from 'jspdf';
-
+import date from '../images/DATECODE1-Model.png'
 
 
 
@@ -20,25 +20,46 @@ const generatePDF = (sensor, data) => {
     let sensor_code = data[0].sensor_code;
     let splitOps = sensor_code.split(housing)
     let connect = splitOps[1];
-    let option = splitOps[0].slice(3)
+    let option = splitOps[0].slice(char.length)
     // splitOps[0].split(char);
-    console.log(connect, option)
+    console.log(connect, option);
     //define needed images
-    // const typeImage = images(`./type/Type-${type}-Model.png`);
-    // const mechImage = images(`./mech/${housing}-Mech-Model.png`);
-    // const housingImage = images(`./housing/${housing}-Model.png`);
-    const test = require(`../images/housing/${housing}-Model.png`);
-    const test2 = require(`D:/DATA/Sensor/webApp/images/housing/S8-Model.png`);
-    // const optionImage = images(`./option/${housing}-Model.png`);
-    // const housingImage = images(`./housing/${housing}-Model.png`);
-    // const housingImage = images(`./housing/${housing}-Model.png`);
-    // const housingImage = images(`./housing/${housing}-Model.png`);
-    // const housingImage = images(`./housing/${housing}-Model.png`);
-    console.log({test2})
+    // const typeImage = require(`D:/DATA/Sensor/webApp/images/type/Type-${type}-Model.png`);
+    // const mechImage = require(`D:/DATA/Sensor/webApp/images/mech/${housing}-Mech-Model.png`);
+    // const housingImage = require(`D:/DATA/Sensor/webApp/images/housing/${housing}-Model.png`);
+    // const optionImage = require(`D:/DATA/Sensor/webApp/images/option/${option}-Model.png`);
+    // const connectImage = require(`D:/DATA/Sensor/webApp/images/connect/${connect}-Model.png`);
+    // const conn_chartsImage = require(`D:/DATA/Sensor/webApp/images/conn_charts/${connect}-${char}-Model.png`);
+    // //const date = require('..images/DATECODE1-Model.png');
+    // const spec_chartsImage = require(`D:/DATA/Sensor/webApp/images/spec_charts/${char}-${option}-Model.png`);
+    // const pictureImage = require(`D:/DATA/Sensor/webApp/images/pictures/${housing}-${char}-Model.png`);
+
+
     //initialize
     const doc = new jsPDF('p', 'in');
+    //set margins, and styling themes
 
-    doc.addImage(test2.default, 'png', 0, 2.25, 5.0, 2.25);
+    const typeImage = require(`D:/DATA/Sensor/webApp/images/type/Type-${type}-Model.png`);
+        doc.addImage(typeImage.default, 'png', 0, 0, 3.5, 2.125);
+    const mechImage = require(`D:/DATA/Sensor/webApp/images/mech/${housing}-Mech-Model.png`);
+        doc.addImage(mechImage.default, 'png', 4.625, 1, 3.625, 1);
+    const housingImage = require(`D:/DATA/Sensor/webApp/images/housing/${housing}-Model.png`);
+        doc.addImage(housingImage.default, 'png', 0, 2.25, 5, 2.25);
+    const optionImage = require(`D:/DATA/Sensor/webApp/images/option/${option}-Model.png`);
+        doc.addImage(optionImage.default, 'png', 5.5, 2.25, 2.125, 2.25);
+    const connectImage = require(`D:/DATA/Sensor/webApp/images/connect/${connect}-Model.png`);
+        doc.addImage(connectImage.default, 'png', 0, 5.25, 5, 2.25);
+    const conn_chartsImage = require(`D:/DATA/Sensor/webApp/images/conn_charts/${connect}-${char}-Model.png`);
+        doc.addImage(conn_chartsImage.default, 'png', 5.5, 5.25, 2.125, 1.125);
+        doc.addImage(date, 'png', 5.5, 6.475, 2.125, 1);
+    
+    //SECOND PAGE
+    doc.addPage();
+    const spec_chartsImage = require(`D:/DATA/Sensor/webApp/images/spec_charts/${char}-${option}-Model.png`);
+        doc.addImage(spec_chartsImage.default, 'png', 0, 0, 7.5, 5.5);
+    const pictureImage = require(`D:/DATA/Sensor/webApp/images/pictures/${housing}-${char}-Model.png`);
+        doc.addImage(pictureImage.default, 'png', 0, 6, 7.5, 4);
+
     doc.save("a4.pdf");
     //startY is margin-top
 
@@ -47,7 +68,16 @@ export default generatePDF;
 
 
 
-
+    // const typeImage = images(`./type/Type-${type}-Model.png`);
+    // const mechImage = images(`./mech/${housing}-Mech-Model.png`);
+    // const housingImage = images(`./housing/${housing}-Model.png`);
+    // const test = require(`../images/housing/${housing}-Model.png`);
+    // const test2 = require(`D:/DATA/Sensor/webApp/images/housing/S8-Model.png`);
+    // const optionImage = images(`./option/${housing}-Model.png`);
+    // const housingImage = images(`./housing/${housing}-Model.png`);
+    // const housingImage = images(`./housing/${housing}-Model.png`);
+    // const housingImage = images(`./housing/${housing}-Model.png`);
+    // const housingImage = images(`./housing/${housing}-Model.png`);
 
 
 
