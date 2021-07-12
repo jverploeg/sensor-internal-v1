@@ -29,6 +29,23 @@ const generatePDF = (sensor, data) => {
     let footer = `Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * ${revision} `;
 
 
+    //BULLETS
+    const bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
+    console.log(bullets_html);
+    var bullet_text = bullets_html.replace(/<[^>]+>/g, '');
+    bullet_text = bullet_text.replace(/\r/g, '');
+    console.log(bullet_text)
+    bullet_text = bullet_text.split('\n');
+    //remove first & last elements
+    bullet_text.shift();//.pop();;
+    bullet_text.pop();
+    console.log(bullet_text);
+    //add 'bullet point to start of each line
+    for(let i = 0; i < bullet_text.length; i++){
+        bullet_text[i] = 'o  '+ bullet_text[i];
+    };
+    console.log(bullet_text);
+
     //Bottom text 
     //TEMPORARY fix to retrieve and manipulate the html text for the spec description...
     //TODO: clean up logic, find if this works for all description files.....
@@ -82,21 +99,22 @@ const generatePDF = (sensor, data) => {
     doc.text(desc_lines, margins.left, margins.top + 15);//+20?
 
     //TODO bullets!!!
+    doc.text(bullet_text, 300, 80)
     
     //ADD IMAGES FOR 1st Page
-    // const typeImage = require(`D:/DATA/Sensor/webApp/images/type/Type-${type}-Model.png`);
-    //     doc.addImage(typeImage.default, 'png', margins.left, 60, 252, 157);
-    // const mechImage = require(`D:/DATA/Sensor/webApp/images/mech/${housing}-Mech-Model.png`);
-    //     doc.addImage(mechImage.default, 'png', 300, 145, 261, 72);
-    // const housingImage = require(`D:/DATA/Sensor/webApp/images/housing/${housing}-Model.png`);
-    //     doc.addImage(housingImage.default, 'png', margins.left, 230, 360, 162);
-    // const optionImage = require(`D:/DATA/Sensor/webApp/images/option/${option}-Model.png`);
-    //     doc.addImage(optionImage.default, 'png', 407, 230, 153, 162);
-    // const connectImage = require(`D:/DATA/Sensor/webApp/images/connect/${connect}-Model.png`);
-    //     doc.addImage(connectImage.default, 'png', margins.left, 400, 360, 162);
-    // const conn_chartsImage = require(`D:/DATA/Sensor/webApp/images/conn_charts/${connect}-${char}-Model.png`);
-    //     doc.addImage(conn_chartsImage.default, 'png', 407, 400, 153, 92);
-    //     doc.addImage(date, 'png', 407, 492, 153, 72);
+    const typeImage = require(`D:/DATA/Sensor/webApp/images/type/Type-${type}-Model.png`);
+        doc.addImage(typeImage.default, 'png', margins.left, 60, 252, 157);
+    const mechImage = require(`D:/DATA/Sensor/webApp/images/mech/${housing}-Mech-Model.png`);
+        doc.addImage(mechImage.default, 'png', 300, 145, 261, 72);
+    const housingImage = require(`D:/DATA/Sensor/webApp/images/housing/${housing}-Model.png`);
+        doc.addImage(housingImage.default, 'png', margins.left, 230, 360, 162);
+    const optionImage = require(`D:/DATA/Sensor/webApp/images/option/${option}-Model.png`);
+        doc.addImage(optionImage.default, 'png', 407, 230, 153, 162);
+    const connectImage = require(`D:/DATA/Sensor/webApp/images/connect/${connect}-Model.png`);
+        doc.addImage(connectImage.default, 'png', margins.left, 400, 360, 162);
+    const conn_chartsImage = require(`D:/DATA/Sensor/webApp/images/conn_charts/${connect}-${char}-Model.png`);
+        doc.addImage(conn_chartsImage.default, 'png', 407, 400, 153, 92);
+        doc.addImage(date, 'png', 407, 492, 153, 72);
 
     //Bottom text
     doc.setFontSize(10);//font size isnt 12 when looking at spec sheets printed currently
@@ -128,7 +146,8 @@ const generatePDF = (sensor, data) => {
         doc.addImage(pictureImage.default, 'png', margins.left, 450, 540, 320);
 
 
-    //footer    
+    //footer
+    doc.setFontSize(10);    
     doc.setFont('times', 'italic');
     doc.text(footer, 132, 785);
 
