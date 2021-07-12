@@ -4,15 +4,10 @@ import axios from 'axios';
 
 // STYLING DEPENDENCIES
 import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@material-ui/data-grid';
-//import Grid from '@material-ui/core/Grid';
-//import Button from '@material-ui/core/Button';
 
 // SUBCOMPONENTS/HELPERS/CUSTOM HOOKS
 import useToggle from './toggle';
 import Search from './search';
-// import usePageSwitch from './pageSwitch';
-// import useReferredState from './ref';
-//import ControlGrid from './dataGrid';
 
 
 const App = () => {
@@ -27,7 +22,6 @@ const App = () => {
     const [inputCols, setInputCols] = useState([]); // need to make a deep copy of cols and then shift so we dont alter cols 
     // custom state/hooks
     const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
-    const [currentPage, setCurrentPage] = useToggle();
     const [select, setButton] = useState(''); // sets the state for styling currentPage in navbar
     
 
@@ -41,7 +35,6 @@ const App = () => {
         getData();
         setPage('Home');
         selected();
-        //document.getElementsByClassName('testing').hidden = true;
     },[]);
 
     useEffect(() => {
@@ -146,9 +139,6 @@ const App = () => {
 
     ////////EVENT HANDLERS////////////
     // Universal input bar handler
-    // const onChangeHandler = useCallback(
-    //     ({target:{name,value}}) => setInputs(state => ({ ...state, [name]:value }), [])
-    // );
     const handleChange = (e) => {
         setInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
     }    
@@ -159,9 +149,8 @@ const App = () => {
             //determine route -> db table based on pageSelection
             let route = page;
             axios.put(`${host}/${route}`, {id, field, props})
-            //axios.put(`${host}/sample`, {id, field, props})
             .then(response => {
-              console.log('axios in app response',response);
+              console.log(response);
             })
             .catch(error => {
               console.log(error);
@@ -171,7 +160,6 @@ const App = () => {
         //determine route -> db table based on pageSelection
         let route = page;
         axios.post(`${host}/${route}`, inputs)
-        //axios.post(`${host}/sample`, temp)
           .then(response => {
             console.log(response);
           })
@@ -186,10 +174,10 @@ const App = () => {
         getData();
     }
 
-    const handleRowClick = (e) => {
-        let target = e.target;
-        console.log(target)
-    }
+    // const handleRowClick = (e) => {
+    //     let target = e.target;
+    //     console.log(target)
+    // }
 
     const handlePageChange = (e) => {
         //get current page
@@ -199,7 +187,7 @@ const App = () => {
         //set the page
         setPage(newPage);
     }
-    // const [select, setButton] = useState(''); // sets the state for styling currentStyle
+
     const selected = (e) => {
         // if nothing selected yet, focus on home page
         if (!select) {
@@ -219,7 +207,6 @@ const App = () => {
         } 
       };
       
-      //https://stackoverflow.com/questions/24502898/show-or-hide-element-in-react
     //DOM
     return(
         <div className = "page">
@@ -239,9 +226,6 @@ const App = () => {
                             </button>
                         </figure>
                     ))}
-                    {/* <button onClick={handlePageChange} name='page1' value={viewports[0]} variant="contained">Home</button>
-                    <button onClick={handlePageChange} name='page2' value={viewports[1]} variant="contained">Char</button>
-                    <button onClick={handlePageChange} name='page3' value={viewports[2]} variant="contained">Housing</button> */}
             </div>
 
             <div className = "body">
@@ -270,11 +254,6 @@ const App = () => {
                         </div>
 
                         <div className = "addData">
-                            {/* <input key="field1" name="field1" onChange={onChangeHandler} value={inputs.field1 || ''}/>
-                            <input key="field2" name="field2" onChange={onChangeHandler} value={inputs.field2 || ''}/> */}
-                            {/* <input name="field1" value={inputs.field1 || ''} onChange={handleChange} />
-                            <input name="field2" value={inputs.field2 || ''} onChange={handleChange} /> */}
-
                             <form id="data-form">
                                 {!!inputCols && inputCols.map((item, index) => (
                                     <input

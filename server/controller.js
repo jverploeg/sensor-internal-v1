@@ -1,22 +1,5 @@
 const db = require('../database/model.js');
 
-
-// const getSample = async(req, res) => {
-//     try {
-//         const data = await db.getSample(req.params);
-//         res.status(200).send(data.rows);
-//     }
-//     catch (error) {
-//         res.status(500).send(error);
-//     }
-// }
-const getImage = (req, res) => {
-    console.log({req})
-    let path = `file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`
-
-    res.sendFile(path);
-}
-
 //ADAPTIVE FUNCTIONS THAT WORK FOR ANY TABLE//
 const getData = (req, res) => {
     //remove the / from the req.url
@@ -65,9 +48,7 @@ const changeData = (req, res) => {
 }
 
 const getSensor = (req, res) => {
-    //console.log({req})
     let data = req.query.sensor; //define what the sensor number is from the axios request
-    //console.log({data}); //{ data: 'asdf' }
     db.getSensor(data)
     .then(result => {
         res.status(200).send(result.rows);
@@ -76,10 +57,9 @@ const getSensor = (req, res) => {
         res.status(500).send(error)
     })
 }
+
 const getType = (req, res) => {
-    //where is our passed param
     let data = req.query.type;
-    //console.log({data});
     db.getType(data)
     .then(result => {
         res.status(200).send(result.rows);
@@ -88,6 +68,7 @@ const getType = (req, res) => {
         res.status(500).send(error);
     })
 }
+
 const getCustom = (req, res) => {
     console.log(req.body)
     let data = ''; //define what this is later
@@ -108,6 +89,5 @@ module.exports = {
     getSensor,
     getType,
     getCustom,
-    //getImage
 
 }

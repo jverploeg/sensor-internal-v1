@@ -13,9 +13,8 @@ module.exports.getData = async(path) => {
     }
 }
 
-// module.exports.addSample = async(values) => {
-//     const text = 'INSERT INTO sample(count, val) VALUES($1, $2)'
 module.exports.addData = async(path, cols, values) => {
+    //TODO: FIX, UPDATE FOR LARGER TABLES
     const text = `INSERT INTO ${path} (${cols}) VALUES('${values[0]}', '${values[1]}', '${values[2]}', '${values[3]}', '${values[4]}')`
     // async/await
     try {
@@ -31,8 +30,6 @@ module.exports.changeData = async(path, values) => {
     let id = values[0];
     //add tablename to id field
     let table_id = path.concat('_id');
-    //console.log({col_name, value, id})
-    //const text = `UPDATE sample set ${col_name} = '${value}' where id = ${id}`
     const text = `UPDATE ${path} set ${col_name} = '${value}' where ${table_id} = ${id}`;
     // async/await
     try {
@@ -46,15 +43,7 @@ module.exports.changeData = async(path, values) => {
 
 ///////////SENSOR SPEC SEARCHES////////////////////
 module.exports.getSensor = async(data) => {
-    //split data into tables, part_ids
-    //multiple queries
-    //promisify/sequelize????
-    console.log({data})
     let qString = `SELECT * FROM sensor where part_number = '${data}'`;
-    // let hString = `SELECT * FROM housing where housing_id = ${something}`;
-    // let chString = `SELECT * FROM char where char_id = ${something}`;
-    // let oString = `SELECT * FROM option where option_id = ${something}`;
-    // let cnString = `SELECT * FROM conn where conn_id = ${something}`;
     try {
         const response = await pool.query(qString);
         return response;
@@ -63,6 +52,7 @@ module.exports.getSensor = async(data) => {
         return error;
     }
 }
+
 module.exports.getType = async(data) => {
     let qString = `SELECT type_description from char where char_code = '${data}' limit 1`;
     try {
