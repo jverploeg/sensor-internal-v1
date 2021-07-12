@@ -29,6 +29,8 @@ const App = () => {
     const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
     const [currentPage, setCurrentPage] = useToggle();
     const [select, setButton] = useState(''); // sets the state for styling currentPage in navbar
+
+    const [hide, setHide] = useState(false);
     
 
 
@@ -41,6 +43,7 @@ const App = () => {
         getData();
         setPage('Home');
         selected();
+        //document.getElementsByClassName('testing').hidden = true;
     },[]);
 
     useEffect(() => {
@@ -217,8 +220,8 @@ const App = () => {
             }
         } 
       };
-
-
+      
+      //https://stackoverflow.com/questions/24502898/show-or-hide-element-in-react
     //DOM
     return(
         <div className = "page">
@@ -289,7 +292,12 @@ const App = () => {
                         </div>
                     </div>
                 }
-                
+                {!!hide &&
+                    <div className="testing">
+                        hello
+                    </div>  
+                }
+     
             </div>
         </div>
     )

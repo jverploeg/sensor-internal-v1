@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import generatePDF from './pdfGenerator';
+import pdfTest from './pdf';
 
 function Parser(search) {
     //define state
@@ -19,7 +20,9 @@ function Parser(search) {
             //return response.data;
             //console.log(response.data);
             sensorData = response.data;
-            generatePDF(sensor, sensorData);
+            //generatePDF(sensor, sensorData);
+            //pdfTest();
+            generatePDF();
             //console.log({sensorData});
         }
         catch (error) {
