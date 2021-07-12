@@ -73,6 +73,7 @@ app.get('/xproto', route.getData);//for displaying sensors in the table selectio
 // app.get('/xproto', route.getData);//for displaying sensors in the table selections
 
 app.get('/sensorValid', route.getSensor); //index.js
+app.get('/type', route.getType); //for the type description at the top of the pdf
 app.get('/custom', route.getCustom);
 
 

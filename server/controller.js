@@ -76,6 +76,18 @@ const getSensor = (req, res) => {
         res.status(500).send(error)
     })
 }
+const getType = (req, res) => {
+    //where is our passed param
+    let data = req.query.type;
+    //console.log({data});
+    db.getType(data)
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error);
+    })
+}
 const getCustom = (req, res) => {
     console.log(req.body)
     let data = ''; //define what this is later
@@ -94,7 +106,8 @@ module.exports = {
     addData,
     changeData,
     getSensor,
+    getType,
     getCustom,
-    getImage
+    //getImage
 
 }

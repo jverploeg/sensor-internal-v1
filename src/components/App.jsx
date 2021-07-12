@@ -29,8 +29,6 @@ const App = () => {
     const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
     const [currentPage, setCurrentPage] = useToggle();
     const [select, setButton] = useState(''); // sets the state for styling currentPage in navbar
-
-    const [hide, setHide] = useState(false);
     
 
 
@@ -292,12 +290,6 @@ const App = () => {
                         </div>
                     </div>
                 }
-                {!!hide &&
-                    <div className="testing">
-                        hello
-                    </div>  
-                }
-     
             </div>
         </div>
     )

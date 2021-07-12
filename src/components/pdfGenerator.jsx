@@ -1,48 +1,84 @@
 import React from 'react';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import axios from 'axios';
 import date from '../images/DATECODE1-Model.png';
 
 
 
 //define generator function
-const generatePDF = () => {//(sensor, data) => {
-    
-        //define stuff
-            const input = document.getElementById('testing');
-            const input2 = document.getElementsByClassName('testing');
-            console.log({input, input2})
-            const pdf = new jsPDF();
-            if (pdf) {
-              html2canvas(input2[0])
-                .then(canvas => {
-                  const imgData = canvas.toDataURL('image/png');
-                  console.log(imgData); //Maybe blank, maybe full image, maybe half of image
-                  pdf.addImage(imgData, 'PNG', 10, 10, 100, 200);
-                  pdf.save('download.pdf');
-                });
-            }
-    
+const generatePDF = (sensor, data) => {
+    const typeDescription = async(type) => {
+        // await axios.get(`http://192.168.1.118:3000/type`, {params: {type}})
+        // .then(res => {
+        //     return res.data;
+        // })
+        // .catch(error => {
+        //     console.log(error);
+        // })
+        //try {
+            const response = await axios.get(`http://192.168.1.118:3000/type`, {params: {type}});
+            //const { data } = await response;
+            return response.data;
+        // }
+        // catch (error) {
+        //     console.log(error);
+        // }
+    }
+    //console.log({sensor, data});//, ty})
     //destructure redefine data/props
 
     //TODO: either here or in parser, logic to differentiate between 3 sensor types...
 
     //break the search term down accordingly
-    // let segments = sensor.split('-');
-    // let housing = segments[0];
-    // let char = segments[1];
-    // let optConn = segments[2];
-    // let type = data[0].type;
-    // let sensor_code = data[0].sensor_code;
-    // let splitOps = sensor_code.split(housing); 
-    // let connect = splitOps[1]; //get accurate connection code(not always same length)
-    // let option = splitOps[0].slice(char.length); //get accurate option code
+    let segments = sensor.split('-');
+    let housing = segments[0];
+    let char = segments[1];
+    let optConn = segments[2];
+    let type = data[0].type;
+    let type_description = '';
+    typeDescription(type)
+        .then(data => {
+            //console.log({data})
+            type_description = data[0].type_description;
+            //console.log(type_description)
+        });
+    //console.log({type_description})
+    let sensor_code = data[0].sensor_code;
+    let splitOps = sensor_code.split(housing); 
+    let connect = splitOps[1]; //get accurate connection code(not always same length)
+    let option = splitOps[0].slice(char.length); //get accurate option code
 
-    // //get relavent text pieces from the data package
-    // let revision = data[0].rev;
-    // let description = data[0].title;
-    // console.log(data[0]);
+    //get relavent text pieces from the data package
+    let revision = data[0].rev;
+    let description = data[0].title;
+    //let type_description = ty.value.data[0].type_description;
+    
+    //console.log('sensorData', data[0]);
 
+    //initialize
+    const doc = new jsPDF({
+        orientation:'portrait',
+        unit: 'pt', //points
+        format: 'letter', //default is a4
+    });
+    var margins = {
+        top: 20,
+        bottom: 42,
+        right: 40,
+        left: 20,
+        width: 552, //612 - (right + left)
+        height: 730, //792 - (top + bottom)
+    };
+    doc.setFont('times','bold');
+    doc.setFontSize(16);
+    doc.text(sensor + '  -  ', margins.left,margins.top); //text(textString, xstart, ystart)
+    //get location/width of this string
+    let newX = doc.getStringUnitWidth(sensor + '  -  ');
+    console.log(newX)
+    doc.setFont('times','normal');
+    doc.setFontSize(14);
+    doc.text(type_description, margins.left + (newX * 16), margins.top)
+    //set margins, and styling themes TODO
 
 
 /*
@@ -71,9 +107,9 @@ const generatePDF = () => {//(sensor, data) => {
     const pictureImage = require(`D:/DATA/Sensor/webApp/images/pictures/${housing}-${char}-Model.png`);
         doc.addImage(pictureImage.default, 'png', 0, 6, 7.5, 4);
 
-    doc.save("a4.pdf");
+    
 */
-
+    doc.save("a4.pdf");
 }
 export default generatePDF;
 /*

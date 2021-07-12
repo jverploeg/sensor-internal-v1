@@ -63,6 +63,18 @@ module.exports.getSensor = async(data) => {
         return error;
     }
 }
+module.exports.getType = async(data) => {
+    let qString = `SELECT type_description from char where type = '${data}' limit 1`;
+    try {
+        const response = await pool.query(qString);
+        return response;
+    }
+    catch(error) {
+        return error;
+    }
+}
+
+
 module.exports.getCustom = async(data) => {
     //split data into tables, part_ids
     //multiple queries

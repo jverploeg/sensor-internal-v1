@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 //import { PDFDownloadLink } from '@react-pdf/renderer';
 //import MyDocument from './pdf';
-import generatePDF from './pdfGenerator';
+//import generatePDF from './pdfGenerator';
 import Parser from './parse';
 
 
