@@ -70,6 +70,11 @@ module.exports = {
                     options: {}
                 }]
             },
+            //html loader
+            {
+                test: /\.html$/i,
+                loader: 'html-loader',
+            },
         ],    
     },
 

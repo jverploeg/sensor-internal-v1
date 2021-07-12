@@ -64,7 +64,7 @@ module.exports.getSensor = async(data) => {
     }
 }
 module.exports.getType = async(data) => {
-    let qString = `SELECT type_description from char where type = '${data}' limit 1`;
+    let qString = `SELECT type_description from char where char_code = '${data}' limit 1`;
     try {
         const response = await pool.query(qString);
         return response;

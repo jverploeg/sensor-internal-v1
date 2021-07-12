@@ -12,6 +12,8 @@ function Parser(search) {
     //temp define search term to save time
     let sensor = 'A47-18ADS-5KT21';
     //let sensor = search;
+    let segments = sensor.split('-');
+    let type = segments[1];
     const typeDescription = async(type) => {
         try {
             const {data:response} = await axios.get(`http://192.168.1.118:3000/type`, {params: {type}});
@@ -42,10 +44,26 @@ function Parser(search) {
         }
     }
     //isValid(sensor);
-    isValid(sensor)
-    .then(data => {
-        console.log(data);
-    })
+    // isValid(sensor)
+    // .then(data => {
+    //     console.log(data);
+    // })
+    const getSensor = async(sensor, type) => {
+        try {
+            const response = await Promise.all([
+                axios.get(`http://192.168.1.118:3000/sensorValid`, {params: {sensor}}),
+                axios.get(`http://192.168.1.118:3000/type`, {params: {type}}),
+            ]);
+            const data = response.map((response) => response.data);
+            let output = data.flat();
+            //console.log({output});
+            generatePDF(sensor, output);
+        } catch (error) {
+            console.log(error)
+            //throw Error("Promise Failed");
+        }
+    }
+    getSensor(sensor, type);
     // var sensorData = isValid(sensor);
     // console.log(sensorData)
     // let type = sensorData[0].type;
