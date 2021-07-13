@@ -1,5 +1,5 @@
 import axios from 'axios';
-import generatePDF from './pdfGenerator';
+//import generatePDF from './pdfGenerator';
 
 function Parser(search) {
     //let sensor = search;
@@ -21,11 +21,13 @@ function Parser(search) {
             ]);
             const data = response.map((response) => response.data);
             let output = data.flat();
-            generatePDF(sensor, output);
+            //generatePDF(sensor, output);
         } catch (error) {
             console.log(error)
         }
     }
     getSensor(sensor, type);
+
+    
 } 
 export default Parser;

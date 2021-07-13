@@ -21,3 +21,50 @@ $transition-duration: .5s;
     opacity: 1;
     transition: all $transition-duration;
 }
+.pdf-preview {
+    display: flex;
+    flex-grow: 1;
+    //padding: 1em;
+    position: relative;
+    //justify-content: center;
+    //align-items: center;
+    max-height: calc(100vh - 100px);
+    max-width: calc(100vw - 200px);
+    // padding-left: 5vw;
+    // padding-right: 5vw;
+    //margin: 0 auto
+}
+.overview-container {
+    display: flex;
+    flex-grow: 1;
+    //padding: 1em;
+    position: relative;
+    //justify-content: center;
+    //align-items: center;
+    max-height: calc(100vh - 100px);
+    max-width: calc(100vw - 200px);
+    // padding-left: 5vw;
+    // padding-right: 5vw;
+    margin: 0 auto
+}
+.page1 {
+    width: 612pt;
+    height: 792pt;
+    //margin: 20pt;
+    padding: 20pt;
+    border: 1pt solid black;
+    //transform: scale(0.7); /* Equal to scaleX(0.7) scaleY(0.7) */
+}
+.page2 {
+    width: 612pt;
+    height: 792pt;
+    border: 1pt solid black;
+    transform: scale(0.7); /* Equal to scaleX(0.7) scaleY(0.7) */
+}
+.scaled {
+    transform: scale(0.7); /* Equal to scaleX(0.7) scaleY(0.7) */
+    //background-color: skyblue;
+}
+.pdf-preview {
+    font-family: "Times New Roman", Times, serif;
+}
