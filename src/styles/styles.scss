@@ -21,19 +21,19 @@ $transition-duration: .5s;
     opacity: 1;
     transition: all $transition-duration;
 }
-.pdf-preview {
-    display: flex;
-    flex-grow: 1;
-    //padding: 1em;
-    position: relative;
-    //justify-content: center;
-    //align-items: center;
-    // max-height: calc(100vh - 100px);
-    // max-width: calc(100vw - 200px);
-    // padding-left: 5vw;
-    // padding-right: 5vw;
-    //margin: 0 auto
-}
+// .pdf-preview {
+//     display: flex;
+//     flex-grow: 1;
+//     //padding: 1em;
+//     position: relative;
+//     //justify-content: center;
+//     //align-items: center;
+//     // max-height: calc(100vh - 100px);
+//     // max-width: calc(100vw - 200px);
+//     // padding-left: 5vw;
+//     // padding-right: 5vw;
+//     //margin: 0 auto
+// }
 .overview-container {
     display: flex;
     flex-grow: 1;
@@ -47,102 +47,194 @@ $transition-duration: .5s;
     // padding-right: 5vw;
     margin: 0 auto
 }
+
+//PIXELSSSSS
+.pdf-preview {
+    font-family: "Times New Roman", Times, serif;
+    display: flex;
+}
 .page1 {
     position: relative;
-    width: 572pt; //612pt - 40 for margins;
-    height: 777pt;//792pt - 15;
+    width: 816px; //612pt - 40 for margins;
+    height: 1054px;//792pt - 15;
     //margin: 20pt;
-    padding: 10pt 20pt 5pt 20pt; //(top right bottom left)
+    //padding: 10pt 20pt 5pt 20pt; //(top right bottom left)
     border: 1pt solid black;
     transform: scale(0.7); /* Equal to scaleX(0.7) scaleY(0.7) */
 }
-// .images {
-//     position: relative;
-// }
-//REMEMBER T TAKE INTO ACCOUNT MARGINS ABOVE...
+.header {
+    position: absolute;
+    width: 762px;
+    left: 27px;
+    top: 27px;
+}
 .type {
     //xywh: 160,120,320,240
     position: absolute;
-    width: 252pt;
-    height: 157pt;
-    //left: 20pt;
-    //top: 60pt;
+    width: 336px;
+    height: 204px;
+    left: 27px;
+    top: 85px;
 }
 .mech {
     position: absolute;
-    width: 261pt;
-    height: 72pt;
-    left: 300pt; //280?
-    top: 135pt;//145
+    width: 348px;
+    height: 96px;
+    left: 398px; 
+    top: 193px;
 }
 .housing {
     position: absolute;
-    width: 360pt;
-    height: 162pt;
-    left: 20pt; 
-    top: 230pt;
+    width: 480px;
+    height: 216px;
+    left: 27px; 
+    top: 306px;
 }
 .option {
     position: absolute;
-    width: 153pt;
-    height: 162pt;
-    left: 407pt; 
-    top: 230pt;
+    width: 204px;
+    height: 216px;
+    left: 541px; 
+    top: 306px;
 }
 .conn {
     position: absolute;
-    width: 360pt;
-    height: 162pt;
-    left: 20pt; 
-    top: 400pt;
+    width: 480px;
+    height: 216px;
+    left: 27px; 
+    top: 531px;
 }
 .conn_chart {
     position: absolute;
-    width: 153pt;
-    height: 92pt;
-    left: 407pt; 
-    top: 400pt;
+    width: 204px;
+    height: 108px;
+    left: 541px; 
+    top: 531px;
 }
 .date {
     position: absolute;
-    width: 153pt;
-    height: 72pt;
-    left: 407pt; 
-    top: 492pt;
+    width: 204px;
+    height: 96px;
+    left: 541px; 
+    top: 651px;
 }
 .footer {
     position: absolute;
-    left: 132pt; 
-    top: 775pt;
+    left: 175px; 
+    top: 1030px;
 }
-
 .page2 {
     position: relative;
-    width: 572pt; //612pt - 40 for margins;
-    height: 777pt;//792pt - 15;
+    width: 816px; //612pt - 40 for margins;
+    height: 1054px;//792pt - 15;
     //margin: 20pt;
-    padding: 10pt 20pt 5pt 20pt; //(top right bottom left)
+    //padding: 10pt 20pt 5pt 20pt; //(top right bottom left)
     border: 1pt solid black;
     transform: scale(0.7); /* Equal to scaleX(0.7) scaleY(0.7) */
 }
 .spec_chart {
     position: absolute;
-    width: 540pt;
-    height: 396pt;
-    // left: 20pt; 
-    // top: 50pt;
+    width: 720px;
+    height: 528px;
+    left: 27px;
+    top: 85px;
 }
 .picture {
     position: absolute;
-    width: 540pt;
-    height: 320pt;
-    left: 20pt; 
-    top: 450pt;
+    width: 720px;
+    height: 384px;
+    left: 27px;
+    top: 598px;
 }
-.scaled {
-    transform: scale(0.7); /* Equal to scaleX(0.7) scaleY(0.7) */
-    //background-color: skyblue;
-}
-.pdf-preview {
-    font-family: "Times New Roman", Times, serif;
-}
+
+
+
+
+
+//REMEMBER T TAKE INTO ACCOUNT MARGINS ABOVE...
+// .type {
+//     //xywh: 160,120,320,240
+//     position: absolute;
+//     width: 252pt;
+//     height: 157pt;
+//     //left: 20pt;
+//     //top: 60pt;
+// }
+// .mech {
+//     position: absolute;
+//     width: 261pt;
+//     height: 72pt;
+//     left: 300pt; //280?
+//     top: 135pt;//145
+// }
+// .housing {
+//     position: absolute;
+//     width: 360pt;
+//     height: 162pt;
+//     left: 20pt; 
+//     top: 230pt;
+// }
+// .option {
+//     position: absolute;
+//     width: 153pt;
+//     height: 162pt;
+//     left: 407pt; 
+//     top: 230pt;
+// }
+// .conn {
+//     position: absolute;
+//     width: 360pt;
+//     height: 162pt;
+//     left: 20pt; 
+//     top: 400pt;
+// }
+// .conn_chart {
+//     position: absolute;
+//     width: 153pt;
+//     height: 92pt;
+//     left: 407pt; 
+//     top: 400pt;
+// }
+// .date {
+//     position: absolute;
+//     width: 153pt;
+//     height: 72pt;
+//     left: 407pt; 
+//     top: 492pt;
+// }
+// .footer {
+//     position: absolute;
+//     left: 132pt; 
+//     top: 775pt;
+// }
+
+// .page2 {
+//     position: relative;
+//     width: 572pt; //612pt - 40 for margins;
+//     height: 777pt;//792pt - 15;
+//     //margin: 20pt;
+//     padding: 10pt 20pt 5pt 20pt; //(top right bottom left)
+//     border: 1pt solid black;
+//     transform: scale(0.7); /* Equal to scaleX(0.7) scaleY(0.7) */
+// }
+// .spec_chart {
+//     position: absolute;
+//     width: 540pt;
+//     height: 396pt;
+//     // left: 20pt; 
+//     // top: 50pt;
+// }
+// .picture {
+//     position: absolute;
+//     width: 540pt;
+//     height: 320pt;
+//     left: 20pt; 
+//     top: 450pt;
+// }
+// .scaled {
+//     transform: scale(0.7); /* Equal to scaleX(0.7) scaleY(0.7) */
+//     //background-color: skyblue;
+// }
+// .pdf-preview {
+//     font-family: "Times New Roman", Times, serif;
+// }

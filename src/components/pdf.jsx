@@ -99,18 +99,33 @@ const PDF = (input) => {
 
     const print = () => {
         var page = document.getElementsByClassName("page1");
-        //var page2 = document.getElementsByClassName("page2");
-        html2canvas(page[0])
-        .then((canvas) => {
-        const imgData = canvas.toDataURL('image/jpeg');
+        var page2 = document.getElementsByClassName("page2");
         const pdf = new jsPDF({
-          orientation: 'portrait',
-          unit: 'pt', //points
-          format: 'letter', //default is a4
+            orientation: 'portrait',
+            //unit: 'in', //points
+            unit: 'pt',
+            format: 'letter', //default is a4
         });
-        pdf.addImage(imgData, 'JPEG', 0, 0, 612, 792);
-        pdf.save('download.pdf');
-      });
+        html2canvas(page[0])
+            .then((canvas) => {
+            const imgData = canvas.toDataURL('image/jpeg');
+            // const pdf = new jsPDF({
+            // orientation: 'portrait',
+            // unit: 'pt', //points
+            // format: 'letter', //default is a4
+            // });
+            // pdf.addImage(imgData, 'JPEG', 0, 0, 8.5, 11);
+            pdf.addImage(imgData, 'JPEG', 0, 0, 614.39, 793.58);
+            //pdf.save('download.pdf');
+        });
+        html2canvas(page2[0])
+            .then((canvas) => {
+            const imgData = canvas.toDataURL('image/jpeg');
+            pdf.addPage();
+            // pdf.addImage(imgData, 'JPEG', 0, 0, 8.5, 11);
+            pdf.addImage(imgData, 'JPEG', 0, 0, 614.39, 793.58);
+            pdf.save('download.pdf');
+        });
     }
 
     
@@ -125,9 +140,9 @@ const PDF = (input) => {
                     {/* <button onClick={() => print()}>{sensorCode}</button> */}
                     <div className="page1">
                         <div className="header" >
-                            <span style={{fontSize:'16pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'14pt'}}>{type_description}</span>
+                            <span style={{fontSize:'16'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'14'}}>{type_description}</span>
                             <br></br>
-                            <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+                            <span style={{fontSize:'12'}}><i>{description}</i></span>
                         </div>
                         {/* <div className="bullets">
                             <iframe src={require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default}></iframe>
