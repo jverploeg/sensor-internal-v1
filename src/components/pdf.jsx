@@ -5,6 +5,7 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 //subcomponents, depedencies
+import date from '../images/DATECODE1-Model.png';
 
 const PDF = (input) => {
     //destructure props
@@ -78,6 +79,7 @@ const PDF = (input) => {
             
                 //break the search term down accordingly
                 let segments = sensor.split('-');
+                let char = segments[1];
                 setHousing(segments[0]);
                 let housing = segments[0];
                 setChar(segments[1]);
@@ -97,7 +99,7 @@ const PDF = (input) => {
 
     const print = () => {
         var page = document.getElementsByClassName("page1");
-        console.log(page)
+        //var page2 = document.getElementsByClassName("page2");
         html2canvas(page[0])
         .then((canvas) => {
         const imgData = canvas.toDataURL('image/jpeg');
@@ -106,52 +108,61 @@ const PDF = (input) => {
           unit: 'pt', //points
           format: 'letter', //default is a4
         });
-        const imgProps= pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        console.log({pdfWidth, pdfHeight})
-        //pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
         pdf.addImage(imgData, 'JPEG', 0, 0, 612, 792);
         pdf.save('download.pdf');
       });
-        // html2canvas(page[0], {
-        //   //dpi: 300, // Set to 300 DPI
-        //   //scale: 3, // Adjusts your resolution
-        //   onrendered: function(canvas) {
-        //     var img = canvas.toDataURL("image/jpeg", 1);
-        //     console.log(img)
-        //     const doc = new jsPDF({
-        //         orientation:'portrait',
-        //         unit: 'pt', //points
-        //         format: 'letter', //default is a4
-        //     });
-        //     doc.addImage(img, 'JPEG', 0, 0, 612, 792);
-        //     doc.save('sample-file.pdf');
-        //   }
-        // });
     }
+
+    
     //split pages into subcomponenets????
     {/* <img src={require(`file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`).default}></img> */}
     //DOM
     return (
         <div>
+            <button onClick={() => print()}>{sensorCode}</button>
             {!!description &&
-                <div className="pdf-preview2">
-                    <button onClick={() => print()}>{sensorCode}</button>
+                <div className="pdf-preview">
+                    {/* <button onClick={() => print()}>{sensorCode}</button> */}
                     <div className="page1">
                         <div className="header" >
                             <span style={{fontSize:'16pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'14pt'}}>{type_description}</span>
                             <br></br>
                             <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                         </div>
+                        {/* <div className="bullets">
+                            <iframe src={require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default}></iframe>
+                        </div>     */}
                         <div className="images">
                             <img className="type" src={require(`D:/DATA/Sensor/webApp/images/type/Type-${type}-Model.png`).default}></img>
+                            <img className="mech" src={require(`D:/DATA/Sensor/webApp/images/mech/${housing}-Mech-Model.png`).default}></img>
+                            <img className="housing" src={require(`D:/DATA/Sensor/webApp/images/housing/${housing}-Model.png`).default}></img>
+                            <img className="option" src={require(`D:/DATA/Sensor/webApp/images/option/${option}-Model.png`).default}></img>
+                            <img className="conn" src={require(`D:/DATA/Sensor/webApp/images/connect/${connect}-Model.png`).default}></img>
+                            <img className="conn_chart" src={require(`D:/DATA/Sensor/webApp/images/conn_charts/${connect}-${char}-Model.png`).default}></img>
+                            <img className="date" src={date}></img>
+                        </div>
+                        {/* <div className="description">
+                            <iframe src={require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default}></iframe>
+                        </div> */}
+                        <div className='footer'>
+                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
+                        </div>           
+                    </div>
+                    <div className="page2">
+                        <div className="header" >
+                            <span style={{fontSize:'16pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'14pt'}}>{type_description}</span>
+                            <br></br>
+                            <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+                        </div>
+                        <div className="images">
+                            <img className="spec_chart" src={require(`D:/DATA/Sensor/webApp/images/spec_charts/${char}-${option}-Model.png`).default}></img>
+                            <img className="picture" src={require(`D:/DATA/Sensor/webApp/images/pictures/${housing}-${char}-Model.png`).default}></img>
+                        </div>
+                        <div className='footer'>
+                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>    
                     </div>
-                    {/* <div className="page2">
-
-                    </div> */}
-                </div>      
+                </div>         
             }
         </div>
     )

@@ -28,8 +28,8 @@ $transition-duration: .5s;
     position: relative;
     //justify-content: center;
     //align-items: center;
-    max-height: calc(100vh - 100px);
-    max-width: calc(100vw - 200px);
+    // max-height: calc(100vh - 100px);
+    // max-width: calc(100vw - 200px);
     // padding-left: 5vw;
     // padding-right: 5vw;
     //margin: 0 auto
@@ -48,18 +48,96 @@ $transition-duration: .5s;
     margin: 0 auto
 }
 .page1 {
-    width: 612pt;
-    height: 792pt;
+    position: relative;
+    width: 572pt; //612pt - 40 for margins;
+    height: 777pt;//792pt - 15;
     //margin: 20pt;
-    padding: 20pt;
-    border: 1pt solid black;
-    //transform: scale(0.7); /* Equal to scaleX(0.7) scaleY(0.7) */
-}
-.page2 {
-    width: 612pt;
-    height: 792pt;
+    padding: 10pt 20pt 5pt 20pt; //(top right bottom left)
     border: 1pt solid black;
     transform: scale(0.7); /* Equal to scaleX(0.7) scaleY(0.7) */
+}
+// .images {
+//     position: relative;
+// }
+//REMEMBER T TAKE INTO ACCOUNT MARGINS ABOVE...
+.type {
+    //xywh: 160,120,320,240
+    position: absolute;
+    width: 252pt;
+    height: 157pt;
+    //left: 20pt;
+    //top: 60pt;
+}
+.mech {
+    position: absolute;
+    width: 261pt;
+    height: 72pt;
+    left: 300pt; //280?
+    top: 135pt;//145
+}
+.housing {
+    position: absolute;
+    width: 360pt;
+    height: 162pt;
+    left: 20pt; 
+    top: 230pt;
+}
+.option {
+    position: absolute;
+    width: 153pt;
+    height: 162pt;
+    left: 407pt; 
+    top: 230pt;
+}
+.conn {
+    position: absolute;
+    width: 360pt;
+    height: 162pt;
+    left: 20pt; 
+    top: 400pt;
+}
+.conn_chart {
+    position: absolute;
+    width: 153pt;
+    height: 92pt;
+    left: 407pt; 
+    top: 400pt;
+}
+.date {
+    position: absolute;
+    width: 153pt;
+    height: 72pt;
+    left: 407pt; 
+    top: 492pt;
+}
+.footer {
+    position: absolute;
+    left: 132pt; 
+    top: 775pt;
+}
+
+.page2 {
+    position: relative;
+    width: 572pt; //612pt - 40 for margins;
+    height: 777pt;//792pt - 15;
+    //margin: 20pt;
+    padding: 10pt 20pt 5pt 20pt; //(top right bottom left)
+    border: 1pt solid black;
+    transform: scale(0.7); /* Equal to scaleX(0.7) scaleY(0.7) */
+}
+.spec_chart {
+    position: absolute;
+    width: 540pt;
+    height: 396pt;
+    // left: 20pt; 
+    // top: 50pt;
+}
+.picture {
+    position: absolute;
+    width: 540pt;
+    height: 320pt;
+    left: 20pt; 
+    top: 450pt;
 }
 .scaled {
     transform: scale(0.7); /* Equal to scaleX(0.7) scaleY(0.7) */
