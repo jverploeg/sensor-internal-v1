@@ -53,7 +53,7 @@ const PDF = (input) => {
 
     //once all part states have been set, fetch images from server
     useEffect(() => {
-        getImages()
+        getImages();
     },[description])//trigger on description change.(last state to be set in Breakdown)
 
     //event handlers
