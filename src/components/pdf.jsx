@@ -4,6 +4,8 @@ import axios from 'axios';
 //pdf helpers
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+// import {Buffer} from 'buffer';
+//Buffer.from('anything','base64');
 
 //assets
 import date from '../images/DATECODE1-Model.png';

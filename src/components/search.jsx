@@ -25,46 +25,46 @@ const Search = () => {
 
 
     //get images from router
-    const getImages = async(input) => {
-        let tempInput = 'typeAH';
-        try {
-            const response = await axios.get(`${host}/images/${tempInput}`, { responseType: 'arraybuffer' });
-            //test url
-            // const response = await axios.get(
-            //     "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
-            //     { responseType: 'arraybuffer' },
-            // );
-            //console.log({response})
-            const buffer = Buffer.from(response.data, 'base64');
-            const buffer2 = Buffer.from(response.data, 'binary');
-            const basedBuffer = buffer.toString('base64');
-            const binary = buffer2.toString('base64');
+    // const getImages = async(input) => {
+    //     let tempInput = 'typeAH';
+    //     try {
+    //         const response = await axios.get(`${host}/images/${tempInput}`, { responseType: 'arraybuffer' });
+    //         //test url
+    //         // const response = await axios.get(
+    //         //     "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+    //         //     { responseType: 'arraybuffer' },
+    //         // );
+    //         //console.log({response})
+    //         const buffer = Buffer.from(response.data, 'base64');
+    //         const buffer2 = Buffer.from(response.data, 'binary');
+    //         const basedBuffer = buffer.toString('base64');
+    //         const binary = buffer2.toString('base64');
 
-            // convert the image data to correct base64format.
-            const base64 = btoa(
-                new Uint8Array(response.data).reduce(
-                  (data, byte) => data + String.fromCharCode(byte),
-                  '',
-                ),
-            );
-            console.log(base64)
+    //         // convert the image data to correct base64format.
+    //         const base64 = btoa(
+    //             new Uint8Array(response.data).reduce(
+    //               (data, byte) => data + String.fromCharCode(byte),
+    //               '',
+    //             ),
+    //         );
+    //         console.log(base64)
 
 
-            // console.log({buffer, basedBuffer}, basedBuffer.length)
-            // console.log({buffer2, binary}, binary.length)
-            setimages( "data:;base64," + base64 );
-        }
-        catch (error) {
-            console.log(error)
-        }
-    }
-    const test = (search) => {
-        console.log({search});
-        //call data request
-        //some middle function to parse request?
-        //need to send objects --> {type: 'AH'} or somethig similar...
-        getImages(search);
-    }
+    //         // console.log({buffer, basedBuffer}, basedBuffer.length)
+    //         // console.log({buffer2, binary}, binary.length)
+    //         setimages( "data:;base64," + base64 );
+    //     }
+    //     catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+    // const test = (search) => {
+    //     console.log({search});
+    //     //call data request
+    //     //some middle function to parse request?
+    //     //need to send objects --> {type: 'AH'} or somethig similar...
+    //     getImages(search);
+    // }
             //determine route -> db table based on pageSelection
             // let route = page;
             // try {
