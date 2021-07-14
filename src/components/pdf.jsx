@@ -4,6 +4,7 @@ import axios from 'axios';
 //pdf helpers
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import generatePDF from './pdfGenerator';
 // import {Buffer} from 'buffer';
 //Buffer.from('anything','base64');
 
@@ -55,7 +56,12 @@ const PDF = (input) => {
 
     //once all part states have been set, fetch images from server
     useEffect(() => {
-        getImages();
+        //because this isnt the top level component, description isnt created on initial render, only after searching
+        //even though description state is set as empty string, this gets called on render...
+        //make sure description has content before calling getimages
+        if(description.length > 1) {
+            getImages();
+        }
     },[description])//trigger on description change.(last state to be set in Breakdown)
 
     //event handlers
@@ -187,13 +193,12 @@ const PDF = (input) => {
         });
     }
 
-    
-    //split pages into subcomponenets????
-    {/* <img src={require(`file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`).default}></img> */}
+
     //DOM
     return (
         <div>
-            <button onClick={() => print()}>{sensorCode}</button>
+            {/* <button onClick={() => print()}>{sensorCode}</button> */}
+            <button onClick={() => generatePDF(sensorCode, sensorData, images)}>{sensorCode}</button>
             {!!images &&
                 <div className="pdf-preview">
                     {/* <button onClick={() => print()}>{sensorCode}</button> */}
@@ -207,9 +212,6 @@ const PDF = (input) => {
                             <iframe src={require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default}></iframe>
                         </div>     */}
                         <div className="images">
-                            {/* <img className="type" src={require(`D:/DATA/Sensor/webApp/images/type/Type-${type}-Model.png`).default}></img>
-                            <img className="mech" src={require(`D:/DATA/Sensor/webApp/images/mech/${housing}-Mech-Model.png`).default}></img> */}
-
                             <img className="type" src={images.type} alt='no image found'/>
                             <img className="mech" src={images.mech} alt='no image found'/>
                             <img className="housing" src={images.housing} alt='no image found'/>

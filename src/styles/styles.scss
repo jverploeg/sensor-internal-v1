@@ -83,6 +83,12 @@ $transition-duration: .5s;
     left: 398px; 
     top: 193px;
 }
+.bullets {
+    position: absolute;
+    width: 348px; //match mech width
+    left: 398.5px; //300pt
+    top: 106.25px; //80pt
+}
 .housing {
     position: absolute;
     width: 480px;
@@ -117,6 +123,12 @@ $transition-duration: .5s;
     height: 96px;
     left: 541px; 
     top: 651px;
+}
+.description {
+    position: absolute;
+    width: 762;
+    left: 27px;
+    top: 770.3px;//580pt;
 }
 .footer {
     position: absolute;

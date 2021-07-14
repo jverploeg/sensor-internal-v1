@@ -93,11 +93,12 @@ const getImage = (req, res) => {
   console.log({package})
 
   res.sendFile(package, (err) => {
-    if(err) {
-      console.log(err);
-    } else {
-      console.log('SENT: ', package);
-    }
+      //ignore these messages for now
+    // if(err) {
+    //   console.log(err);
+    // } else {
+    //   console.log('SENT: ', package);
+    // }
   });
 
 }  
