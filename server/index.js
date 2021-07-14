@@ -10,9 +10,8 @@ const app = express();
 // render static files
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 
-//local files
-//app.use('/images', express.static('file:///D:/DATA/Sensor/webApp/images'))
-//https://www.geeksforgeeks.org/how-to-fetch-images-from-node-server/
+
+
 
 // setup middleware for parsing
 app.use(express.json());
@@ -39,6 +38,54 @@ const port = 3000;
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
+//local files
+//app.use('/images', express.static('file:///D:/DATA/Sensor/webApp/images'))
+//https://www.geeksforgeeks.org/how-to-fetch-images-from-node-server/
+// let filepath = `file:///D:/DATA/Sensor/webApp/images`;
+let filepath = `D:/DATA/Sensor/webApp/images`;
+app.get('/images/*', (req, res) => {
+  
+  let route = req.url.slice(8);
+  //split logic
+  let folder = route.slice(0,4);
+  let fileName = route.slice(4);
+  console.log(route)
+  // let temp = req.query;
+  // let folder = Object.keys(temp);
+  // let fileName = temp[folder];
+  console.log({route, folder, fileName})
+  let package = `${filepath}/${folder}/Type-${fileName}-Model.png`;
+  console.log({package})
+  //res.type('png')?
+  res.sendFile(package, (err) => {
+    if(err) {
+      console.log(err);
+      //next(err);
+    } else {
+      console.log('SENT: ', package);
+    }
+  });
+})
+// res.sendFile(fileName, options, function (err) {
+//   if (err) {
+//       next(err);
+//   } else {
+//       console.log('Sent:', fileName);
+//   }
+// });
+
+
+// const getData = (req, res) => {
+//   //remove the / from the req.url
+//   let route = req.url.slice(1); // '/route' --> 'route'
+//   db.getData(route)
+//   .then(result => {
+//       res.status(200).send(result.rows);
+//   })
+//   .catch(error => {
+//       res.status(500).send(error)
+//   })
+// }
 
 //app.get('/images', route.getImage);
 ////////////ROUTES//////////////////////
