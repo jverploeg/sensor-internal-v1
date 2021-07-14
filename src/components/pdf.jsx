@@ -1,24 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-//pdf helpers
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+//helper functions
 import generatePDF from './pdfGenerator';
-// import {Buffer} from 'buffer';
-//Buffer.from('anything','base64');
 
 //assets
 import date from '../images/DATECODE1-Model.png';
 
 const PDF = (input) => {
-    //destructure props
-    const searchTerm = input;
+    console.log(input, typeof(input))
+    //destructure props!!!!!!!!!!!!!!!
+    let temp = input.input;
+    //const searchTerm = input;
     //TODO: check valid and type function
 
     //temp define search
-    let sensor = 'A47-18ADS-5KT21';
+    //var sensor = 'A47-18ADS-5KT21';
+    
+    console.log(input, temp)
+    //shortcuts for testing random sensors
+    if(temp === "a") {
+        console.log('hey')
+        var sensor = 'MFM7-EHS1-F5P21';//fits
+    } else if(temp === 'b') {
+        var sensor = 'M1VE-MRS-E5CP2';//issues with 2nd page
+    } else if(temp === 'c') {
+        var sensor = 'S63B-HS3-L5T21';//issues with 2nd page
+    } else if(temp === 'd') {
+        var sensor = 'A44-18ADS-OCR22';//fits
+    } else if(temp === 'e') {
+        var sensor = 'A63-37ADSD-51T21';//fits, but header description is close to spec_chart
+    } else {
+        var sensor = 'A47-18ADS-5KT21';
+    }
+    //console.log({sensor},'sdf')
+
     let segments = sensor.split('-');
+    //console.log(segments)
     let typeTemp = segments[1];//this wont work for cs, proto
 
 
@@ -66,6 +84,7 @@ const PDF = (input) => {
 
     //event handlers
     const getSensor = async(sensor, type) => {
+        console.log({sensor})
         try {
             const response = await Promise.all([
                 axios.get(`${host}/sensorValid`, {params: {sensor}}),
@@ -158,39 +177,6 @@ const PDF = (input) => {
         } catch (error) {
             console.log(error)
         }
-    }
-
-
-
-    const print = () => {
-        var page = document.getElementsByClassName("page1");
-        var page2 = document.getElementsByClassName("page2");
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            //unit: 'in', //points
-            unit: 'pt',
-            format: 'letter', //default is a4
-        });
-        html2canvas(page[0])
-            .then((canvas) => {
-            const imgData = canvas.toDataURL('image/jpeg');
-            // const pdf = new jsPDF({
-            // orientation: 'portrait',
-            // unit: 'pt', //points
-            // format: 'letter', //default is a4
-            // });
-            // pdf.addImage(imgData, 'JPEG', 0, 0, 8.5, 11);
-            pdf.addImage(imgData, 'JPEG', 0, 0, 614.39, 793.58);
-            //pdf.save('download.pdf');
-        });
-        html2canvas(page2[0])
-            .then((canvas) => {
-            const imgData = canvas.toDataURL('image/jpeg');
-            pdf.addPage();
-            // pdf.addImage(imgData, 'JPEG', 0, 0, 8.5, 11);
-            pdf.addImage(imgData, 'JPEG', 0, 0, 614.39, 793.58);
-            pdf.save('download.pdf');
-        });
     }
 
 

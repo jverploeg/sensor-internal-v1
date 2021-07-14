@@ -90,16 +90,19 @@ const getImage = (req, res) => {
   let route = req.url.slice(8);
   //combine Absolute path to local storage with endpoint
   let package = `${filepath}/${route}.png`;
-  console.log({package})
+  //console.log({package})
 
-  res.sendFile(package, (err) => {
-      //ignore these messages for now
-    // if(err) {
-    //   console.log(err);
-    // } else {
-    //   console.log('SENT: ', package);
-    // }
-  });
+  res.sendFile(package);
+
+  
+//   res.sendFile(package, (err) => {
+//     //ignore these messages for now
+//   if(err) {
+//     console.log(err);
+//   } else {
+//     console.log('SENT: ', package);
+//   }
+// });
 
 }  
 
