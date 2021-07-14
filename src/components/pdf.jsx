@@ -5,10 +5,7 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
-//need?
-//import {Buffer} from 'buffer';
-
-//subcomponents, depedencies
+//assets
 import date from '../images/DATECODE1-Model.png';
 
 const PDF = (input) => {
@@ -39,11 +36,7 @@ const PDF = (input) => {
 
     const host = `http://192.168.1.118:3000`;
 
-    //render/useEffect
-    //on prop/input change, call get sensor
-    // useEffect(() => {
-    //     //parse to get type
-    // },[input])
+    //RERENDER PAGE ON TRIGGERS////////////////////
     useEffect(() => {
         //getSensor(input, type)
         getSensor(sensor, typeTemp);
@@ -60,7 +53,6 @@ const PDF = (input) => {
 
     //once all part states have been set, fetch images from server
     useEffect(() => {
-        //retrieveImages(input, inputs?);
         getImages()
     },[description])//trigger on description change.(last state to be set in Breakdown)
 
@@ -82,30 +74,27 @@ const PDF = (input) => {
     }
     const breakdown = (data, sensor) => {
         //break retrieved data into relevent variables
-                //destructure redefine data/props
-                //console.log(data)
-                let specs = data[0];
-                setTypeD(data[1].type_description);
-                //let type_description = data[1].type_description;
-            
-            
-                //TODO: either here or in parser, logic to differentiate between 3 sensor types...
-            
-                //break the search term down accordingly
-                let segments = sensor.split('-');
-                let char = segments[1];
-                setHousing(segments[0]);
-                let housing = segments[0];
-                setChar(segments[1]);
-                setType(specs.type);
-                let sensor_code = specs.sensor_code;
-                let splitOps = sensor_code.split(housing); 
-                setConnect(splitOps[1]);
-                let opt = splitOps[0].slice(char.length); //get accurate option code
-                setOption(opt);
-                setRev(specs.rev)
-                setDescription(specs.title)
-                //let footer = `Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * ${revision} `;
+
+        //TODO: either here or in parser, logic to differentiate between 3 sensor types...
+
+
+        //destructure redefine data/props
+        let specs = data[0];
+        setTypeD(data[1].type_description);
+        //break the search term down accordingly
+        let segments = sensor.split('-');
+        let char = segments[1];
+        setHousing(segments[0]);
+        let housing = segments[0];
+        setChar(segments[1]);
+        setType(specs.type);
+        let sensor_code = specs.sensor_code;
+        let splitOps = sensor_code.split(housing); 
+        setConnect(splitOps[1]);
+        let opt = splitOps[0].slice(char.length); //get accurate option code
+        setOption(opt);
+        setRev(specs.rev)
+        setDescription(specs.title)
     }
 
     //Get images from router
@@ -115,7 +104,7 @@ const PDF = (input) => {
             mech: '',
             housing: '',
             option: '',
-            conn: '',
+            connect: '',
             conn_chart: '',
             spec_chart: '',
             picture: '',
@@ -123,8 +112,14 @@ const PDF = (input) => {
         try {
             //Promise.all to get all the images from server
             const response = await Promise.all([
-                axios.get(`${host}/images/type/${type}`, { responseType: 'arraybuffer' }),
-                axios.get(`${host}/images/mech/${housing}`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/mech/${housing}-Mech-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/housing/${housing}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/option/${option}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/connect/${connect}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/conn_charts/${connect}-${char}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/spec_charts/${char}-${option}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/pictures/${housing}-${char}-Model`, { responseType: 'arraybuffer' }),
             ]);
             const data = response.map((response) => response.data);
             let convertedArray = [];
@@ -142,6 +137,12 @@ const PDF = (input) => {
             //save to template... -> better way to do this????
             template.type = convertedArray[0];
             template.mech = convertedArray[1];
+            template.housing = convertedArray[2];
+            template.option = convertedArray[3];
+            template.connect = convertedArray[4];
+            template.conn_chart = convertedArray[5];
+            template.spec_chart = convertedArray[6];
+            template.picture = convertedArray[7];
             //...
 
             //set image state
@@ -209,32 +210,31 @@ const PDF = (input) => {
 
                             <img className="type" src={images.type} alt='no image found'/>
                             <img className="mech" src={images.mech} alt='no image found'/>
-
-                            {/* <img className="housing" src={require(`D:/DATA/Sensor/webApp/images/housing/${housing}-Model.png`).default}></img>
-                            <img className="option" src={require(`D:/DATA/Sensor/webApp/images/option/${option}-Model.png`).default}></img>
-                            <img className="conn" src={require(`D:/DATA/Sensor/webApp/images/connect/${connect}-Model.png`).default}></img>
-                            <img className="conn_chart" src={require(`D:/DATA/Sensor/webApp/images/conn_charts/${connect}-${char}-Model.png`).default}></img>
-                            <img className="date" src={date}></img> */}
+                            <img className="housing" src={images.housing} alt='no image found'/>
+                            <img className="option" src={images.option} alt='no image found'/>
+                            <img className="connect" src={images.connect} alt='no image found'/>
+                            <img className="conn_chart" src={images.conn_chart} alt='no image found'/>
+                            <img className="date" src={date}></img>
                         </div>
                         {/* <div className="description">
                             <iframe src={require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default}></iframe>
                         </div> */}
                         <div className='footer'>
-                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
+                            <span style={{fontSize:'10'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>           
                     </div>
                     <div className="page2">
                         <div className="header" >
-                            <span style={{fontSize:'16pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'14pt'}}>{type_description}</span>
+                            <span style={{fontSize:'16'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'14'}}>{type_description}</span>
                             <br></br>
-                            <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+                            <span style={{fontSize:'12'}}><i>{description}</i></span>
                         </div>
-                        {/* <div className="images">
-                            <img className="spec_chart" src={require(`D:/DATA/Sensor/webApp/images/spec_charts/${char}-${option}-Model.png`).default}></img>
-                            <img className="picture" src={require(`D:/DATA/Sensor/webApp/images/pictures/${housing}-${char}-Model.png`).default}></img>
-                        </div> */}
+                        <div className="images">
+                            <img className="spec_chart" src={images.spec_chart} alt='no image found'/>
+                            <img className="picture" src={images.picture} alt='no image found'/>
+                        </div>
                         <div className='footer'>
-                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
+                            <span style={{fontSize:'10'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>    
                     </div>
                 </div>         
