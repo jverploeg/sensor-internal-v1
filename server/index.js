@@ -42,37 +42,9 @@ app.listen(port, () => {
 //app.use('/images', express.static('file:///D:/DATA/Sensor/webApp/images'))
 //https://www.geeksforgeeks.org/how-to-fetch-images-from-node-server/
 // let filepath = `file:///D:/DATA/Sensor/webApp/images`;
-let filepath = `D:/DATA/Sensor/webApp/images`;
-app.get('/images/*', (req, res) => {
-  
-  let route = req.url.slice(8);
-  //split logic
-  let folder = route.slice(0,4);
-  let fileName = route.slice(4);
-  console.log(route)
-  // let temp = req.query;
-  // let folder = Object.keys(temp);
-  // let fileName = temp[folder];
-  console.log({route, folder, fileName})
-  let package = `${filepath}/${folder}/Type-${fileName}-Model.png`;
-  console.log({package})
-  //res.type('png')?
-  res.sendFile(package, (err) => {
-    if(err) {
-      console.log(err);
-      //next(err);
-    } else {
-      console.log('SENT: ', package);
-    }
-  });
-})
-// res.sendFile(fileName, options, function (err) {
-//   if (err) {
-//       next(err);
-//   } else {
-//       console.log('Sent:', fileName);
-//   }
-// });
+//let filepath = `D:/DATA/Sensor/webApp/images`;
+
+
 
 
 // const getData = (req, res) => {
@@ -122,6 +94,9 @@ app.get('/xproto', route.getData);//for displaying sensors in the table selectio
 app.get('/sensorValid', route.getSensor); //index.js
 app.get('/type', route.getType); //for the type description at the top of the pdf
 app.get('/custom', route.getCustom);
+
+//get images for pdf
+app.get('/images/*', route.getImage);
 
 
 

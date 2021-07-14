@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Parser from './parse';
-//import PDF from './pdf';
-import {Buffer} from 'buffer';
+import PDF from './pdf';
+// import {Buffer} from 'buffer';
 //Buffer.from('anything','base64');
 
 
@@ -125,11 +125,11 @@ const Search = () => {
             <div className = "results">
                 {!!searchTerm &&
                 <div>
-                    {/* <PDF input={searchTerm} /> */}
+                    <PDF input={searchTerm} />
                     {/* <button onClick={() => Parser(searchTerm)}>{searchTerm}</button> */}
-                    <button onClick={() => test(searchTerm)}>{searchTerm}</button>
-                    <img src={images} alt='not found'/>
-                    <img src={require(`D:/DATA/Sensor/webApp/images/type/Type-AH-Model.png`).default}></img>
+                    {/* <button onClick={() => test(searchTerm)}>{searchTerm}</button> */}
+                    {/* <img src={images} alt='not found'/>
+                    <img src={require(`D:/DATA/Sensor/webApp/images/type/Type-AH-Model.png`).default}></img> */}
                     {/* <img src={`https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350`} alt='not found'/> */}
                 </div>
                 }

@@ -4,6 +4,10 @@ import axios from 'axios';
 //pdf helpers
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+
+//need?
+//import {Buffer} from 'buffer';
+
 //subcomponents, depedencies
 import date from '../images/DATECODE1-Model.png';
 
@@ -30,6 +34,10 @@ const PDF = (input) => {
     const [option, setOption] = useState('');
     const [rev, setRev] = useState('');
     const [description, setDescription] = useState('');
+    //images
+    const [images, setImages] = useState({});
+
+    const host = `http://192.168.1.118:3000`;
 
     //render/useEffect
     //on prop/input change, call get sensor
@@ -41,21 +49,27 @@ const PDF = (input) => {
         getSensor(sensor, typeTemp);
     },[input])//change to type later
 
-    //check that state is changing
+    //once we have sensor data package, call breakdown to split into relevant parts
     useEffect(() => {
-        console.log({sensorCode, sensorData})
+        //console.log({sensorCode, sensorData})
         //breakdown(sensorData, sensorCode);
         if(sensorData.length > 1) {
             breakdown(sensorData, sensorCode);
         }    
     },[sensorData])
 
+    //once all part states have been set, fetch images from server
+    useEffect(() => {
+        //retrieveImages(input, inputs?);
+        getImages()
+    },[description])//trigger on description change.(last state to be set in Breakdown)
+
     //event handlers
     const getSensor = async(sensor, type) => {
         try {
             const response = await Promise.all([
-                axios.get(`http://192.168.1.118:3000/sensorValid`, {params: {sensor}}),
-                axios.get(`http://192.168.1.118:3000/type`, {params: {type}}),
+                axios.get(`${host}/sensorValid`, {params: {sensor}}),
+                axios.get(`${host}/type`, {params: {type}}),
             ]);
             const data = response.map((response) => response.data);
             let output = data.flat();
@@ -69,7 +83,7 @@ const PDF = (input) => {
     const breakdown = (data, sensor) => {
         //break retrieved data into relevent variables
                 //destructure redefine data/props
-                console.log(data)
+                //console.log(data)
                 let specs = data[0];
                 setTypeD(data[1].type_description);
                 //let type_description = data[1].type_description;
@@ -93,9 +107,51 @@ const PDF = (input) => {
                 setDescription(specs.title)
                 //let footer = `Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * ${revision} `;
     }
-    useEffect(() => {
-        console.log({type})
-    },[type])
+
+    //Get images from router
+    const getImages = async() => {
+        let template = {
+            type: '',
+            mech: '',
+            housing: '',
+            option: '',
+            conn: '',
+            conn_chart: '',
+            spec_chart: '',
+            picture: '',
+        }
+        try {
+            //Promise.all to get all the images from server
+            const response = await Promise.all([
+                axios.get(`${host}/images/type/${type}`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/mech/${housing}`, { responseType: 'arraybuffer' }),
+            ]);
+            const data = response.map((response) => response.data);
+            let convertedArray = [];
+            //iterate through array buffer and convert to base64
+            for(let i = 0; i < data.length; i++){
+                let base64 = btoa(
+                    new Uint8Array(data[i]).reduce(
+                          (data, byte) => data + String.fromCharCode(byte),
+                          '',
+                    ),
+                );
+                //append data format declaration and add to object;
+                convertedArray[i] = ( "data:;base64," + base64 );
+            }
+            //save to template... -> better way to do this????
+            template.type = convertedArray[0];
+            template.mech = convertedArray[1];
+            //...
+
+            //set image state
+            setImages(template);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
 
     const print = () => {
         var page = document.getElementsByClassName("page1");
@@ -135,7 +191,7 @@ const PDF = (input) => {
     return (
         <div>
             <button onClick={() => print()}>{sensorCode}</button>
-            {!!description &&
+            {!!images &&
                 <div className="pdf-preview">
                     {/* <button onClick={() => print()}>{sensorCode}</button> */}
                     <div className="page1">
@@ -148,13 +204,17 @@ const PDF = (input) => {
                             <iframe src={require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default}></iframe>
                         </div>     */}
                         <div className="images">
-                            <img className="type" src={require(`D:/DATA/Sensor/webApp/images/type/Type-${type}-Model.png`).default}></img>
-                            <img className="mech" src={require(`D:/DATA/Sensor/webApp/images/mech/${housing}-Mech-Model.png`).default}></img>
-                            <img className="housing" src={require(`D:/DATA/Sensor/webApp/images/housing/${housing}-Model.png`).default}></img>
+                            {/* <img className="type" src={require(`D:/DATA/Sensor/webApp/images/type/Type-${type}-Model.png`).default}></img>
+                            <img className="mech" src={require(`D:/DATA/Sensor/webApp/images/mech/${housing}-Mech-Model.png`).default}></img> */}
+
+                            <img className="type" src={images.type} alt='no image found'/>
+                            <img className="mech" src={images.mech} alt='no image found'/>
+
+                            {/* <img className="housing" src={require(`D:/DATA/Sensor/webApp/images/housing/${housing}-Model.png`).default}></img>
                             <img className="option" src={require(`D:/DATA/Sensor/webApp/images/option/${option}-Model.png`).default}></img>
                             <img className="conn" src={require(`D:/DATA/Sensor/webApp/images/connect/${connect}-Model.png`).default}></img>
                             <img className="conn_chart" src={require(`D:/DATA/Sensor/webApp/images/conn_charts/${connect}-${char}-Model.png`).default}></img>
-                            <img className="date" src={date}></img>
+                            <img className="date" src={date}></img> */}
                         </div>
                         {/* <div className="description">
                             <iframe src={require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default}></iframe>
@@ -169,10 +229,10 @@ const PDF = (input) => {
                             <br></br>
                             <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                         </div>
-                        <div className="images">
+                        {/* <div className="images">
                             <img className="spec_chart" src={require(`D:/DATA/Sensor/webApp/images/spec_charts/${char}-${option}-Model.png`).default}></img>
                             <img className="picture" src={require(`D:/DATA/Sensor/webApp/images/pictures/${housing}-${char}-Model.png`).default}></img>
-                        </div>
+                        </div> */}
                         <div className='footer'>
                             <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>    
