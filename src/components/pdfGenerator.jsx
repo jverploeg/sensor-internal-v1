@@ -4,11 +4,13 @@ import date from '../images/DATECODE1-Model.png';
 
 
 //define generator function
-const generatePDF = (sensor, data, images) => {
+const generatePDF = (sensor, data, images, text) => {
     //destructure redefine data/props
     let specs = data[0];
     let type_description = data[1].type_description;
 
+
+    console.log({text})
 
     //TODO: either here or in parser, logic to differentiate between 3 sensor types...
 
@@ -77,9 +79,9 @@ const generatePDF = (sensor, data, images) => {
     spec_text = spec_text.replace(/Title/, '');
     spec_text = spec_text.replace(/\n{2,8}/g, '');
     spec_text = spec_text.replace(/\t/g, '');
-    console.log(spec_text)
+    //console.log(spec_text)
     let s_text = spec_text.split("\n\n");//'\n');("\\r?\\n")
-    //console.log(s_text);
+    console.log(s_text);
     //join array back together
     //s_text = s_text.join(' ');
     //console.log(s_text)
@@ -122,7 +124,8 @@ const generatePDF = (sensor, data, images) => {
 
     //TODO bullets!!!
     // doc.text(bullet_text, 398.5, 106.25);//300, 80)
-    let bulletLines = doc.splitTextToSize(final, 391);
+    //console.log(final, text.bullets)
+    let bulletLines = doc.splitTextToSize(text.bullets,391);//final, 391);
     doc.text(bulletLines, 398.5, 106.25);//300, 80)
     
 
@@ -138,7 +141,8 @@ const generatePDF = (sensor, data, images) => {
     //Bottom text
     doc.setFontSize(10);//font size isnt 12 when looking at spec sheets printed currently
     doc.setFont('times', 'normal');
-    let char_lines = doc.splitTextToSize(s_text, 762);
+    console.log(s_text, text.desc);
+    let char_lines = doc.splitTextToSize(text.desc, 762);//s_text, 762);
     doc.text(char_lines, margins.left, 770);//580);
 
     // doc.fromHTML(
@@ -169,7 +173,7 @@ const generatePDF = (sensor, data, images) => {
 
     //images
     //console.log('spec_chart', images.spec_chart)
-    doc.addImage(images.spec_chart, 'png', margins.left, 85, 720, 528);
+    doc.addImage(images.spec_chart, 'png', margins.left, 85, 720, 529);
     doc.addImage(images.picture, 'png', margins.left, 650, 720, 384);//598, 720, 384);
 
 

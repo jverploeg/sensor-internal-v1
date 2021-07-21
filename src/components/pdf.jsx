@@ -3,6 +3,7 @@ import axios from 'axios';
 
 //helper functions
 import generatePDF from './pdfGenerator';
+import html2text from './html2text';
 
 //assets
 import date from '../images/DATECODE1-Model.png';
@@ -54,6 +55,8 @@ const PDF = (input) => {
     const [description, setDescription] = useState('');
     //images
     const [images, setImages] = useState({});
+    //html
+    const [html, setHtml] = useState({});
 
     const host = `http://192.168.1.118:3000`;
 
@@ -122,6 +125,14 @@ const PDF = (input) => {
         setOption(opt);
         setRev(specs.rev)
         setDescription(specs.title)
+        let bullets = html2text(1, char);
+        console.log({bullets})
+        let desc = html2text(2, char);
+        let template = {
+            bullets: bullets, 
+            desc: desc,
+        }
+        setHtml(template);
     }
 
     //Get images from router
@@ -184,7 +195,7 @@ const PDF = (input) => {
     return (
         <div>
             {/* <button onClick={() => print()}>{sensorCode}</button> */}
-            <button onClick={() => generatePDF(sensorCode, sensorData, images)}>{sensorCode}</button>
+            <button onClick={() => generatePDF(sensorCode, sensorData, images, html)}>{sensorCode}</button>
             {!!images &&
                 <div className="pdf-preview">
                     {/* <button onClick={() => print()}>{sensorCode}</button> */}
