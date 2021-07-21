@@ -31,15 +31,15 @@ const generatePDF = (sensor, data, images) => {
 
     //BULLETS
     const bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
-    console.log(bullets_html);
+    //console.log(bullets_html);
     var bullet_text = bullets_html.replace(/<[^>]+>/g, '');
     let tester = bullets_html.split('\n');
-    console.log({tester})
+    //console.log({tester})
     let final = [];
 
     tester.pop();
     tester.shift();
-    console.log({tester})
+    //console.log({tester})
     for (let i = 0; i < tester.length; i++){
         //replace any list items
         var temp = tester[i].replace(/<[^>]+>/g, '');
@@ -49,40 +49,41 @@ const generatePDF = (sensor, data, images) => {
             final.push('o  ' + temp);
         }
     }
-    console.log({final});
-    console.log(bullet_text)
+    //console.log({final});
+   // console.log(bullet_text)
     bullet_text = bullet_text.replace(/\r/g, '');
-    console.log(bullet_text)
+    //console.log(bullet_text)
     bullet_text = bullet_text.split('\n');
-    console.log(bullet_text)
+    //console.log(bullet_text)
     //remove first & last elements
     bullet_text.shift();//.pop();;
     bullet_text.pop();
-    console.log(bullet_text);
+    //console.log(bullet_text);
     //add 'bullet point to start of each line
     for(let i = 0; i < bullet_text.length; i++){
         
         bullet_text[i] = 'o  '+ bullet_text[i];
     };
-    console.log(bullet_text);
+    //console.log(bullet_text);
 
     //Bottom text 
     //TEMPORARY fix to retrieve and manipulate the html text for the spec description...
     //TODO: clean up logic, find if this works for all description files.....
     const description_html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
-    //console.log(description_html)
+    console.log({description_html})
     //regex to modify
     var spec_text = description_html.replace(/<[^>]+>/g, '');
     spec_text = spec_text.replace(/\&nbsp\;/g, '');
     spec_text = spec_text.replace(/Title/, '');
     spec_text = spec_text.replace(/\n{2,8}/g, '');
     spec_text = spec_text.replace(/\t/g, '');
-    //console.log(spec_text)
-    let s_text = spec_text.split('\n');
+    console.log(spec_text)
+    let s_text = spec_text.split("\n\n");//'\n');("\\r?\\n")
+    //console.log(s_text);
     //join array back together
-    s_text = s_text.join(' ');
+    //s_text = s_text.join(' ');
     //console.log(s_text)
-    s_text = s_text.replace(/' '{4,5}/g, '\n');//'12345' '10' '    '
+    //s_text = s_text.replace(/' '{4,5}/g, '\n');//'12345' '10' '    '
     //TODO: fix newline logic
     //console.log(s_text)
     //lookahead for multiple strings ^(?=.*[a-zA-Z])(?=.*[~!@#$%^&*()_+])(?=.*\d).*$
@@ -135,15 +136,23 @@ const generatePDF = (sensor, data, images) => {
     doc.addImage(date, 'png', 541, 651, 204, 96);
 
     //Bottom text
-    // doc.setFontSize(10);//font size isnt 12 when looking at spec sheets printed currently
-    // doc.setFont('times', 'normal');
-    // let char_lines = doc.splitTextToSize(s_text, margins.width);
-    // doc.text(char_lines, margins.left, 580);
+    doc.setFontSize(10);//font size isnt 12 when looking at spec sheets printed currently
+    doc.setFont('times', 'normal');
+    let char_lines = doc.splitTextToSize(s_text, 762);
+    doc.text(char_lines, margins.left, 770);//580);
+
+    // doc.fromHTML(
+    //     description_html,
+    //     150,
+    //     150,
+    //     {
+    //       'width': 180,//'elementHandlers': elementHandler
+    //     });
 
     //footer(centered on page)
     doc.setFontSize(10);
     doc.setFont('times', 'italic');
-    doc.text(footer, 175, 1030)
+    doc.text(footer, 175, 1045)
 
     //SECOND PAGE
 
@@ -153,7 +162,7 @@ const generatePDF = (sensor, data, images) => {
     doc.setFontSize(16);
     doc.text(sensor + '  -  ', margins.left,margins.top);
     doc.setFontSize(14);
-    doc.text(type_description, margins.left + (newX * 22), margins.top);
+    doc.text(type_description, margins.left + (newX * 18.6), margins.top)//(newX * 22), margins.top);
     doc.setFontSize(12);
     doc.setFont('times', 'italic');
     doc.text(desc_lines, margins.left, margins.top + 20);//+20?
@@ -167,9 +176,7 @@ const generatePDF = (sensor, data, images) => {
     //footer
     doc.setFontSize(10);    
     doc.setFont('times', 'italic');
-    doc.text(footer, 175, 1030);
-    let footerW = doc.getStringUnitWidth(footer);
-    console.log(footerW)
+    doc.text(footer, 175, 1045);
 
     //save pdf image
     doc.save(`${sensor}.pdf`);
