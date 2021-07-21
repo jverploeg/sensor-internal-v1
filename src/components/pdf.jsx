@@ -125,8 +125,8 @@ const PDF = (input) => {
         setOption(opt);
         setRev(specs.rev)
         setDescription(specs.title)
+        
         let bullets = html2text(1, char);
-        console.log({bullets})
         let desc = html2text(2, char);
         let template = {
             bullets: bullets, 
