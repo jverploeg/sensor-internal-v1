@@ -33,6 +33,23 @@ const generatePDF = (sensor, data, images) => {
     const bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
     console.log(bullets_html);
     var bullet_text = bullets_html.replace(/<[^>]+>/g, '');
+    let tester = bullets_html.split('\n');
+    console.log({tester})
+    let final = [];
+
+    tester.pop();
+    tester.shift();
+    console.log({tester})
+    for (let i = 0; i < tester.length; i++){
+        //replace any list items
+        var temp = tester[i].replace(/<[^>]+>/g, '');
+        temp = temp.replace(/\r/g, '');
+        //replace /r formatting
+        if(temp.length > 3){
+            final.push('o  ' + temp);
+        }
+    }
+    console.log({final});
     console.log(bullet_text)
     bullet_text = bullet_text.replace(/\r/g, '');
     console.log(bullet_text)
@@ -103,8 +120,10 @@ const generatePDF = (sensor, data, images) => {
     doc.text(desc_lines, margins.left, margins.top + 20);//+20?
 
     //TODO bullets!!!
-    doc.text(bullet_text, 398.5, 106.25);//300, 80)
+    // doc.text(bullet_text, 398.5, 106.25);//300, 80)
+    doc.text(final, 398.5, 106.25);//300, 80)
     
+
     //ADD IMAGES FOR 1st Page
     doc.addImage(images.type, 'png', margins.left, 85, 336, 204);
     doc.addImage(images.mech, 'png', 398, 193, 348, 96);
