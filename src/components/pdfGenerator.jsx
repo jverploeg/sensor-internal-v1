@@ -152,31 +152,31 @@ const generatePDF = (sensor, data, images) => {
     //footer(centered on page)
     doc.setFontSize(10);
     doc.setFont('times', 'italic');
-    doc.text(footer, 175, 1045)
+    doc.text(footer, 175, 1047)
 
     //SECOND PAGE
 
     //header
     doc.addPage();
     doc.setFont('times','bold');
-    doc.setFontSize(16);
-    doc.text(sensor + '  -  ', margins.left,margins.top);
     doc.setFontSize(14);
-    doc.text(type_description, margins.left + (newX * 18.6), margins.top)//(newX * 22), margins.top);
+    doc.text(sensor + '  -  ', margins.left,margins.top);
     doc.setFontSize(12);
+    doc.text(type_description, margins.left + (newX * 18.6), margins.top)//(newX * 22), margins.top);
+    //doc.setFontSize(12);
     doc.setFont('times', 'italic');
     doc.text(desc_lines, margins.left, margins.top + 20);//+20?
 
     //images
     //console.log('spec_chart', images.spec_chart)
     doc.addImage(images.spec_chart, 'png', margins.left, 85, 720, 528);
-    doc.addImage(images.picture, 'png', margins.left, 598, 720, 384);
+    doc.addImage(images.picture, 'png', margins.left, 650, 720, 384);//598, 720, 384);
 
 
     //footer
     doc.setFontSize(10);    
     doc.setFont('times', 'italic');
-    doc.text(footer, 175, 1045);
+    doc.text(footer, 175, 1047);
 
     //save pdf image
     doc.save(`${sensor}.pdf`);
