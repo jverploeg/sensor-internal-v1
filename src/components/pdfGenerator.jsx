@@ -106,22 +106,23 @@ const generatePDF = (sensor, data, images) => {
         height: 1054, //792 - (top + bottom)
     };
     doc.setFont('times','bold');
-    doc.setFontSize(16);
+    doc.setFontSize(14);
     doc.text(sensor + '  -  ', margins.left,margins.top);
     //get location/width of this string so that type_description placed accordingly
     let newX = doc.getStringUnitWidth(sensor + '  -  ');
-    doc.setFontSize(14);
-    doc.text(type_description, margins.left + (newX * 22), margins.top);
+    doc.setFontSize(12);
+    doc.text(type_description, margins.left + (newX * 18.6), margins.top);//22
 
     //break sensor description down based on text width so it fits within the page
-    doc.setFontSize(12);
+    //doc.setFontSize(12);
     doc.setFont('times', 'italic');
     let desc_lines = doc.splitTextToSize(description, 762)//margins.width)
     doc.text(desc_lines, margins.left, margins.top + 20);//+20?
 
     //TODO bullets!!!
     // doc.text(bullet_text, 398.5, 106.25);//300, 80)
-    doc.text(final, 398.5, 106.25);//300, 80)
+    let bulletLines = doc.splitTextToSize(final, 391);
+    doc.text(bulletLines, 398.5, 106.25);//300, 80)
     
 
     //ADD IMAGES FOR 1st Page
