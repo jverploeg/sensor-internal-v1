@@ -33,15 +33,18 @@ const generatePDF = (sensor, data, images) => {
     const bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
     console.log(bullets_html);
     var bullet_text = bullets_html.replace(/<[^>]+>/g, '');
+    console.log(bullet_text)
     bullet_text = bullet_text.replace(/\r/g, '');
     console.log(bullet_text)
     bullet_text = bullet_text.split('\n');
+    console.log(bullet_text)
     //remove first & last elements
     bullet_text.shift();//.pop();;
     bullet_text.pop();
     console.log(bullet_text);
     //add 'bullet point to start of each line
     for(let i = 0; i < bullet_text.length; i++){
+        
         bullet_text[i] = 'o  '+ bullet_text[i];
     };
     console.log(bullet_text);
@@ -118,6 +121,7 @@ const generatePDF = (sensor, data, images) => {
     // doc.text(char_lines, margins.left, 580);
 
     //footer(centered on page)
+    doc.setFontSize(10);
     doc.setFont('times', 'italic');
     doc.text(footer, 175, 1030)
 
@@ -135,6 +139,7 @@ const generatePDF = (sensor, data, images) => {
     doc.text(desc_lines, margins.left, margins.top + 20);//+20?
 
     //images
+    //console.log('spec_chart', images.spec_chart)
     doc.addImage(images.spec_chart, 'png', margins.left, 85, 720, 528);
     doc.addImage(images.picture, 'png', margins.left, 598, 720, 384);
 
@@ -143,7 +148,8 @@ const generatePDF = (sensor, data, images) => {
     doc.setFontSize(10);    
     doc.setFont('times', 'italic');
     doc.text(footer, 175, 1030);
-
+    let footerW = doc.getStringUnitWidth(footer);
+    console.log(footerW)
 
     //save pdf image
     doc.save(`${sensor}.pdf`);

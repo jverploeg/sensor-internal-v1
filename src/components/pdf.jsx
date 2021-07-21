@@ -8,7 +8,7 @@ import generatePDF from './pdfGenerator';
 import date from '../images/DATECODE1-Model.png';
 
 const PDF = (input) => {
-    console.log(input, typeof(input))
+    //console.log(input, typeof(input))
     //destructure props!!!!!!!!!!!!!!!
     let temp = input.input;
     //const searchTerm = input;
@@ -17,7 +17,7 @@ const PDF = (input) => {
     //temp define search
     //var sensor = 'A47-18ADS-5KT21';
     
-    console.log(input, temp)
+    //console.log(input, temp)
     //shortcuts for testing random sensors
     if(temp === "a") {
         console.log('hey')
@@ -84,7 +84,7 @@ const PDF = (input) => {
 
     //event handlers
     const getSensor = async(sensor, type) => {
-        console.log({sensor})
+        //console.log({sensor})
         try {
             const response = await Promise.all([
                 axios.get(`${host}/sensorValid`, {params: {sensor}}),
