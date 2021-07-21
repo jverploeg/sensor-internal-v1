@@ -86,6 +86,7 @@ const generatePDF = (sensor, data, images, text) => {
     doc.text(sensor + '  -  ', margins.left,margins.top);
     //get location/width of this string so that type_description placed accordingly
     let newX = doc.getStringUnitWidth(sensor + '  -  ');
+    //console.log(newX) == 9.369 * 18.6 = 179.28 + m.left = 207.3
     doc.setFontSize(12);
     doc.text(type_description, margins.left + (newX * 18.6), margins.top);//22
 

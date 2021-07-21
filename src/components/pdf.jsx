@@ -125,13 +125,14 @@ const PDF = (input) => {
         setOption(opt);
         setRev(specs.rev)
         setDescription(specs.title)
-        
+
         let bullets = html2text(1, char);
         let desc = html2text(2, char);
         let template = {
             bullets: bullets, 
             desc: desc,
         }
+        console.log(template)
         setHtml(template);
     }
 
@@ -147,6 +148,7 @@ const PDF = (input) => {
             spec_chart: '',
             picture: '',
         }
+        console.log(html.bullets)
         try {
             //Promise.all to get all the images from server
             const response = await Promise.all([
@@ -201,13 +203,19 @@ const PDF = (input) => {
                     {/* <button onClick={() => print()}>{sensorCode}</button> */}
                     <div className="page1">
                         <div className="header" >
-                            <span style={{fontSize:'16'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'14'}}>{type_description}</span>
+                            <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
                             <br></br>
-                            <span style={{fontSize:'12'}}><i>{description}</i></span>
+                            <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                         </div>
-                        {/* <div className="bullets">
-                            <iframe src={require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default}></iframe>
-                        </div>     */}
+                        <div className="bullets">
+                            <ul className="bullets2">
+                                {!!html.bullets && html.bullets.map((item,index) => (
+                                    <li style={{fontSize:'12pt'}}>
+                                    <i>{item}</i>  
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>    
                         <div className="images">
                             <img className="type" src={images.type} alt='no image found'/>
                             <img className="mech" src={images.mech} alt='no image found'/>
@@ -217,25 +225,25 @@ const PDF = (input) => {
                             <img className="conn_chart" src={images.conn_chart} alt='no image found'/>
                             <img className="date" src={date}></img>
                         </div>
-                        {/* <div className="description">
-                            <iframe src={require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default}></iframe>
-                        </div> */}
+                        <div className="description">
+                            <p style={{fontSize:'10pt'}}>{html.desc}</p>
+                        </div>
                         <div className='footer'>
-                            <span style={{fontSize:'10'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
+                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>           
                     </div>
                     <div className="page2">
                         <div className="header" >
-                            <span style={{fontSize:'16'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'14'}}>{type_description}</span>
+                            <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}>{type_description}</span>
                             <br></br>
-                            <span style={{fontSize:'12'}}><i>{description}</i></span>
+                            <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                         </div>
                         <div className="images">
                             <img className="spec_chart" src={images.spec_chart} alt='no image found'/>
                             <img className="picture" src={images.picture} alt='no image found'/>
                         </div>
                         <div className='footer'>
-                            <span style={{fontSize:'10'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
+                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>    
                     </div>
                 </div>         
