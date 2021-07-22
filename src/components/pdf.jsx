@@ -4,18 +4,18 @@ import axios from 'axios';
 //helper functions
 import generatePDF from './pdfGenerator';
 import html2text from './html2text';
-import customPdf from './customPdf';
+//import customPdf from './customPdf';
+import checkType from './checkType';
 
 //assets
 import date from '../images/DATECODE1-Model.png';
 
 const PDF = (input) => {
-    //console.log(input, typeof(input))
+    const host = `http://192.168.1.118:3000`;
     //destructure props!!!!!!!!!!!!!!!
     let temp = input.input;
-    console.log(temp.slice(0,2))
-    //const searchTerm = input;
-    //TODO: check valid and type function
+    //let sensor = input.input;
+
 
     //temp define search
     //var sensor = 'A47-18ADS-5KT21';
@@ -28,7 +28,7 @@ const PDF = (input) => {
     } else if(temp === 'b') {
         var sensor = 'M1VE-MRS-E5CP2';//issues with 2nd page
     } else if(temp === 'c') {
-        var sensor = 'S63B-HS3-L5T21';//issues with 2nd page
+        var sensor = 'CS1111';
     } else if(temp === 'd') {
         var sensor = 'A44-18ADS-OCR22';//fits
     } else if(temp === 'e') {
@@ -36,17 +36,14 @@ const PDF = (input) => {
     } else {
         var sensor = 'A47-18ADS-5KT21';
     }
-    //console.log({sensor},'sdf')
-
-    let segments = sensor.split('-');
-    //console.log(segments)
-    let typeTemp = segments[1];//this wont work for cs, proto.. without additional step
 
 
     //define state
+    const [sensorType, setSensorType] = useState('');
+    //define key data pieces
     const [sensorCode, setSensorCode] = useState('');
     const [sensorData, setSensorData] = useState({});
-    //part states
+    //breakdown of part states
     const [type, setType] = useState('');
     const [type_description, setTypeD] = useState('');
     const [housing, setHousing] = useState('');
@@ -60,13 +57,25 @@ const PDF = (input) => {
     //html
     const [html, setHtml] = useState({});
 
-    const host = `http://192.168.1.118:3000`;
+    
 
     //RERENDER PAGE ON TRIGGERS////////////////////
     useEffect(() => {
-        //getSensor(input, type)
-        getSensor(sensor, typeTemp);
-    },[input])//change to type later
+        let senstype = checkType(sensor); // 'standard', 'custom', 'xproto'
+        console.log(senstype)
+        if (senstype === 'standard') {
+            //breakdown the 3 part code
+            let segments = sensor.split('-');
+            let typeTemp = segments[1];
+            //getSensor(temp, type) ?typeTemp works for this implementation
+            getSensor(sensor, typeTemp);
+        } else if(senstype === 'custom') {
+            getCustom(sensor);
+        } else if(senstype === 'xproto') {
+            //TODO LATER: implement logic for xproto sensors
+            //getProto
+        }
+    },[input])//change to type later? no?
 
     //once we have sensor data package, call breakdown to split into relevant parts
     useEffect(() => {
@@ -96,7 +105,8 @@ const PDF = (input) => {
                 axios.get(`${host}/type`, {params: {type}}),
             ]);
             const data = response.map((response) => response.data);
-            let output = data.flat();
+            let output = data.flat(); //DO WE NEED THE WHOLE ROW?
+            //console.log(sensor, output)
             setSensorCode(sensor);
             setSensorData(output);
             //generatePDF(sensor, output);
@@ -104,13 +114,22 @@ const PDF = (input) => {
             console.log(error)
         }
     }
-    // //get custom
-    // const getCustom = async(sensor) => {
-    //     try {
-    //         const response = await axios.get(`${host}/custom/${sensor}`);
+    const getCustom = async(sensor) => {
+        try {
+            const response = await axios.get(`${host}/custom/${sensor}`);
+            //setSensor(response.data)
+            console.log(response.data);//[0]);
+            //Sensitive Either Pole Hall Switch, 38 G, supply filter, npn 5k pull up resistor, Aluminum 15/32-32 x 1" housing, 3 pin Deutsch DT with 5 inch 20 AWG XLPE
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
-    //     }
-    // }
+
+
+
+
     const breakdown = (data, sensor) => {
         //break retrieved data into relevent variables
 

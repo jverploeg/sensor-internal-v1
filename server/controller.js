@@ -72,8 +72,9 @@ const getType = (req, res) => {
 
 const getCustom = (req, res) => {
     console.log(req.body)
-    let data = ''; //define what this is later
-    db.getCustom(data)
+    console.log(req.url)
+    let sensor = req.url.slice(8) //CS1111
+    db.getCustom(sensor)
     .then(result => {
         res.status(200).send(result.rows);
     })
