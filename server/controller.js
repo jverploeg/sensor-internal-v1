@@ -82,6 +82,25 @@ const getCustom = (req, res) => {
 }
 
 
+const getImage = (req, res) => {
+    //set basepath
+  let filepath = `D:/DATA/Sensor/webApp/images`;
+  //get images/folder/filename.png from client request
+  let route = req.url.slice(8);
+  //combine Absolute path to local storage with endpoint
+  let package = `${filepath}/${route}.png`;
+
+  res.sendFile(package, (err) => {
+    if(err) {
+      //console.log(err);
+    } else {
+      console.log('SENT: ', package);
+    }
+  });
+
+}  
+
+
 module.exports = {
     getData,
     addData,
@@ -89,5 +108,6 @@ module.exports = {
     getSensor,
     getType,
     getCustom,
+    getImage
 
 }

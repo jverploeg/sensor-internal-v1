@@ -10,9 +10,8 @@ const app = express();
 // render static files
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 
-//local files
-//app.use('/images', express.static('file:///D:/DATA/Sensor/webApp/images'))
-//https://www.geeksforgeeks.org/how-to-fetch-images-from-node-server/
+
+
 
 // setup middleware for parsing
 app.use(express.json());
@@ -39,6 +38,26 @@ const port = 3000;
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
+//local files
+//app.use('/images', express.static('file:///D:/DATA/Sensor/webApp/images'))
+//https://www.geeksforgeeks.org/how-to-fetch-images-from-node-server/
+// let filepath = `file:///D:/DATA/Sensor/webApp/images`;
+//let filepath = `D:/DATA/Sensor/webApp/images`;
+
+
+
+
+// const getData = (req, res) => {
+//   //remove the / from the req.url
+//   let route = req.url.slice(1); // '/route' --> 'route'
+//   db.getData(route)
+//   .then(result => {
+//       res.status(200).send(result.rows);
+//   })
+//   .catch(error => {
+//       res.status(500).send(error)
+//   })
+// }
 
 //app.get('/images', route.getImage);
 ////////////ROUTES//////////////////////
@@ -75,6 +94,9 @@ app.get('/xproto', route.getData);//for displaying sensors in the table selectio
 app.get('/sensorValid', route.getSensor); //index.js
 app.get('/type', route.getType); //for the type description at the top of the pdf
 app.get('/custom', route.getCustom);
+
+//get images for pdf
+app.get('/images/*', route.getImage);
 
 
 

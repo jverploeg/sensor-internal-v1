@@ -4,7 +4,8 @@ import axios from 'axios';
 //pdf helpers
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-//subcomponents, depedencies
+
+//assets
 import date from '../images/DATECODE1-Model.png';
 
 const PDF = (input) => {
@@ -30,32 +31,37 @@ const PDF = (input) => {
     const [option, setOption] = useState('');
     const [rev, setRev] = useState('');
     const [description, setDescription] = useState('');
+    //images
+    const [images, setImages] = useState({});
 
-    //render/useEffect
-    //on prop/input change, call get sensor
-    // useEffect(() => {
-    //     //parse to get type
-    // },[input])
+    const host = `http://192.168.1.118:3000`;
+
+    //RERENDER PAGE ON TRIGGERS////////////////////
     useEffect(() => {
         //getSensor(input, type)
         getSensor(sensor, typeTemp);
     },[input])//change to type later
 
-    //check that state is changing
+    //once we have sensor data package, call breakdown to split into relevant parts
     useEffect(() => {
-        console.log({sensorCode, sensorData})
+        //console.log({sensorCode, sensorData})
         //breakdown(sensorData, sensorCode);
         if(sensorData.length > 1) {
             breakdown(sensorData, sensorCode);
         }    
     },[sensorData])
 
+    //once all part states have been set, fetch images from server
+    useEffect(() => {
+        getImages()
+    },[description])//trigger on description change.(last state to be set in Breakdown)
+
     //event handlers
     const getSensor = async(sensor, type) => {
         try {
             const response = await Promise.all([
-                axios.get(`http://192.168.1.118:3000/sensorValid`, {params: {sensor}}),
-                axios.get(`http://192.168.1.118:3000/type`, {params: {type}}),
+                axios.get(`${host}/sensorValid`, {params: {sensor}}),
+                axios.get(`${host}/type`, {params: {type}}),
             ]);
             const data = response.map((response) => response.data);
             let output = data.flat();
@@ -68,34 +74,85 @@ const PDF = (input) => {
     }
     const breakdown = (data, sensor) => {
         //break retrieved data into relevent variables
-                //destructure redefine data/props
-                console.log(data)
-                let specs = data[0];
-                setTypeD(data[1].type_description);
-                //let type_description = data[1].type_description;
-            
-            
-                //TODO: either here or in parser, logic to differentiate between 3 sensor types...
-            
-                //break the search term down accordingly
-                let segments = sensor.split('-');
-                let char = segments[1];
-                setHousing(segments[0]);
-                let housing = segments[0];
-                setChar(segments[1]);
-                setType(specs.type);
-                let sensor_code = specs.sensor_code;
-                let splitOps = sensor_code.split(housing); 
-                setConnect(splitOps[1]);
-                let opt = splitOps[0].slice(char.length); //get accurate option code
-                setOption(opt);
-                setRev(specs.rev)
-                setDescription(specs.title)
-                //let footer = `Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * ${revision} `;
+
+        //TODO: either here or in parser, logic to differentiate between 3 sensor types...
+
+
+        //destructure redefine data/props
+        let specs = data[0];
+        setTypeD(data[1].type_description);
+        //break the search term down accordingly
+        let segments = sensor.split('-');
+        let char = segments[1];
+        setHousing(segments[0]);
+        let housing = segments[0];
+        setChar(segments[1]);
+        setType(specs.type);
+        let sensor_code = specs.sensor_code;
+        let splitOps = sensor_code.split(housing); 
+        setConnect(splitOps[1]);
+        let opt = splitOps[0].slice(char.length); //get accurate option code
+        setOption(opt);
+        setRev(specs.rev)
+        setDescription(specs.title)
     }
-    useEffect(() => {
-        console.log({type})
-    },[type])
+
+    //Get images from router
+    const getImages = async() => {
+        let template = {
+            type: '',
+            mech: '',
+            housing: '',
+            option: '',
+            connect: '',
+            conn_chart: '',
+            spec_chart: '',
+            picture: '',
+        }
+        try {
+            //Promise.all to get all the images from server
+            const response = await Promise.all([
+                axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/mech/${housing}-Mech-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/housing/${housing}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/option/${option}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/connect/${connect}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/conn_charts/${connect}-${char}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/spec_charts/${char}-${option}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/pictures/${housing}-${char}-Model`, { responseType: 'arraybuffer' }),
+            ]);
+            const data = response.map((response) => response.data);
+            let convertedArray = [];
+            //iterate through array buffer and convert to base64
+            for(let i = 0; i < data.length; i++){
+                let base64 = btoa(
+                    new Uint8Array(data[i]).reduce(
+                          (data, byte) => data + String.fromCharCode(byte),
+                          '',
+                    ),
+                );
+                //append data format declaration and add to object;
+                convertedArray[i] = ( "data:;base64," + base64 );
+            }
+            //save to template... -> better way to do this????
+            template.type = convertedArray[0];
+            template.mech = convertedArray[1];
+            template.housing = convertedArray[2];
+            template.option = convertedArray[3];
+            template.connect = convertedArray[4];
+            template.conn_chart = convertedArray[5];
+            template.spec_chart = convertedArray[6];
+            template.picture = convertedArray[7];
+            //...
+
+            //set image state
+            setImages(template);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
 
     const print = () => {
         var page = document.getElementsByClassName("page1");
@@ -135,7 +192,7 @@ const PDF = (input) => {
     return (
         <div>
             <button onClick={() => print()}>{sensorCode}</button>
-            {!!description &&
+            {!!images &&
                 <div className="pdf-preview">
                     {/* <button onClick={() => print()}>{sensorCode}</button> */}
                     <div className="page1">
@@ -148,33 +205,36 @@ const PDF = (input) => {
                             <iframe src={require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default}></iframe>
                         </div>     */}
                         <div className="images">
-                            <img className="type" src={require(`D:/DATA/Sensor/webApp/images/type/Type-${type}-Model.png`).default}></img>
-                            <img className="mech" src={require(`D:/DATA/Sensor/webApp/images/mech/${housing}-Mech-Model.png`).default}></img>
-                            <img className="housing" src={require(`D:/DATA/Sensor/webApp/images/housing/${housing}-Model.png`).default}></img>
-                            <img className="option" src={require(`D:/DATA/Sensor/webApp/images/option/${option}-Model.png`).default}></img>
-                            <img className="conn" src={require(`D:/DATA/Sensor/webApp/images/connect/${connect}-Model.png`).default}></img>
-                            <img className="conn_chart" src={require(`D:/DATA/Sensor/webApp/images/conn_charts/${connect}-${char}-Model.png`).default}></img>
+                            {/* <img className="type" src={require(`D:/DATA/Sensor/webApp/images/type/Type-${type}-Model.png`).default}></img>
+                            <img className="mech" src={require(`D:/DATA/Sensor/webApp/images/mech/${housing}-Mech-Model.png`).default}></img> */}
+
+                            <img className="type" src={images.type} alt='no image found'/>
+                            <img className="mech" src={images.mech} alt='no image found'/>
+                            <img className="housing" src={images.housing} alt='no image found'/>
+                            <img className="option" src={images.option} alt='no image found'/>
+                            <img className="connect" src={images.connect} alt='no image found'/>
+                            <img className="conn_chart" src={images.conn_chart} alt='no image found'/>
                             <img className="date" src={date}></img>
                         </div>
                         {/* <div className="description">
                             <iframe src={require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default}></iframe>
                         </div> */}
                         <div className='footer'>
-                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
+                            <span style={{fontSize:'10'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>           
                     </div>
                     <div className="page2">
                         <div className="header" >
-                            <span style={{fontSize:'16pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'14pt'}}>{type_description}</span>
+                            <span style={{fontSize:'16'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'14'}}>{type_description}</span>
                             <br></br>
-                            <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+                            <span style={{fontSize:'12'}}><i>{description}</i></span>
                         </div>
                         <div className="images">
-                            <img className="spec_chart" src={require(`D:/DATA/Sensor/webApp/images/spec_charts/${char}-${option}-Model.png`).default}></img>
-                            <img className="picture" src={require(`D:/DATA/Sensor/webApp/images/pictures/${housing}-${char}-Model.png`).default}></img>
+                            <img className="spec_chart" src={images.spec_chart} alt='no image found'/>
+                            <img className="picture" src={images.picture} alt='no image found'/>
                         </div>
                         <div className='footer'>
-                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
+                            <span style={{fontSize:'10'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>    
                     </div>
                 </div>         
