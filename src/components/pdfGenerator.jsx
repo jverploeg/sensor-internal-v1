@@ -4,12 +4,10 @@ import date from '../images/DATECODE1-Model.png';
 
 
 //define generator function
-const generatePDF = (sensor, data) => {
+const generatePDF = (sensor, data, images, text) => {
     //destructure redefine data/props
     let specs = data[0];
     let type_description = data[1].type_description;
-
-
     //TODO: either here or in parser, logic to differentiate between 3 sensor types...
 
     //break the search term down accordingly
@@ -30,41 +28,39 @@ const generatePDF = (sensor, data) => {
 
 
     //BULLETS
-    const bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
-    console.log(bullets_html);
-    var bullet_text = bullets_html.replace(/<[^>]+>/g, '');
-    bullet_text = bullet_text.replace(/\r/g, '');
-    console.log(bullet_text)
-    bullet_text = bullet_text.split('\n');
-    //remove first & last elements
-    bullet_text.shift();//.pop();;
-    bullet_text.pop();
-    console.log(bullet_text);
-    //add 'bullet point to start of each line
-    for(let i = 0; i < bullet_text.length; i++){
-        bullet_text[i] = 'o  '+ bullet_text[i];
-    };
-    console.log(bullet_text);
+    // const bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
+    // var bullet_text = bullets_html.replace(/<[^>]+>/g, '');
+    // let tester = bullets_html.split('\n');
+
+    // let final = [];
+
+    // tester.pop();
+    // tester.shift();
+    // for (let i = 0; i < tester.length; i++){
+    //     //replace any list items
+    //     var temp = tester[i].replace(/<[^>]+>/g, '');
+    //     temp = temp.replace(/\r/g, '');
+    //     //replace /r formatting
+    //     if(temp.length > 3){
+    //         final.push('o  ' + temp);
+    //     }
+    // }
+
 
     //Bottom text 
     //TEMPORARY fix to retrieve and manipulate the html text for the spec description...
     //TODO: clean up logic, find if this works for all description files.....
-    const description_html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
-    //console.log(description_html)
-    //regex to modify
-    var spec_text = description_html.replace(/<[^>]+>/g, '');
-    spec_text = spec_text.replace(/\&nbsp\;/g, '');
-    spec_text = spec_text.replace(/Title/, '');
-    spec_text = spec_text.replace(/\n{2,8}/g, '');
-    spec_text = spec_text.replace(/\t/g, '');
-    //console.log(spec_text)
-    let s_text = spec_text.split('\n');
-    //join array back together
-    s_text = s_text.join(' ');
-    //console.log(s_text)
-    s_text = s_text.replace(/' '{4,5}/g, '\n');//'12345' '10' '    '
-    //TODO: fix newline logic
-    //console.log(s_text)
+    // const description_html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
+    // //regex to modify
+    // var spec_text = description_html.replace(/<[^>]+>/g, '');
+    // spec_text = spec_text.replace(/\&nbsp\;/g, '');
+    // spec_text = spec_text.replace(/Title/, '');
+    // spec_text = spec_text.replace(/\n{2,8}/g, '');
+    // spec_text = spec_text.replace(/\t/g, '');
+    // let s_text = spec_text.split("\n\n");//'\n');("\\r?\\n")
+
+    //s_text = s_text.join(' ');
+    //s_text = s_text.replace(/' '{4,5}/g, '\n');//'12345' '10' '    '
     //lookahead for multiple strings ^(?=.*[a-zA-Z])(?=.*[~!@#$%^&*()_+])(?=.*\d).*$
     
 
@@ -72,85 +68,81 @@ const generatePDF = (sensor, data) => {
 
     //initialize
     const doc = new jsPDF({
+        hotfixes: ["px_scaling"],
         orientation:'portrait',
-        unit: 'pt', //points
+        unit: 'px', //pixels
         format: 'letter', //default is a4
     });
     var margins = {
-        top: 20,
-        bottom: 42,
-        right: 40,
-        left: 20,
-        width: 552, //612 - (right + left)
-        height: 730, //792 - (top + bottom)
+        top: 27,
+        bottom: 1030,
+        right: 27,
+        left: 27,
+        width: 816, //612 - (right + left)
+        height: 1054, //792 - (top + bottom)
     };
     doc.setFont('times','bold');
-    doc.setFontSize(16);
+    doc.setFontSize(14);
     doc.text(sensor + '  -  ', margins.left,margins.top);
     //get location/width of this string so that type_description placed accordingly
     let newX = doc.getStringUnitWidth(sensor + '  -  ');
-    doc.setFontSize(14);
-    doc.text(type_description, margins.left + (newX * 16), margins.top);
+    //console.log(newX) == 9.369 * 18.6 = 179.28 + m.left = 207.3
+    doc.setFontSize(12);
+    doc.text(type_description, margins.left + (newX * 18.6), margins.top);//22
 
     //break sensor description down based on text width so it fits within the page
-    doc.setFontSize(12);
+    //doc.setFontSize(12);
     doc.setFont('times', 'italic');
-    let desc_lines = doc.splitTextToSize(description, margins.width)
-    doc.text(desc_lines, margins.left, margins.top + 15);//+20?
+    let desc_lines = doc.splitTextToSize(description, 762)//margins.width)
+    doc.text(desc_lines, margins.left, margins.top + 20);//+20?
 
-    //TODO bullets!!!
-    doc.text(bullet_text, 300, 80)
+    //bullets
+    let bulletLines = doc.splitTextToSize(text.bullets,391);//final, 391);
+    doc.text(bulletLines, 398.5, 106.25);//300, 80)
     
+
     //ADD IMAGES FOR 1st Page
-    const typeImage = require(`D:/DATA/Sensor/webApp/images/type/Type-${type}-Model.png`);
-        doc.addImage(typeImage.default, 'png', margins.left, 60, 252, 157);
-    const mechImage = require(`D:/DATA/Sensor/webApp/images/mech/${housing}-Mech-Model.png`);
-        doc.addImage(mechImage.default, 'png', 300, 145, 261, 72);
-    const housingImage = require(`D:/DATA/Sensor/webApp/images/housing/${housing}-Model.png`);
-        doc.addImage(housingImage.default, 'png', margins.left, 230, 360, 162);
-    const optionImage = require(`D:/DATA/Sensor/webApp/images/option/${option}-Model.png`);
-        doc.addImage(optionImage.default, 'png', 407, 230, 153, 162);
-    const connectImage = require(`D:/DATA/Sensor/webApp/images/connect/${connect}-Model.png`);
-        doc.addImage(connectImage.default, 'png', margins.left, 400, 360, 162);
-    const conn_chartsImage = require(`D:/DATA/Sensor/webApp/images/conn_charts/${connect}-${char}-Model.png`);
-        doc.addImage(conn_chartsImage.default, 'png', 407, 400, 153, 92);
-        doc.addImage(date, 'png', 407, 492, 153, 72);
+    doc.addImage(images.type, 'png', margins.left, 85, 336, 204);
+    doc.addImage(images.mech, 'png', 398, 193, 348, 96);
+    doc.addImage(images.housing, 'png', margins.left, 306, 480, 216);
+    doc.addImage(images.option, 'png', 541, 306, 204, 216);
+    doc.addImage(images.connect, 'png', margins.left, 531, 480, 216);
+    doc.addImage(images.conn_chart, 'png', 541, 531, 204, 108);
+    doc.addImage(date, 'png', 541, 651, 204, 96);
 
     //Bottom text
     doc.setFontSize(10);//font size isnt 12 when looking at spec sheets printed currently
     doc.setFont('times', 'normal');
-    let char_lines = doc.splitTextToSize(s_text, margins.width);
-    doc.text(char_lines, margins.left, 580);
+    let char_lines = doc.splitTextToSize(text.desc, 762);//s_text, 762);
+    doc.text(char_lines, margins.left, 770);//580);
 
     //footer(centered on page)
+    doc.setFontSize(10);
     doc.setFont('times', 'italic');
-    doc.text(footer, 132, 785)
+    doc.text(footer, 175, 1047)
 
     //SECOND PAGE
 
     //header
     doc.addPage();
     doc.setFont('times','bold');
-    doc.setFontSize(16);
-    doc.text(sensor + '  -  ', margins.left,margins.top);
     doc.setFontSize(14);
-    doc.text(type_description, margins.left + (newX * 16), margins.top);
+    doc.text(sensor + '  -  ', margins.left,margins.top);
     doc.setFontSize(12);
+    doc.text(type_description, margins.left + (newX * 18.6), margins.top)//(newX * 22), margins.top);
+    //doc.setFontSize(12);
     doc.setFont('times', 'italic');
-    doc.text(desc_lines, margins.left, margins.top + 15);//+20?
+    doc.text(desc_lines, margins.left, margins.top + 20);//+20?
 
     //images
-    const spec_chartsImage = require(`D:/DATA/Sensor/webApp/images/spec_charts/${char}-${option}-Model.png`);
-        doc.addImage(spec_chartsImage.default, 'png', margins.left, 50, 540, 396);
-    const pictureImage = require(`D:/DATA/Sensor/webApp/images/pictures/${housing}-${char}-Model.png`);
-        doc.addImage(pictureImage.default, 'png', margins.left, 450, 540, 320);
+    doc.addImage(images.spec_chart, 'png', margins.left, 85, 720, 529);
+    doc.addImage(images.picture, 'png', margins.left, 650, 720, 384);//598, 720, 384);
 
 
     //footer
     doc.setFontSize(10);    
     doc.setFont('times', 'italic');
-    doc.text(footer, 132, 785);
-
+    doc.text(footer, 175, 1047);
 
     //save pdf image
     doc.save(`${sensor}.pdf`);

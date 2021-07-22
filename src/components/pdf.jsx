@@ -1,22 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-//pdf helpers
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+//helper functions
+import generatePDF from './pdfGenerator';
+import html2text from './html2text';
 
 //assets
 import date from '../images/DATECODE1-Model.png';
 
 const PDF = (input) => {
-    //destructure props
-    const searchTerm = input;
+    //console.log(input, typeof(input))
+    //destructure props!!!!!!!!!!!!!!!
+    let temp = input.input;
+    //const searchTerm = input;
     //TODO: check valid and type function
 
     //temp define search
-    let sensor = 'A47-18ADS-5KT21';
+    //var sensor = 'A47-18ADS-5KT21';
+    
+    //console.log(input, temp)
+    //shortcuts for testing random sensors
+    if(temp === "a") {
+        console.log('hey')
+        var sensor = 'MFM7-EHS1-F5P21';//fits
+    } else if(temp === 'b') {
+        var sensor = 'M1VE-MRS-E5CP2';//issues with 2nd page
+    } else if(temp === 'c') {
+        var sensor = 'S63B-HS3-L5T21';//issues with 2nd page
+    } else if(temp === 'd') {
+        var sensor = 'A44-18ADS-OCR22';//fits
+    } else if(temp === 'e') {
+        var sensor = 'A63-37ADSD-51T21';//fits, but header description is close to spec_chart
+    } else {
+        var sensor = 'A47-18ADS-5KT21';
+    }
+    //console.log({sensor},'sdf')
+
     let segments = sensor.split('-');
-    let typeTemp = segments[1];//this wont work for cs, proto
+    //console.log(segments)
+    let typeTemp = segments[1];//this wont work for cs, proto.. without additional step
 
 
     //define state
@@ -33,6 +55,8 @@ const PDF = (input) => {
     const [description, setDescription] = useState('');
     //images
     const [images, setImages] = useState({});
+    //html
+    const [html, setHtml] = useState({});
 
     const host = `http://192.168.1.118:3000`;
 
@@ -53,11 +77,17 @@ const PDF = (input) => {
 
     //once all part states have been set, fetch images from server
     useEffect(() => {
-        getImages()
+        //because this isnt the top level component, description isnt created on initial render, only after searching
+        //even though description state is set as empty string, this gets called on render...
+        //make sure description has content before calling getimages
+        if(description.length > 1) {
+            getImages();
+        }
     },[description])//trigger on description change.(last state to be set in Breakdown)
 
     //event handlers
     const getSensor = async(sensor, type) => {
+        //console.log({sensor})
         try {
             const response = await Promise.all([
                 axios.get(`${host}/sensorValid`, {params: {sensor}}),
@@ -95,6 +125,15 @@ const PDF = (input) => {
         setOption(opt);
         setRev(specs.rev)
         setDescription(specs.title)
+
+        let bullets = html2text(1, char);
+        let desc = html2text(2, char);
+        let template = {
+            bullets: bullets, 
+            desc: desc,
+        }
+        console.log(template)
+        setHtml(template);
     }
 
     //Get images from router
@@ -109,6 +148,7 @@ const PDF = (input) => {
             spec_chart: '',
             picture: '',
         }
+        console.log(html.bullets)
         try {
             //Promise.all to get all the images from server
             const response = await Promise.all([
@@ -153,61 +193,30 @@ const PDF = (input) => {
     }
 
 
-
-    const print = () => {
-        var page = document.getElementsByClassName("page1");
-        var page2 = document.getElementsByClassName("page2");
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            //unit: 'in', //points
-            unit: 'pt',
-            format: 'letter', //default is a4
-        });
-        html2canvas(page[0])
-            .then((canvas) => {
-            const imgData = canvas.toDataURL('image/jpeg');
-            // const pdf = new jsPDF({
-            // orientation: 'portrait',
-            // unit: 'pt', //points
-            // format: 'letter', //default is a4
-            // });
-            // pdf.addImage(imgData, 'JPEG', 0, 0, 8.5, 11);
-            pdf.addImage(imgData, 'JPEG', 0, 0, 614.39, 793.58);
-            //pdf.save('download.pdf');
-        });
-        html2canvas(page2[0])
-            .then((canvas) => {
-            const imgData = canvas.toDataURL('image/jpeg');
-            pdf.addPage();
-            // pdf.addImage(imgData, 'JPEG', 0, 0, 8.5, 11);
-            pdf.addImage(imgData, 'JPEG', 0, 0, 614.39, 793.58);
-            pdf.save('download.pdf');
-        });
-    }
-
-    
-    //split pages into subcomponenets????
-    {/* <img src={require(`file:///D:/DATA/Sensor/webApp/images/housing/S8-Model.png`).default}></img> */}
     //DOM
     return (
         <div>
-            <button onClick={() => print()}>{sensorCode}</button>
+            {/* <button onClick={() => print()}>{sensorCode}</button> */}
+            <button onClick={() => generatePDF(sensorCode, sensorData, images, html)}>{sensorCode}</button>
             {!!images &&
                 <div className="pdf-preview">
                     {/* <button onClick={() => print()}>{sensorCode}</button> */}
                     <div className="page1">
                         <div className="header" >
-                            <span style={{fontSize:'16'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'14'}}>{type_description}</span>
+                            <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
                             <br></br>
-                            <span style={{fontSize:'12'}}><i>{description}</i></span>
+                            <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                         </div>
-                        {/* <div className="bullets">
-                            <iframe src={require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default}></iframe>
-                        </div>     */}
+                        <div className="bullets">
+                            <ul className="bullets2">
+                                {!!html.bullets && html.bullets.map((item,index) => (
+                                    <li style={{fontSize:'12pt'}}>
+                                    <i>{item}</i>  
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>    
                         <div className="images">
-                            {/* <img className="type" src={require(`D:/DATA/Sensor/webApp/images/type/Type-${type}-Model.png`).default}></img>
-                            <img className="mech" src={require(`D:/DATA/Sensor/webApp/images/mech/${housing}-Mech-Model.png`).default}></img> */}
-
                             <img className="type" src={images.type} alt='no image found'/>
                             <img className="mech" src={images.mech} alt='no image found'/>
                             <img className="housing" src={images.housing} alt='no image found'/>
@@ -216,25 +225,25 @@ const PDF = (input) => {
                             <img className="conn_chart" src={images.conn_chart} alt='no image found'/>
                             <img className="date" src={date}></img>
                         </div>
-                        {/* <div className="description">
-                            <iframe src={require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default}></iframe>
-                        </div> */}
+                        <div className="description">
+                            <p style={{fontSize:'10pt'}}>{html.desc}</p>
+                        </div>
                         <div className='footer'>
-                            <span style={{fontSize:'10'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
+                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>           
                     </div>
                     <div className="page2">
                         <div className="header" >
-                            <span style={{fontSize:'16'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'14'}}>{type_description}</span>
+                            <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}>{type_description}</span>
                             <br></br>
-                            <span style={{fontSize:'12'}}><i>{description}</i></span>
+                            <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                         </div>
                         <div className="images">
                             <img className="spec_chart" src={images.spec_chart} alt='no image found'/>
                             <img className="picture" src={images.picture} alt='no image found'/>
                         </div>
                         <div className='footer'>
-                            <span style={{fontSize:'10'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
+                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>    
                     </div>
                 </div>         

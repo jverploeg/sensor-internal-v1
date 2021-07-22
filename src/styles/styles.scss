@@ -83,6 +83,27 @@ $transition-duration: .5s;
     left: 398px; 
     top: 193px;
 }
+.bullets {
+    position: absolute;
+    width: 391px; 
+    left: 398.5px;
+    top: 100px;//106.25px; 
+    // width: 348px; //match mech width
+    // left: 398.5px; //300pt
+    // top: 106.25px; //80pt
+}
+.bullets2 {
+    // position: absolute;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    // width: 391px; 
+    // left: 398.5px; 
+    // top: 106.25px; 
+    // width: 348px; //match mech width
+    // left: 398.5px; //300pt
+    // top: 106.25px; //80pt
+}
 .housing {
     position: absolute;
     width: 480px;
@@ -118,10 +139,16 @@ $transition-duration: .5s;
     left: 541px; 
     top: 651px;
 }
+.description {
+    position: absolute;
+    left: 27px;
+    top: 750px;//580pt;//offset of 17 for text. shout be 770
+    width: 762px;
+}
 .footer {
     position: absolute;
     left: 175px; 
-    top: 1030px;
+    top: 1035px;//this is different from pdfGenerator
 }
 .page2 {
     position: relative;
@@ -144,7 +171,7 @@ $transition-duration: .5s;
     width: 720px;
     height: 384px;
     left: 27px;
-    top: 598px;
+    top: 650px;//598px;
 }
 
 
