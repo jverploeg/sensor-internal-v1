@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const customPdf = (input) => {
     //destructure props
-    let input = {...input};
+    let { search } = input;
     //set state
     const [sensor, setSensor] = useState({});
 
