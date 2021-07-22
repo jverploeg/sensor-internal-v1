@@ -1,9 +1,9 @@
 //function for parsing
 
-const html2text = (option, char) => {
+const html2text = (option, char, sensor) => {
     if(option === 1) {
         //bullets
-        const bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;//char
+        const bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default; // || csxxx.html? TODO
         let tester = bullets_html.split('\n');
         let final = [];
         tester.pop();
@@ -22,7 +22,7 @@ const html2text = (option, char) => {
 
     } else if(option === 2) {
         //description
-        const description_html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
+        const description_html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default; // || csxxx.html? TODO
         //regex to modify
         var spec_text = description_html.replace(/<[^>]+>/g, '');
         spec_text = spec_text.replace(/\&nbsp\;/g, '');

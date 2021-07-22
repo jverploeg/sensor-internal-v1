@@ -63,13 +63,22 @@ module.exports.getType = async(data) => {
         return error;
     }
 }
+module.exports.getCustomType = async(data) => {
+    let qString = `SELECT type from char where char_code = '${data}' limit 1`;
+    try {
+        const response = await pool.query(qString);
+        return response;
+    }
+    catch(error) {
+        return error;
+    }
+}
 
 module.exports.getCustom = async(sensor) => {
     // let qString = `SELECT (custom_sensor_code, rev, title) FROM custom where part_number = '${sensor}'`; //issues with formatting... just get the whole row
     let qString = `SELECT * FROM custom where part_number = '${sensor}'`;
     try {
         const response = await pool.query(qString);
-        console.log(response)
         return response;
     }
     catch(error) {

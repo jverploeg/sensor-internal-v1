@@ -71,10 +71,20 @@ const getType = (req, res) => {
 }
 
 const getCustom = (req, res) => {
-    console.log(req.body)
-    console.log(req.url)
     let sensor = req.url.slice(8) //CS1111
     db.getCustom(sensor)
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error)
+    })
+}
+const getCustomType = (req, res) => {
+    console.log('hello')
+    let data = req.query.input;
+    console.log(data)
+    db.getCustomType(data)
     .then(result => {
         res.status(200).send(result.rows);
     })
@@ -115,6 +125,7 @@ module.exports = {
     getSensor,
     getType,
     getCustom,
+    getCustomType,
     getImage
 
 }

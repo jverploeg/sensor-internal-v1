@@ -93,7 +93,9 @@ app.get('/xproto', route.getData);//for displaying sensors in the table selectio
 
 app.get('/sensorValid', route.getSensor); //index.js
 app.get('/type', route.getType); //for the type description at the top of the pdf
+
 app.get('/custom/*', route.getCustom);
+app.get('/custom/type', route.getCustomType);//need options for image selection
 //axios.get(`${host}/custom/${sensor}`);
 
 //get images for pdf

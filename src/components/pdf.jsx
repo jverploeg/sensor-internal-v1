@@ -85,15 +85,15 @@ const PDF = (input) => {
     useEffect(() => {
         console.log({sensorData})
         if(sensorData.length > 1) {
-            setCustomData({});//reset custom
+            //setCustomData({});//reset custom
             breakdown(sensorData, sensorCode);
         }
     },[sensorData])
     //once we have sensor data package, call breakdown to split into relevant parts
     useEffect(() => {
         console.log({customData})
-        if(customData.length > 1) {
-            setSensorData({});
+        if(customData.length > 0) {
+            //setSensorData({});
             customBreakdown(customData);
         }    
     },[customData])
@@ -104,9 +104,24 @@ const PDF = (input) => {
         //even though description state is set as empty string, this gets called on render...
         //make sure description has content before calling getimages
         if(description.length > 1) {
-            getImages();
+            console.log(sensorType)
+            if(sensorType === 'standard') {
+                getImages();
+            }else if(sensorType === 'custom'){
+                console.log(char)
+                getType(char);
+                //getCustomImages();
+            }else if(sensorType === 'xproto'){
+                //getProtoImages();
+            }
         }
     },[description])//trigger on description change.(last state to be set in Breakdown)
+
+    // useEffect(() => {
+    //     if(sensorType === 'custom') {
+    //         getCustomImages();
+    //     }
+    // },[type]);
 
     //event handlers
     const getSensor = async(sensor, type) => {
@@ -128,6 +143,40 @@ const PDF = (input) => {
         try {
             const response = await axios.get(`${host}/custom/${sensor}`);
             setCustomData(response.data);
+            // console.log(response.data);
+            let char = response.data[0].closest_char;
+            let temp = getType(char)
+
+            // pattern of chaining promises, returning them to keep the promise chain alive.
+            
+            // axios
+            //   .get('https://maps.googleapis.com/maps/api/geocode/json?&address=' + this.props.p1)
+            //   .then(response => {
+            //     this.setState({ p1Location: response.data });
+            //     return axios.get('https://maps.googleapis.com/maps/api/geocode/json?&address=' + this.props.p2);
+            //   })
+            //   .then(response => {
+            //     this.setState({ p2Location: response.data });
+            //     return axios.get('https://maps.googleapis.com/maps/api/geocode/json?&address=' + this.props.p3);
+            //   })
+
+            //cascading call
+            // try {
+            //     const response2 = await axios.get(`${host}/custom/type/${char}`);
+            //     console.log(response2.data)
+            // }
+            // catch (error) {
+            //     console.log(error);
+            // }
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+    const getType = async(input) => {
+        try {
+            const response = await axios.get(`${host}/custom/type/${char}`, {params: {input}});
+            console.log(response.data)
         }
         catch (error) {
             console.log(error)
@@ -140,6 +189,7 @@ const PDF = (input) => {
         //TODO: either here or in parser, logic to differentiate between 3 sensor types...
         // -> NO custom sensors arent consistent if they use part code or csxxx code for images/data
     const breakdown = (data, sensor) => {
+        console.log('breakdown')
         //break retrieved data into relevent variables
 
         //destructure redefine data/props
@@ -170,38 +220,38 @@ const PDF = (input) => {
         setHtml(template);
     }
     const customBreakdown = (sensor) => {
+        console.log('custom breakdown')
         console.log(sensor)
         /*
         sensorCode = CSxxxx (state)
 
         */
         //destructure redefine data/props
-
-        // let specs = sensor[0];
-        // setTypeD(data[1].type_description);//dont need
-        // //break the search term down accordingly
-        // let segments = sensor.split('-');
-        // let char = segments[1];
-        // setHousing(segments[0]);
-        // let housing = segments[0];
-        // setChar(segments[1]);
+        let specs = sensor[0];
+        setTypeD('');//dont need type description, its part of the title for custom sensors...
+        let char = specs.closest_char;
+        setChar(char);
+        let housing = specs.closest_housing;
+        setHousing(housing);
+        //get type from <char -->axios on char table... COME BACK TO LATER.....
         // setType(specs.type);
-        // let sensor_code = specs.sensor_code;
-        // let splitOps = sensor_code.split(housing); 
-        // setConnect(splitOps[1]);
-        // let opt = splitOps[0].slice(char.length); //get accurate option code
-        // setOption(opt);
-        // setRev(specs.rev)
-        // setDescription(specs.title)
+        let conn = specs.closest_connection;
+        setConnect(conn);
+        let opt = specs.closeest_option;
+        setOption(opt);
+        setRev(specs.rev);
+        setDescription(specs.title);
 
-        // let bullets = html2text(1, char);
-        // let desc = html2text(2, char);
+        //CHECK AFTER WE CAN GET IMAGES
+        // let bullets = html2text(1, char, sensor);
+        // let desc = html2text(2, char, char, sensor);
         // let template = {
         //     bullets: bullets, 
         //     desc: desc,
         // }
         // console.log(template)
         // setHtml(template);
+
     }
 
     //Get images from router
@@ -302,7 +352,7 @@ const PDF = (input) => {
                     </div>
                     <div className="page2">
                         <div className="header" >
-                            <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}>{type_description}</span>
+                            <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
                             <br></br>
                             <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                         </div>
