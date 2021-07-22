@@ -28,7 +28,7 @@ module.exports = {
     // OUTPUT
     output: {
         //output of bundling will be in dist folder created upon build
-        path: path.resolve(__dirname, 'src', 'dist'),
+        path: path.resolve(__dirname, 'dist'),
         // declare filename
         filename: 'bundle.js'
     },

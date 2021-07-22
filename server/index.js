@@ -8,7 +8,7 @@ const cors = require('cors');
 const app = express();
 
 // render static files
-app.use(express.static(path.resolve(__dirname, '..', 'src', 'dist')));
+app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 
 //local files
 //app.use('/images', express.static('file:///D:/DATA/Sensor/webApp/images'))

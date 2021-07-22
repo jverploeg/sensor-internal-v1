@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Parser from './parse';
+import PDF from './pdf';
 
 
 const Search = () => {
@@ -56,7 +57,8 @@ const Search = () => {
             <div className = "results">
                 {!!searchTerm &&
                 <div>
-                    <button onClick={() => Parser(searchTerm)}>{searchTerm}</button>
+                    <PDF input={searchTerm} />
+                    {/* <button onClick={() => Parser(searchTerm)}>{searchTerm}</button> */}
                 </div>
                 }
             </div>
