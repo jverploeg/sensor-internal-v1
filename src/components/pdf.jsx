@@ -38,7 +38,7 @@ const PDF = (input) => {
 
     let segments = sensor.split('-');
     //console.log(segments)
-    let typeTemp = segments[1];//this wont work for cs, proto
+    let typeTemp = segments[1];//this wont work for cs, proto.. without additional step
 
 
     //define state
