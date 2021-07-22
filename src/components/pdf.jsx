@@ -42,6 +42,7 @@ const PDF = (input) => {
     const [sensorType, setSensorType] = useState('');
     //define key data pieces
     const [sensorCode, setSensorCode] = useState('');
+    const [customData, setCustomData] = useState({});
     const [sensorData, setSensorData] = useState({});
     //breakdown of part states
     const [type, setType] = useState('');
@@ -62,7 +63,9 @@ const PDF = (input) => {
     //RERENDER PAGE ON TRIGGERS////////////////////
     useEffect(() => {
         let senstype = checkType(sensor); // 'standard', 'custom', 'xproto'
-        console.log(senstype)
+        //set state
+        setSensorType(senstype);
+
         if (senstype === 'standard') {
             //breakdown the 3 part code
             let segments = sensor.split('-');
@@ -70,6 +73,7 @@ const PDF = (input) => {
             //getSensor(temp, type) ?typeTemp works for this implementation
             getSensor(sensor, typeTemp);
         } else if(senstype === 'custom') {
+            setSensorCode(sensor);
             getCustom(sensor);
         } else if(senstype === 'xproto') {
             //TODO LATER: implement logic for xproto sensors
@@ -79,12 +83,20 @@ const PDF = (input) => {
 
     //once we have sensor data package, call breakdown to split into relevant parts
     useEffect(() => {
-        //console.log({sensorCode, sensorData})
-        //breakdown(sensorData, sensorCode);
+        console.log({sensorData})
         if(sensorData.length > 1) {
+            setCustomData({});//reset custom
             breakdown(sensorData, sensorCode);
-        }    
+        }
     },[sensorData])
+    //once we have sensor data package, call breakdown to split into relevant parts
+    useEffect(() => {
+        console.log({customData})
+        if(customData.length > 1) {
+            setSensorData({});
+            customBreakdown(customData);
+        }    
+    },[customData])
 
     //once all part states have been set, fetch images from server
     useEffect(() => {
@@ -105,11 +117,9 @@ const PDF = (input) => {
                 axios.get(`${host}/type`, {params: {type}}),
             ]);
             const data = response.map((response) => response.data);
-            let output = data.flat(); //DO WE NEED THE WHOLE ROW?
-            //console.log(sensor, output)
+            let output = data.flat(); //DO WE NEED THE WHOLE ROW? --> yes it helps avoid wierd formatting as a data response
             setSensorCode(sensor);
             setSensorData(output);
-            //generatePDF(sensor, output);
         } catch (error) {
             console.log(error)
         }
@@ -117,9 +127,7 @@ const PDF = (input) => {
     const getCustom = async(sensor) => {
         try {
             const response = await axios.get(`${host}/custom/${sensor}`);
-            //setSensor(response.data)
-            console.log(response.data);//[0]);
-            //Sensitive Either Pole Hall Switch, 38 G, supply filter, npn 5k pull up resistor, Aluminum 15/32-32 x 1" housing, 3 pin Deutsch DT with 5 inch 20 AWG XLPE
+            setCustomData(response.data);
         }
         catch (error) {
             console.log(error)
@@ -129,12 +137,10 @@ const PDF = (input) => {
 
 
 
-
+        //TODO: either here or in parser, logic to differentiate between 3 sensor types...
+        // -> NO custom sensors arent consistent if they use part code or csxxx code for images/data
     const breakdown = (data, sensor) => {
         //break retrieved data into relevent variables
-
-        //TODO: either here or in parser, logic to differentiate between 3 sensor types...
-
 
         //destructure redefine data/props
         let specs = data[0];
@@ -162,6 +168,40 @@ const PDF = (input) => {
         }
         console.log(template)
         setHtml(template);
+    }
+    const customBreakdown = (sensor) => {
+        console.log(sensor)
+        /*
+        sensorCode = CSxxxx (state)
+
+        */
+        //destructure redefine data/props
+
+        // let specs = sensor[0];
+        // setTypeD(data[1].type_description);//dont need
+        // //break the search term down accordingly
+        // let segments = sensor.split('-');
+        // let char = segments[1];
+        // setHousing(segments[0]);
+        // let housing = segments[0];
+        // setChar(segments[1]);
+        // setType(specs.type);
+        // let sensor_code = specs.sensor_code;
+        // let splitOps = sensor_code.split(housing); 
+        // setConnect(splitOps[1]);
+        // let opt = splitOps[0].slice(char.length); //get accurate option code
+        // setOption(opt);
+        // setRev(specs.rev)
+        // setDescription(specs.title)
+
+        // let bullets = html2text(1, char);
+        // let desc = html2text(2, char);
+        // let template = {
+        //     bullets: bullets, 
+        //     desc: desc,
+        // }
+        // console.log(template)
+        // setHtml(template);
     }
 
     //Get images from router
