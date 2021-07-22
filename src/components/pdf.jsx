@@ -4,6 +4,7 @@ import axios from 'axios';
 //helper functions
 import generatePDF from './pdfGenerator';
 import html2text from './html2text';
+import customPdf from './customPdf';
 
 //assets
 import date from '../images/DATECODE1-Model.png';
@@ -12,6 +13,7 @@ const PDF = (input) => {
     //console.log(input, typeof(input))
     //destructure props!!!!!!!!!!!!!!!
     let temp = input.input;
+    console.log(temp.slice(0,2))
     //const searchTerm = input;
     //TODO: check valid and type function
 
@@ -102,6 +104,13 @@ const PDF = (input) => {
             console.log(error)
         }
     }
+    // //get custom
+    // const getCustom = async(sensor) => {
+    //     try {
+    //         const response = await axios.get(`${host}/custom/${sensor}`);
+
+    //     }
+    // }
     const breakdown = (data, sensor) => {
         //break retrieved data into relevent variables
 
