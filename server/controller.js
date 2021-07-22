@@ -49,8 +49,8 @@ const changeData = (req, res) => {
 }
 
 const getSensor = (req, res) => {
-    let data = req.query.sensor; //define what the sensor number is from the axios request
-    db.getSensor(data)
+    let sensor = req.url.slice(8);//MFM7-EHS1-F5P21
+    db.getSensor(sensor)
     .then(result => {
         res.status(200).send(result.rows);
     })
@@ -81,10 +81,8 @@ const getCustom = (req, res) => {
     })
 }
 const getCustomType = (req, res) => {
-    console.log('hello')
-    let data = req.query.input;
-    console.log(data)
-    db.getCustomType(data)
+    let sensor = req.url.slice(7) //275VPD
+    db.getCustomType(sensor)
     .then(result => {
         res.status(200).send(result.rows);
     })

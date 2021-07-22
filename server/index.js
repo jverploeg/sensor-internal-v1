@@ -91,12 +91,13 @@ app.get('/xproto', route.getData);//for displaying sensors in the table selectio
 // app.get('/custom', route.getData);//for displaying sensors in the table selections
 // app.get('/xproto', route.getData);//for displaying sensors in the table selections
 
-app.get('/sensorValid', route.getSensor); //index.js
+app.get('/sensor/*', route.getSensor); //index.js
 app.get('/type', route.getType); //for the type description at the top of the pdf
 
 app.get('/custom/*', route.getCustom);
-app.get('/custom/type', route.getCustomType);//need options for image selection
-//axios.get(`${host}/custom/${sensor}`);
+//app.get('/custom/type', route.getCustomType);!!!!!!!!!!!!!!!You cant call subfolders if a wildcard has already been defined!!!!!!!!!!!!!!!!
+app.get('/ctype/*', route.getCustomType);//need options for image selection
+
 
 //get images for pdf
 app.get('/images/*', route.getImage);

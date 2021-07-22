@@ -38,7 +38,7 @@ const PDF = (input) => {
     }
 
 
-    //define state
+    //define which category of sensor ['standard', 'custom', 'xproto']
     const [sensorType, setSensorType] = useState('');
     //define key data pieces
     const [sensorCode, setSensorCode] = useState('');
@@ -70,7 +70,6 @@ const PDF = (input) => {
             //breakdown the 3 part code
             let segments = sensor.split('-');
             let typeTemp = segments[1];
-            //getSensor(temp, type) ?typeTemp works for this implementation
             getSensor(sensor, typeTemp);
         } else if(senstype === 'custom') {
             setSensorCode(sensor);
@@ -83,15 +82,15 @@ const PDF = (input) => {
 
     //once we have sensor data package, call breakdown to split into relevant parts
     useEffect(() => {
-        console.log({sensorData})
+        //console.log({sensorData})
         if(sensorData.length > 1) {
             //setCustomData({});//reset custom
             breakdown(sensorData, sensorCode);
         }
     },[sensorData])
-    //once we have sensor data package, call breakdown to split into relevant parts
+    //once we have custom data package, call special breakdown to split into relevant parts
     useEffect(() => {
-        console.log({customData})
+        //console.log({customData})
         if(customData.length > 0) {
             //setSensorData({});
             customBreakdown(customData);
@@ -100,15 +99,12 @@ const PDF = (input) => {
 
     //once all part states have been set, fetch images from server
     useEffect(() => {
-        //because this isnt the top level component, description isnt created on initial render, only after searching
-        //even though description state is set as empty string, this gets called on render...
-        //make sure description has content before calling getimages
         if(description.length > 1) {
             console.log(sensorType)
             if(sensorType === 'standard') {
                 getImages();
             }else if(sensorType === 'custom'){
-                console.log(char)
+                //need to get type for image selection first
                 getType(char);
                 //getCustomImages();
             }else if(sensorType === 'xproto'){
@@ -117,18 +113,18 @@ const PDF = (input) => {
         }
     },[description])//trigger on description change.(last state to be set in Breakdown)
 
-    // useEffect(() => {
-    //     if(sensorType === 'custom') {
-    //         getCustomImages();
-    //     }
-    // },[type]);
+    //getCustomImages
+    useEffect(() => {
+        if(sensorType === 'custom' && type.length > 1) {
+            getCustomImages();
+        }
+    },[type]);
 
     //event handlers
     const getSensor = async(sensor, type) => {
-        //console.log({sensor})
         try {
             const response = await Promise.all([
-                axios.get(`${host}/sensorValid`, {params: {sensor}}),
+                axios.get(`${host}/sensor/${sensor}`),
                 axios.get(`${host}/type`, {params: {type}}),
             ]);
             const data = response.map((response) => response.data);
@@ -175,8 +171,9 @@ const PDF = (input) => {
     }
     const getType = async(input) => {
         try {
-            const response = await axios.get(`${host}/custom/type/${char}`, {params: {input}});
-            console.log(response.data)
+            const response = await axios.get(`${host}/ctype/${input}`);//, {params: {input}});
+            let tempType = response.data[0].type;
+            setType(tempType);
         }
         catch (error) {
             console.log(error)
@@ -220,12 +217,6 @@ const PDF = (input) => {
         setHtml(template);
     }
     const customBreakdown = (sensor) => {
-        console.log('custom breakdown')
-        console.log(sensor)
-        /*
-        sensorCode = CSxxxx (state)
-
-        */
         //destructure redefine data/props
         let specs = sensor[0];
         setTypeD('');//dont need type description, its part of the title for custom sensors...
@@ -233,8 +224,8 @@ const PDF = (input) => {
         setChar(char);
         let housing = specs.closest_housing;
         setHousing(housing);
-        //get type from <char -->axios on char table... COME BACK TO LATER.....
-        // setType(specs.type);
+        //get type from <char -->axios on char table... FIXED!
+        // setType(specs.type); --> called elsewhere now
         let conn = specs.closest_connection;
         setConnect(conn);
         let opt = specs.closeest_option;
