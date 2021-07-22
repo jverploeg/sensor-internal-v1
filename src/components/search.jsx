@@ -1,27 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Parser from './parse';
 import PDF from './pdf';
-// import {Buffer} from 'buffer';
-//Buffer.from('anything','base64');
+
 
 
 const Search = () => {
     //object destructure prop if necessary
 
-    //variables
-    let options = ['sensor', 'custom'];
-
     //declare state for keyboard input. initialize to empty string
-    const [sensor, setSensor] = useState({});
-    const [type, setType] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
     const [inputs, setInputs] = useState({}); // inputs from submission fields
-    const [images, setimages] = useState({});
 
 
     const host = `http://192.168.1.118:3000`;
-    let testString = 'A47-18ADS-5KT21';
 
     //EVENT HANDLERS WITH AXIOS REQUESTS
     const handleSubmit = () => {
@@ -57,11 +47,6 @@ const Search = () => {
                 {!!searchTerm &&
                 <div>
                     <PDF input={searchTerm} />
-                    {/* <button onClick={() => PDF(searchTerm)}>{searchTerm}</button> */}
-                    {/* <button onClick={() => test(searchTerm)}>{searchTerm}</button> */}
-                    {/* <img src={images} alt='not found'/>
-                    <img src={require(`D:/DATA/Sensor/webApp/images/type/Type-AH-Model.png`).default}></img> */}
-                    {/* <img src={`https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350`} alt='not found'/> */}
                 </div>
                 }
             </div>

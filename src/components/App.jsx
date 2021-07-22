@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 // STYLING DEPENDENCIES
-import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@material-ui/data-grid';
+import { DataGrid } from '@material-ui/data-grid';
 
 // SUBCOMPONENTS/HELPERS/CUSTOM HOOKS
 import useToggle from './toggle';
@@ -15,7 +15,7 @@ const App = () => {
 
     //DEFINE STATE//////////////////
     const [page, setPage] = useState({}); //initialize to homepage on initial render
-    const [data, setData] = useState([]); //data from database
+    const [data, setData] = useState([]); //data fetched from database
     const [inputs, setInputs] = useState({}); // inputs from submission fields
     const [columns, setColumns] = useState([]); // column name for tables
     const [rows, setRows] = useState([]); // formatted rows from data so dataGrid can be filled correctly
@@ -27,19 +27,16 @@ const App = () => {
 
 
     //USEEFFECT AND PAGE RERENDERING?////////////
-    //TODO: fix useeffect logic below, get rid of repetitive calls
-    //get data on initial page load? and if inputs change?
-    //set pageView to Home on initial load
-    //TODO: when multiple table tabs added, want to call getDATA (and modify how route is chosen) with useEffect[pageChange]...
     useEffect(() => {
-        getData();
-        setPage('Home');
-        selected();
+        //getData();
+        setPage('Home');//initialize page to start on home
+        selected();//highlight home tab
     },[]);
 
+    //TODO: do we we need both these useEffects below????
     useEffect(() => {
-        getColumns();
-        getRows();
+        //getColumns();
+        //getRows();
         getData();
     },[page, isTextChanged])
     //get new row values whenever data is modified in database
@@ -47,7 +44,8 @@ const App = () => {
         getColumns();
         getRows();
     },[data])
-        // USEEFFECT TO CHECK IF STATE HAS CHANGED PROPERLY
+
+    // USEEFFECT TO CHECK IF STATE HAS CHANGED PROPERLY
     // useEffect(() => {
     //     console.log({data, rows, columns})
     // },[data, isTextChanged])
@@ -57,10 +55,11 @@ const App = () => {
 
     //header for cors requests
     //const header = {'Content-Type', undefined}
-    // set host to ip rather than localhost --> running into cors issues. come back and fix later
+    // set host to ip rather than localhost --> running into cors issues. come back and fix later if security issues with guest wifi?
     const host = `http://192.168.1.118:3000`;
 
-    //define Set Functions
+
+    //define GET Functions
     const getData = async() => {
         //determine route -> db table based on pageSelection
         let route = page;
@@ -72,9 +71,10 @@ const App = () => {
             console.log(error)
         }
     }
-    const showData = () => {
-        setIsTextChanged();
-    }
+    //toggle for hiding/showing data not used anymore
+    // const showData = () => {
+    //     setIsTextChanged();
+    // }
     const getColumns = () => {
         let temp = [];
         let table = page;
@@ -108,11 +108,7 @@ const App = () => {
         inputs.shift();
         setInputCols(inputs);
     }
-    ////////////////////////////////////////
-    /*
-    TODO: figure out logic to map each database table row to the row format needed to use the Material DATAGRID.....
-    */
-    ///////////////////////////////////////
+
     const getRows = () => {
         let format = {};
         let rowsTemp = [];
@@ -134,6 +130,12 @@ const App = () => {
         //set state
         setRows(rowsTemp);
     }
+    ////////////////////////////////////////
+    /*
+    TODO: may need to come back and actually customize each page individually to better display more relevant information in diff col widths
+    */
+    ///////////////////////////////////////
+    
 
 
 
@@ -270,9 +272,6 @@ const App = () => {
                     </div>
                 }
             </div>
-            {/* <div className="pdf-preview">
-
-            </div> */}
         </div>
     )
 };

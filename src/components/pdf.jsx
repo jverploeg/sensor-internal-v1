@@ -4,7 +4,6 @@ import axios from 'axios';
 //helper functions
 import generatePDF from './pdfGenerator';
 import html2text from './html2text';
-//import customPdf from './customPdf';
 import checkType from './checkType';
 
 //assets
