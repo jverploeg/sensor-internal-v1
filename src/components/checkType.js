@@ -1,5 +1,5 @@
 const checkType = (input) => {
-    let temp = input;//.input;
+    let temp = input;
     let type = '';
     let first = temp.slice(0,1);
 

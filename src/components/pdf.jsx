@@ -24,14 +24,13 @@ const PDF = (input) => {
     //console.log(input, temp)
     //shortcuts for testing random sensors
     if(temp === "a") {
-        console.log('hey')
         var sensor = 'MFM7-EHS1-F5P21';//fits
     } else if(temp === 'b') {
         var sensor = 'M1VE-MRS-E5CP2';//issues with 2nd page
     } else if(temp === 'c') {
         var sensor = 'CS1111';
     } else if(temp === 'd') {
-        var sensor = 'CS1174';//fits
+        var sensor = 'CS1193';//fits
     } else if(temp === 'e') {
         var sensor = 'A63-37ADSD-51T21';//fits, but header description is close to spec_chart
     } else {
@@ -107,7 +106,7 @@ const PDF = (input) => {
             }else if(sensorType === 'custom'){
                 //need to get type for image selection first
                 getType(char);
-                //getCustomImages();
+                //getCustomImages(); --> called after we get type.. refactor now that we have axios understood better
             }else if(sensorType === 'xproto'){
                 //getProtoImages();
             }
@@ -120,6 +119,7 @@ const PDF = (input) => {
             getCustomImages();
         }
     },[type]);
+
 
     //event handlers
     const getSensor = async(sensor, type) => {
@@ -140,31 +140,6 @@ const PDF = (input) => {
         try {
             const response = await axios.get(`${host}/custom/${sensor}`);
             setCustomData(response.data);
-            // console.log(response.data);
-            //let char = response.data[0].closest_char;
-            //let temp = getType(char)
-
-            // pattern of chaining promises, returning them to keep the promise chain alive.
-            
-            // axios
-            //   .get('https://maps.googleapis.com/maps/api/geocode/json?&address=' + this.props.p1)
-            //   .then(response => {
-            //     this.setState({ p1Location: response.data });
-            //     return axios.get('https://maps.googleapis.com/maps/api/geocode/json?&address=' + this.props.p2);
-            //   })
-            //   .then(response => {
-            //     this.setState({ p2Location: response.data });
-            //     return axios.get('https://maps.googleapis.com/maps/api/geocode/json?&address=' + this.props.p3);
-            //   })
-
-            //cascading call
-            // try {
-            //     const response2 = await axios.get(`${host}/custom/type/${char}`);
-            //     console.log(response2.data)
-            // }
-            // catch (error) {
-            //     console.log(error);
-            // }
         }
         catch (error) {
             console.log(error)
@@ -172,7 +147,7 @@ const PDF = (input) => {
     }
     const getType = async(input) => {
         try {
-            const response = await axios.get(`${host}/ctype/${input}`);//, {params: {input}});
+            const response = await axios.get(`${host}/ctype/${input}`);
             let tempType = response.data[0].type;
             setType(tempType);
         }
@@ -229,11 +204,12 @@ const PDF = (input) => {
         // setType(specs.type); --> called elsewhere now
         let conn = specs.closest_connection;
         setConnect(conn);
-        let opt = specs.closeest_option;
+        let opt = specs.closest_option;
         setOption(opt);
         setRev(specs.rev);
         setDescription(specs.title);
 
+        //TODO///////////////////////////////////////////////////////////////////////////////////
         //CHECK AFTER WE CAN GET IMAGES
         // let bullets = html2text(1, char, sensor);
         // let desc = html2text(2, char, char, sensor);
@@ -248,17 +224,6 @@ const PDF = (input) => {
 
     //Get images from router
     const getImages = async() => {
-        let template = {
-            type: '',
-            mech: '',
-            housing: '',
-            option: '',
-            connect: '',
-            conn_chart: '',
-            spec_chart: '',
-            picture: '',
-        }
-        console.log(html.bullets)
         try {
             //Promise.all to get all the images from server
             const response = await Promise.all([
@@ -272,70 +237,63 @@ const PDF = (input) => {
                 axios.get(`${host}/images/pictures/${housing}-${char}-Model`, { responseType: 'arraybuffer' }),
             ]);
             const data = response.map((response) => response.data);
-            let convertedArray = [];
-            //iterate through array buffer and convert to base64
-            for(let i = 0; i < data.length; i++){
-                let base64 = btoa(
-                    new Uint8Array(data[i]).reduce(
-                          (data, byte) => data + String.fromCharCode(byte),
-                          '',
-                    ),
-                );
-                //append data format declaration and add to object;
-                convertedArray[i] = ( "data:;base64," + base64 );
-            }
-            //save to template... -> better way to do this????
-            template.type = convertedArray[0];
-            template.mech = convertedArray[1];
-            template.housing = convertedArray[2];
-            template.option = convertedArray[3];
-            template.connect = convertedArray[4];
-            template.conn_chart = convertedArray[5];
-            template.spec_chart = convertedArray[6];
-            template.picture = convertedArray[7];
-            //...
-
-            //set image state
-            setImages(template);
+            convertAll(data);
         } catch (error) {
             console.log(error)
         }
     }
 
     //get custom images
-    const getCustomImages = () => {
-        //use states for paths. need to try and get csxxxx image first, if not -> then try alternates.
-        // axios.all([
-        //     axios.get(`${host}/images/type/Type-${sensorCode}-Model`, { responseType: 'arraybuffer' }),
-        //     axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
-        // ])
-        // .then(axios.spread((img1, img2) => {
-        //     console.log(img1.data)
-        //     console.log('----')
-        //     console.log(img2.data)
-        // }))
-        // try {
-        //     const response = await axios.get(`${host}/images/type/Type-${sensorCode}-Model`, { responseType: 'arraybuffer' });
-        //     console.log(response.data);
-        // }
-        // catch (error) {
-        //     try {
-        //         const response = await axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' });
-        //         console.log(response.data);
-        //     }
-        //     catch (error) {
-        //         console.log(error);
-        //     }
-        // }
-        let typeImage = calls.getCustomImageType(sensorCode, type);
-        console.log('type', typeImage);
-        let mechImage = calls.getCustomImageMech(sensorCode, housing);
-        console.log('mech', mechImage);
-
-
-
-        // const data = response.map((response) => response.data);
-        // let output = data.flat(); 
+    const getCustomImages = async() => {
+        //call all the waterfalls to get an image for each section
+        const response = await Promise.all([
+            calls.getCustomImageType(sensorCode, type),
+            calls.getCustomImageMech(sensorCode, housing),
+            calls.getCustomImageHousing(sensorCode, housing),
+            calls.getCustomImageOption(sensorCode, option),
+            calls.getCustomImageConnect(sensorCode, connect),
+            calls.getCustomImageConnChart(sensorCode, connect, char),
+            calls.getCustomImageSpec(sensorCode, char, option),
+            calls.getCustomImagePicture(sensorCode, housing, char, type),
+        ]);
+        const data = response.map((response) => response.data);
+        convertAll(data);
+    }
+    //convert images to the correct format
+    const convertAll = (data) => {
+        console.log(data)
+        let template = {
+            type: '',
+            mech: '',
+            housing: '',
+            option: '',
+            connect: '',
+            conn_chart: '',
+            spec_chart: '',
+            picture: '',
+        }
+        let convertedArray = [];
+        //iterate through array buffer and convert to base64
+        for(let i = 0; i < data.length; i++){
+            let base64 = btoa(
+                new Uint8Array(data[i]).reduce(
+                      (data, byte) => data + String.fromCharCode(byte),
+                      '',
+                ),
+            );
+            //append data format declaration and add to object;
+            convertedArray[i] = ( "data:;base64," + base64 );
+        }
+        //save to template... -> better way to do this????
+        template.type = convertedArray[0];
+        template.mech = convertedArray[1];
+        template.housing = convertedArray[2];
+        template.option = convertedArray[3];
+        template.connect = convertedArray[4];
+        template.conn_chart = convertedArray[5];
+        template.spec_chart = convertedArray[6];
+        template.picture = convertedArray[7];
+        setImages(template);
     }
 
 

@@ -19,7 +19,6 @@ module.exports.addData = async(path, cols, values) => {
     // async/await
     try {
         const res = await pool.query(text)
-        console.log(res.rows[0])
     } catch (err) {
         console.log(err.stack)
     }
@@ -34,7 +33,6 @@ module.exports.changeData = async(path, values) => {
     // async/await
     try {
         const res = await pool.query(text)
-        console.log(res.rows[0])
     } catch (err) {
         console.log(err.stack)
     }
@@ -86,21 +84,3 @@ module.exports.getCustom = async(sensor) => {
     }
 }
 
-
-// module.exports.getCustom = async(data) => {
-//     //split data into tables, part_ids
-//     //multiple queries
-//     //promisify/sequelize????
-
-//     let hString = `SELECT * FROM housing where housing_id = ${something}`;
-//     let chString = `SELECT * FROM char where char_id = ${something}`;
-//     let oString = `SELECT * FROM option where option_id = ${something}`;
-//     let cnString = `SELECT * FROM conn where conn_id = ${something}`;
-//     try {
-//         const response = await pool.query(qString);
-//         return response;
-//     }
-//     catch(error) {
-//         return error;
-//     }
-// }
