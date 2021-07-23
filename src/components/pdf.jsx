@@ -6,6 +6,8 @@ import generatePDF from './pdfGenerator';
 import html2text from './html2text';
 import checkType from './checkType';
 
+import calls from './axiosCalls';
+
 //assets
 import date from '../images/DATECODE1-Model.png';
 
@@ -29,7 +31,7 @@ const PDF = (input) => {
     } else if(temp === 'c') {
         var sensor = 'CS1111';
     } else if(temp === 'd') {
-        var sensor = 'A44-18ADS-OCR22';//fits
+        var sensor = 'CS1174';//fits
     } else if(temp === 'e') {
         var sensor = 'A63-37ADSD-51T21';//fits, but header description is close to spec_chart
     } else {
@@ -139,8 +141,8 @@ const PDF = (input) => {
             const response = await axios.get(`${host}/custom/${sensor}`);
             setCustomData(response.data);
             // console.log(response.data);
-            let char = response.data[0].closest_char;
-            let temp = getType(char)
+            //let char = response.data[0].closest_char;
+            //let temp = getType(char)
 
             // pattern of chaining promises, returning them to keep the promise chain alive.
             
@@ -298,6 +300,42 @@ const PDF = (input) => {
         } catch (error) {
             console.log(error)
         }
+    }
+
+    //get custom images
+    const getCustomImages = () => {
+        //use states for paths. need to try and get csxxxx image first, if not -> then try alternates.
+        // axios.all([
+        //     axios.get(`${host}/images/type/Type-${sensorCode}-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
+        // ])
+        // .then(axios.spread((img1, img2) => {
+        //     console.log(img1.data)
+        //     console.log('----')
+        //     console.log(img2.data)
+        // }))
+        // try {
+        //     const response = await axios.get(`${host}/images/type/Type-${sensorCode}-Model`, { responseType: 'arraybuffer' });
+        //     console.log(response.data);
+        // }
+        // catch (error) {
+        //     try {
+        //         const response = await axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' });
+        //         console.log(response.data);
+        //     }
+        //     catch (error) {
+        //         console.log(error);
+        //     }
+        // }
+        let typeImage = calls.getCustomImageType(sensorCode, type);
+        console.log('type', typeImage);
+        let mechImage = calls.getCustomImageMech(sensorCode, housing);
+        console.log('mech', mechImage);
+
+
+
+        // const data = response.map((response) => response.data);
+        // let output = data.flat(); 
     }
 
 
