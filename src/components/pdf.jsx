@@ -4,6 +4,7 @@ import axios from 'axios';
 //helper functions
 import generatePDF from './pdfGenerator';
 import html2text from './html2text';
+import CustomHTML from './customHtml2text';
 import checkType from './checkType';
 
 import calls from './axiosCalls';
@@ -57,6 +58,7 @@ const PDF = (input) => {
     const [images, setImages] = useState({});
     //html
     const [html, setHtml] = useState({});
+    const [htmlFormatted, setHtmlFormatted] = useState({});
 
     
 
@@ -159,10 +161,7 @@ const PDF = (input) => {
 
 
 
-        //TODO: either here or in parser, logic to differentiate between 3 sensor types...
-        // -> NO custom sensors arent consistent if they use part code or csxxx code for images/data
     const breakdown = (data, sensor) => {
-        //console.log('breakdown')
         //break retrieved data into relevent variables
 
         //destructure redefine data/props
@@ -183,15 +182,16 @@ const PDF = (input) => {
         setRev(specs.rev)
         setDescription(specs.title)
 
+        //format and set html object with text...
         let bullets = html2text(1, char);
         let desc = html2text(2, char);
         let template = {
             bullets: bullets, 
             desc: desc,
         }
-        console.log(template)
         setHtml(template);
     }
+
     const customBreakdown = (sensor) => {
         //destructure redefine data/props
         let specs = sensor[0];
@@ -209,27 +209,30 @@ const PDF = (input) => {
         setRev(specs.rev);
         setDescription(specs.title);
 
-        console.log({sensorCode})
-        let bullets = html2text(1, char, sensorCode);
-        let desc = html2text(2, char, sensorCode);
-        let template = {
-            bullets: bullets, 
-            desc: desc,
-        }
-        console.log(template)
-        setHtml(template);
+        //getCustomHtml
+        getCustomHtml(char, sensorCode);
+    }
 
-        //TODO///////////////////////////////////////////////////////////////////////////////////
-        //CHECK AFTER WE CAN GET IMAGES
-        // let bullets = html2text(1, char, sensor);
-        // let desc = html2text(2, char, char, sensor);
-        // let template = {
-        //     bullets: bullets, 
-        //     desc: desc,
-        // }
-        // console.log(template)
-        // setHtml(template);
-
+    const getCustomHtml = async(char, sensor) => {
+        try {
+            const response = await Promise.all([
+                calls.checkBullets(sensor, char),
+                calls.checkDescription(sensor, char),
+            ])
+            // console.log(response[0]);
+            // console.log(response[1]);
+            //convert
+            let bullets = CustomHTML(1, response[0]);
+            let desc = CustomHTML(2, response[1]);
+            //set object template
+            let template = {
+                bullets: bullets, 
+                desc: desc,
+            }
+            setHtml(template);
+        } catch(error) {
+            console.log(error);
+        }    
     }
 
     //Get images from router

@@ -157,6 +157,34 @@ const calls = {
             }
         }
     },
+    //custom html calls
+    checkBullets : async(file1, file2) => {
+        try {
+            const found1 = await require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${file1}.html`).default;
+            return found1;
+        } catch(error) {
+            try {
+                const found2 = await require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${file2}.html`).default;
+                return found2;
+            } catch(error) {
+                console.log(error)
+            }
+        }
+    },
+    checkDescription : async(file1, file2) => {
+        try {
+            const found1 = await require(`D:/DATA/Sensor/webApp/images/descriptions/${file1}.html`).default;
+            return found1;
+        } catch(error) {
+            try {
+                const found2 = await require(`D:/DATA/Sensor/webApp/images/descriptions/${file2}.html`).default;
+                return found2;
+            } catch(error) {
+                console.log(error)
+            }
+        }
+    },
+
 }
 
 export default calls;
