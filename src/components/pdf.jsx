@@ -34,6 +34,8 @@ const PDF = (input) => {
         var sensor = 'CS1193';//fits
     } else if(temp === 'e') {
         var sensor = 'CS1066';//no custom bullets, get from char...
+    } else if(temp === 'f') {
+        var sensor = 'CS1226';//no custom bullets, get from char...
     } else {
         var sensor = 'A47-18ADS-5KT21';
     }
@@ -68,7 +70,7 @@ const PDF = (input) => {
         //set state
         setSensorType(senstype);
 
-        if (senstype === 'standard') {
+        if (senstype === 'catalog') {
             //breakdown the 3 part code
             let segments = sensor.split('-');
             let typeTemp = segments[1];
@@ -103,10 +105,11 @@ const PDF = (input) => {
     useEffect(() => {
         if(description.length > 1) {
             console.log(sensorType)
-            if(sensorType === 'standard') {
+            if(sensorType === 'catalog') {
                 getImages();
             }else if(sensorType === 'custom'){
                 //need to get type for image selection first
+                console.log({customData})
                 getType(char);
                 //getCustomImages(); --> called after we get type.. refactor now that we have axios understood better
             }else if(sensorType === 'xproto'){
@@ -314,7 +317,7 @@ const PDF = (input) => {
     return (
         <div>
             {/* <button onClick={() => print()}>{sensorCode}</button> */}
-            <button onClick={() => generatePDF(sensorCode, sensorData, images, html)}>{sensorCode}</button>
+            <button onClick={() => generatePDF(sensorType, sensorCode, sensorData, customData, images, html)}>{sensorCode}</button>
             {!!images &&
                 <div className="pdf-preview">
                     {/* <button onClick={() => print()}>{sensorCode}</button> */}

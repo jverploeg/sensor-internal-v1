@@ -4,26 +4,31 @@ import date from '../images/DATECODE1-Model.png';
 
 
 //define generator function
-const generatePDF = (sensor, data, images, text) => {
-    //destructure redefine data/props
-    let specs = data[0];
-    let type_description = data[1].type_description;
-    //TODO: either here or in parser, logic to differentiate between 3 sensor types...
+//(sensorType, sensorCode, sensorData, customData, images, html)
+const generatePDF = (S_Type, sensor, data, customData, images, text) => {
+    //logic depends on sensor type
+    if(S_Type === 'catalog') {
+        //destructure redefine data/props
+        var specs = data[0];
+        var type_description = data[1].type_description;
+        //TODO: either here or in parser, logic to differentiate between 3 sensor types...
 
-    //break the search term down accordingly
-    let segments = sensor.split('-');
-    let housing = segments[0];
-    let char = segments[1];
-    let optConn = segments[2];
-    let type = specs.type;
-    let sensor_code = specs.sensor_code;
-    let splitOps = sensor_code.split(housing); 
-    let connect = splitOps[1]; //get accurate connection code(not always same length)
-    let option = splitOps[0].slice(char.length); //get accurate option code
+        //break the search term down accordingly
+        var segments = sensor.split('-');
+        var housing = segments[0];
+        var char = segments[1];
+        var optConn = segments[2];
+        var type = specs.type;
+        var sensor_code = specs.sensor_code;
+        var splitOps = sensor_code.split(housing); 
+        var connect = splitOps[1]; //get accurate connection code(not always same length)
+        var option = splitOps[0].slice(char.length); //get accurate option code
 
-    //get relavent text pieces from the data package
-    let revision = specs.rev;
-    let description = specs.title;
+        //get relavent text pieces from the data package
+        var revision = specs.rev;
+        var description = specs.title;
+    }
+
     let footer = `Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * ${revision} `;
 
 

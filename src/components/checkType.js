@@ -8,7 +8,7 @@ const checkType = (input) => {
     } else if (first === 'X'){
         type = 'xproto';
     } else {
-        type = 'standard'
+        type = 'catalog'
     }
     return type;
 }
