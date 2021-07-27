@@ -32,7 +32,7 @@ const PDF = (input) => {
     } else if(temp === 'd') {
         var sensor = 'CS1193';//fits
     } else if(temp === 'e') {
-        var sensor = 'A63-37ADSD-51T21';//fits, but header description is close to spec_chart
+        var sensor = 'CS1066';//no custom bullets, get from char...
     } else {
         var sensor = 'A47-18ADS-5KT21';
     }
@@ -162,7 +162,7 @@ const PDF = (input) => {
         //TODO: either here or in parser, logic to differentiate between 3 sensor types...
         // -> NO custom sensors arent consistent if they use part code or csxxx code for images/data
     const breakdown = (data, sensor) => {
-        console.log('breakdown')
+        //console.log('breakdown')
         //break retrieved data into relevent variables
 
         //destructure redefine data/props
@@ -208,6 +208,16 @@ const PDF = (input) => {
         setOption(opt);
         setRev(specs.rev);
         setDescription(specs.title);
+
+        console.log({sensorCode})
+        let bullets = html2text(1, char, sensorCode);
+        let desc = html2text(2, char, sensorCode);
+        let template = {
+            bullets: bullets, 
+            desc: desc,
+        }
+        console.log(template)
+        setHtml(template);
 
         //TODO///////////////////////////////////////////////////////////////////////////////////
         //CHECK AFTER WE CAN GET IMAGES
@@ -261,7 +271,7 @@ const PDF = (input) => {
     }
     //convert images to the correct format
     const convertAll = (data) => {
-        console.log(data)
+        //console.log(data)
         let template = {
             type: '',
             mech: '',
