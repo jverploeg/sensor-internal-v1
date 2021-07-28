@@ -79,6 +79,8 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         let desc_lines = doc.splitTextToSize(indentedText, 720);//762)720 keeps right end even with images...
         doc.text(desc_lines, margins.left, margins.top);//+20?
 
+
+
         ///////option2
         // doc.text(type_description2, margins.left + (newX * 18.6), margins.top);
         // //break sensor description down based on text width so it fits within the page
@@ -86,7 +88,6 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         // let desc_lines = doc.splitTextToSize(description2, 762)//margins.width)
         // doc.text(desc_lines, margins.left, margins.top + 20);//+20?
     }
-
 
     //bullets
     //TODO: move up slightly???
@@ -104,10 +105,14 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     doc.addImage(date, 'png', 541, 651, 204, 96);
 
     //Bottom text
+    //default line height = 1.15
+    doc.setLineHeightFactor(1.05);//this seems like the smallest we should go
     doc.setFontSize(10);//font size isnt 12 when looking at spec sheets printed currently
     doc.setFont('times', 'normal');
     let char_lines = doc.splitTextToSize(text.desc, 720);//762);//change to 720px?????
     doc.text(char_lines, margins.left, 770);//580pt);
+    //reset line height
+    doc.setLineHeightFactor(1.15);
 
     //footer(centered on page)
     doc.setFontSize(10);

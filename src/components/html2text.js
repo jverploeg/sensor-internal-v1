@@ -11,7 +11,7 @@ const convertToPlain= (html) => {
     // Retrieve the text property of the element 
     return tempDivElement.textContent || tempDivElement.innerText || "";
 }
-const html2text = (option, char, sensor, html) => {
+const html2text = (option, char, text) => {
     if(option === 1) {
         //bullets
         const bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
@@ -34,8 +34,8 @@ const html2text = (option, char, sensor, html) => {
     } else if(option === 2) {
         //description
         const description_html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
-        const test = convertToPlain(description_html)//same as after step 1 below
-        console.log(test)
+        // const test = convertToPlain(description_html)//same as after step 1 below
+        // console.log(test)
         //console.log(description_html)
         //regex to modify
         var spec_text = description_html.replace(/<[^>]+>/g, '');
@@ -47,23 +47,31 @@ const html2text = (option, char, sensor, html) => {
         spec_text = spec_text.replace(/\n{2,8}/g, '');
         //console.log(spec_text)
         spec_text = spec_text.replace(/\t/g, '');
-        console.log(spec_text)
+        //console.log(spec_text)
         let text_array = spec_text.split("\n\n");//'\n');("\\r?\\n")
-        console.log(text_array);
+        //console.log(text_array);
         let temp = [];
         for(let i = 0; i < text_array.length; i++) {
             let focus = text_array[i]
             if(focus.length > 1) {
                 let inner = focus.replace(/ \n/g, ' ');//get rid of new lines between words
                 inner = inner.replace(/\n/g, ' '); //replace line breaks between words without a space with a space
+                let indent = '     ';//5spaces?
+                inner = indent.concat(inner)
                 temp.push(inner);
-                //temp.push('');
             }
         }
-        console.log(temp);
+        //console.log(temp);
         let output = temp.join('\n\n');//turn the array back into a text block with line breaks between paragraphs
-        console.log(output)
+        //console.log(output)
         return output;
+    } else if(option === 3) {
+        //description array for preview
+        //take output from above and split into array
+        let text_array = text.split("\n\n");
+        //console.log(text_array);
+
+        return text_array;
     } 
 }
 export default html2text;

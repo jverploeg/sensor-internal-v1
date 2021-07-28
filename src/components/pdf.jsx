@@ -62,6 +62,7 @@ const PDF = (input) => {
     const [images, setImages] = useState({});
     //html
     const [html, setHtml] = useState({});
+    const [descArray, setDescArray] = useState([]);
     const [htmlFormatted, setHtmlFormatted] = useState({});//need?
 
     
@@ -126,6 +127,10 @@ const PDF = (input) => {
         }
     },[type]);
 
+    useEffect(() => {
+        console.log(descArray)
+    },[html])
+
 
     //event handlers
     const getSensor = async(sensor, type) => {
@@ -189,6 +194,10 @@ const PDF = (input) => {
         //format and set html object with text...
         let bullets = html2text(1, char);
         let desc = html2text(2, char);
+        //get description array for preview
+        let desc_array = html2text(3, char, desc);
+        setDescArray(desc_array);
+        //set formatted html for generator
         let template = {
             bullets: bullets, 
             desc: desc,
@@ -250,6 +259,8 @@ const PDF = (input) => {
 
     //Get images from router
     const getImages = async() => {
+        console.log(html)
+        console.log(descArray)
         try {
             //Promise.all to get all the images from server
             const response = await Promise.all([
@@ -365,9 +376,17 @@ const PDF = (input) => {
                             <img className="conn_chart" src={images.conn_chart} alt='no image found'/>
                             <img className="date" src={date}></img>
                         </div>
+                        {/* <div className="description" style={{fontSize:'10pt'}}>
+                            <span style={{fontSize:'10pt'}}>{html.desc}</span>
+                        </div> */}
                         <div className="description">
-                            <p style={{fontSize:'10pt'}}>{html.desc}</p>
+                            {!!descArray && descArray.map((paragraph, index) => {
+                                return(
+                                    <p>{paragraph}</p>
+                                )
+                            })}
                         </div>
+                        
                         <div className='footer'>
                             <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>           
@@ -401,3 +420,14 @@ const PDF = (input) => {
     )
 }
 export default PDF;
+
+{/* <div className="description" style={{fontSize:'10pt'}}>
+{/* {!!descArray && descArray.map((paragraph, index) => {
+    <p>{paragraph}</p>
+})} */}
+{/* {!!html.bullets && descArray.map((item, index) => {
+    <div>
+        <span>{item}</span>
+    </div>    
+})} */}
+//</div>

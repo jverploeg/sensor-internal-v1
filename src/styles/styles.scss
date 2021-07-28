@@ -145,11 +145,20 @@ $transition-duration: .5s;
     left: 541px; 
     top: 651px;
 }
+// .description {
+//     position: absolute;
+//     left: 27px;
+//     top: 750px;//580pt;//offset of 17 for text. shout be 770
+//     width: 720px;//762px;
+// }
 .description {
     position: absolute;
     left: 27px;
     top: 750px;//580pt;//offset of 17 for text. shout be 770
     width: 720px;//762px;
+    line-height: 1.05;
+    font-size: 10pt;
+    text-indent: 7pt;
 }
 .footer {
     position: absolute;
