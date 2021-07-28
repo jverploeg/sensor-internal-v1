@@ -40,6 +40,13 @@ const PDF = (input) => {
         var sensor = 'A47-18ADS-5KT21';
     }
 
+    //catalog issues
+    /*
+        'S63B-PHS-RGCD3' -> paragraphs not split for description
+        'A63-37ADQO-LPCP4' -> weird symbols(diamond w/ ?) <?>
+
+    */
+
 
     //define which category of sensor ['standard', 'custom', 'xproto']
     const [sensorType, setSensorType] = useState('');
@@ -127,9 +134,9 @@ const PDF = (input) => {
         }
     },[type]);
 
-    useEffect(() => {
-        console.log(descArray)
-    },[html])
+    // useEffect(() => {
+    //     console.log(descArray)
+    // },[html])
 
 
     //event handlers
@@ -196,6 +203,7 @@ const PDF = (input) => {
         let desc = html2text(2, char);
         //get description array for preview
         let desc_array = html2text(3, char, desc);
+        console.log({desc, desc_array})
         setDescArray(desc_array);
         //set formatted html for generator
         let template = {
@@ -259,8 +267,8 @@ const PDF = (input) => {
 
     //Get images from router
     const getImages = async() => {
-        console.log(html)
-        console.log(descArray)
+        // console.log(html)
+        // console.log(descArray)
         try {
             //Promise.all to get all the images from server
             const response = await Promise.all([
@@ -420,14 +428,4 @@ const PDF = (input) => {
     )
 }
 export default PDF;
-
-{/* <div className="description" style={{fontSize:'10pt'}}>
-{/* {!!descArray && descArray.map((paragraph, index) => {
-    <p>{paragraph}</p>
-})} */}
-{/* {!!html.bullets && descArray.map((item, index) => {
-    <div>
-        <span>{item}</span>
-    </div>    
-})} */}
-//</div>
+//https://stackoverflow.com/questions/48215965/how-to-display-an-array-of-strings-in-react-component
