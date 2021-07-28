@@ -11,62 +11,31 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         //destructure redefine data/props
         var specs = data[0];
         var type_description = data[1].type_description;
-        //TODO: either here or in parser, logic to differentiate between 3 sensor types...
-
-        //break the search term down accordingly
-        var segments = sensor.split('-');
-        var housing = segments[0];
-        var char = segments[1];
-        var optConn = segments[2];
-        var type = specs.type;
-        var sensor_code = specs.sensor_code;
-        var splitOps = sensor_code.split(housing); 
-        var connect = splitOps[1]; //get accurate connection code(not always same length)
-        var option = splitOps[0].slice(char.length); //get accurate option code
-
         //get relavent text pieces from the data package
         var revision = specs.rev;
         var description = specs.title;
+    } else if(S_Type === 'custom') {
+        console.log(customData)
+        var specs = customData[0];
+        //type description is in the title
+
+        //option1
+        var type_description = specs.title;
+        var revision = specs.rev;
+        //no description
+
+        //option2
+        let temp = specs.title;
+        temp = temp.split(', ');
+        var type_description2 = temp[0];
+        temp.unshift();
+        var description2 = temp.join(', ');
     }
 
     let footer = `Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * ${revision} `;
 
 
-    //BULLETS
-    // const bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
-    // var bullet_text = bullets_html.replace(/<[^>]+>/g, '');
-    // let tester = bullets_html.split('\n');
 
-    // let final = [];
-
-    // tester.pop();
-    // tester.shift();
-    // for (let i = 0; i < tester.length; i++){
-    //     //replace any list items
-    //     var temp = tester[i].replace(/<[^>]+>/g, '');
-    //     temp = temp.replace(/\r/g, '');
-    //     //replace /r formatting
-    //     if(temp.length > 3){
-    //         final.push('o  ' + temp);
-    //     }
-    // }
-
-
-    //Bottom text 
-    //TEMPORARY fix to retrieve and manipulate the html text for the spec description...
-    //TODO: clean up logic, find if this works for all description files.....
-    // const description_html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
-    // //regex to modify
-    // var spec_text = description_html.replace(/<[^>]+>/g, '');
-    // spec_text = spec_text.replace(/\&nbsp\;/g, '');
-    // spec_text = spec_text.replace(/Title/, '');
-    // spec_text = spec_text.replace(/\n{2,8}/g, '');
-    // spec_text = spec_text.replace(/\t/g, '');
-    // let s_text = spec_text.split("\n\n");//'\n');("\\r?\\n")
-
-    //s_text = s_text.join(' ');
-    //s_text = s_text.replace(/' '{4,5}/g, '\n');//'12345' '10' '    '
-    //lookahead for multiple strings ^(?=.*[a-zA-Z])(?=.*[~!@#$%^&*()_+])(?=.*\d).*$
     
 
 
@@ -89,17 +58,34 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     doc.setFont('times','bold');
     doc.setFontSize(14);
     doc.text(sensor + '  -  ', margins.left,margins.top);
-    //get location/width of this string so that type_description placed accordingly
+    //get location/width of this string so that type_description placed accordingly for catalog
     let newX = doc.getStringUnitWidth(sensor + '  -  ');
     //console.log(newX) == 9.369 * 18.6 = 179.28 + m.left = 207.3
     doc.setFontSize(12);
-    doc.text(type_description, margins.left + (newX * 18.6), margins.top);//22
+    if(S_Type === 'catalog') {
+        doc.text(type_description, margins.left + (newX * 18.6), margins.top);//22
+        //break sensor description down based on text width so it fits within the page
+        doc.setFont('times', 'italic');
+        let desc_lines = doc.splitTextToSize(description, 762)//margins.width)
+        doc.text(desc_lines, margins.left, margins.top + 20);//+20?
+    } else if(S_Type === 'custom') {
+        //option1
+        //need to split text, but need to start on first line with indent...
+        // let length = (sensor.length) + 15; //? what value do we want here...csxxxx should always be relatively same length
+        // let indent = new Array(length + 1).join(' ');
+        // let indentedText = indent.concat(type_description);//empty text shouldnt overwrite visible text
+        // doc.setFont('times', 'italic');
+        // let desc_lines = doc.splitTextToSize(indentedText, 720);//762)720 keeps right end even with images...
+        // doc.text(desc_lines, margins.left, margins.top);//+20?
 
-    //break sensor description down based on text width so it fits within the page
-    //doc.setFontSize(12);
-    doc.setFont('times', 'italic');
-    let desc_lines = doc.splitTextToSize(description, 762)//margins.width)
-    doc.text(desc_lines, margins.left, margins.top + 20);//+20?
+        //option2
+        doc.text(type_description2, margins.left + (newX * 18.6), margins.top);//22
+        //break sensor description down based on text width so it fits within the page
+        doc.setFont('times', 'italic');
+        let desc_lines = doc.splitTextToSize(description2, 762)//margins.width)
+        doc.text(desc_lines, margins.left, margins.top + 20);//+20?
+    }
+
 
     //bullets
     let bulletLines = doc.splitTextToSize(text.bullets,391);//final, 391);
@@ -133,11 +119,27 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     doc.setFont('times','bold');
     doc.setFontSize(14);
     doc.text(sensor + '  -  ', margins.left,margins.top);
-    doc.setFontSize(12);
-    doc.text(type_description, margins.left + (newX * 18.6), margins.top)//(newX * 22), margins.top);
+
     //doc.setFontSize(12);
-    doc.setFont('times', 'italic');
-    doc.text(desc_lines, margins.left, margins.top + 20);//+20?
+    //doc.text(type_description, margins.left + (newX * 18.6), margins.top)//(newX * 22), margins.top);
+    // doc.setFont('times', 'italic');
+    // doc.text(desc_lines, margins.left, margins.top + 20);
+    doc.setFontSize(12);
+    if(S_Type === 'catalog') {
+        doc.text(type_description, margins.left + (newX * 18.6), margins.top);//22
+        //break sensor description down based on text width so it fits within the page
+        doc.setFont('times', 'italic');
+        let desc_lines = doc.splitTextToSize(description, 762)//margins.width)
+        doc.text(desc_lines, margins.left, margins.top + 20);//+20?
+    } else if(S_Type === 'custom') {
+        //need to split text, but need to start on first line with indent...
+        let length = (sensor.length) + 15; //? what value do we want here...csxxxx should always be relatively same length
+        let indent = new Array(length + 1).join(' ');
+        let indentedText = indent.concat(type_description);//empty text shouldnt overwrite visible text
+        doc.setFont('times', 'italic');
+        let desc_lines = doc.splitTextToSize(indentedText, 720);//762)720 keeps right end even with images...
+        doc.text(desc_lines, margins.left, margins.top);//+20?
+    }
 
     //images
     doc.addImage(images.spec_chart, 'png', margins.left, 85, 720, 529);
@@ -153,3 +155,18 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     doc.save(`${sensor}.pdf`);
 }
 export default generatePDF;
+        // //TODO: either here or in parser, logic to differentiate between 3 sensor types...
+
+        // //break the search term down accordingly
+        // var segments = sensor.split('-');
+        // var housing = segments[0];
+        // var char = segments[1];
+        // var optConn = segments[2];
+        // var type = specs.type;
+        // var sensor_code = specs.sensor_code;
+        // var splitOps = sensor_code.split(housing); 
+        // var connect = splitOps[1]; //get accurate connection code(not always same length)
+        // var option = splitOps[0].slice(char.length); //get accurate option code
+
+
+        //https://codepen.io/AndreKelling/pen/BaoLWao
