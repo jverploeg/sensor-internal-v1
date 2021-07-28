@@ -66,7 +66,7 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         doc.text(type_description, margins.left + (newX * 18.6), margins.top);//22
         //break sensor description down based on text width so it fits within the page
         doc.setFont('times', 'italic');
-        let desc_lines = doc.splitTextToSize(description, 762)//margins.width)
+        let desc_lines = doc.splitTextToSize(description, 720);//762)//margins.width)
         doc.text(desc_lines, margins.left, margins.top + 20);//+20?
     } else if(S_Type === 'custom') {
         ////////option1
@@ -90,7 +90,7 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     //bullets
     //TODO: move up slightly???
     let bulletLines = doc.splitTextToSize(text.bullets,391);//final, 391);
-    doc.text(bulletLines, 398.5, 106.25);//300, 80)
+    doc.text(bulletLines, 398.5, 100);//106.25);//300, 80)
     
 
     //ADD IMAGES FOR 1st Page
@@ -105,7 +105,7 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     //Bottom text
     doc.setFontSize(10);//font size isnt 12 when looking at spec sheets printed currently
     doc.setFont('times', 'normal');
-    let char_lines = doc.splitTextToSize(text.desc, 762);//change to 720px?????
+    let char_lines = doc.splitTextToSize(text.desc, 720);//762);//change to 720px?????
     doc.text(char_lines, margins.left, 770);//580pt);
 
     //footer(centered on page)
@@ -130,7 +130,7 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         doc.text(type_description, margins.left + (newX * 18.6), margins.top);//22
         //break sensor description down based on text width so it fits within the page
         doc.setFont('times', 'italic');
-        let desc_lines = doc.splitTextToSize(description, 762)//margins.width)
+        let desc_lines = doc.splitTextToSize(description, 720);//762)//margins.width)
         doc.text(desc_lines, margins.left, margins.top + 20);//+20?
     } else if(S_Type === 'custom') {
         ////////option1

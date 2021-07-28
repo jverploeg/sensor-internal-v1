@@ -14,7 +14,7 @@ const html2text = (option, char, sensor, html) => {
             temp = temp.replace(/\r/g, '');
             //replace /r formatting
             if(temp.length > 3){
-                final.push('o  ' + temp);
+                final.push('o     ' + temp);//change 2 spaces to 3?
             }
         }
         return final;

@@ -64,7 +64,7 @@ $transition-duration: .5s;
 }
 .header {
     position: absolute;
-    width: 762px;
+    width: 720px;//762px;
     left: 27px;
     top: 27px;
 }
@@ -93,7 +93,7 @@ $transition-duration: .5s;
     position: absolute;
     width: 391px; 
     left: 398.5px;
-    top: 100px;//106.25px; 
+    top: 87px;//100px;//106.25px; 
     // width: 348px; //match mech width
     // left: 398.5px; //300pt
     // top: 106.25px; //80pt
@@ -149,7 +149,7 @@ $transition-duration: .5s;
     position: absolute;
     left: 27px;
     top: 750px;//580pt;//offset of 17 for text. shout be 770
-    width: 762px;
+    width: 720px;//762px;
 }
 .footer {
     position: absolute;
