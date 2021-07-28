@@ -25,17 +25,17 @@ const PDF = (input) => {
     //console.log(input, temp)
     //shortcuts for testing random sensors
     if(temp === "a") {
-        var sensor = 'MFM7-EHS1-F5P21';//fits
+        var sensor = 'MFM7-EHS1-F5P21';//
     } else if(temp === 'b') {
-        var sensor = 'M1VE-MRS-E5CP2';//issues with 2nd page
+        var sensor = 'M1VE-MRS-E5CP2';//
     } else if(temp === 'c') {
-        var sensor = 'CS1111';
+        var sensor = 'A47-HS-RTCP2';//'CS1111'
     } else if(temp === 'd') {
-        var sensor = 'CS1193';//fits
+        var sensor = 'S38S-MRS-E5T21';//'CS1193'
     } else if(temp === 'e') {
-        var sensor = 'CS1066';//no custom bullets, get from char...
+        var sensor = 'S63B-PHS-RGCD3';//'CS1066'
     } else if(temp === 'f') {
-        var sensor = 'CS1226';//no custom bullets, get from char...
+        var sensor = 'A63-37ADQO-LPCP4';//'CS1226'
     } else {
         var sensor = 'A47-18ADS-5KT21';
     }
@@ -111,7 +111,6 @@ const PDF = (input) => {
                 getImages();
             }else if(sensorType === 'custom'){
                 //need to get type for image selection first
-                console.log({customData})
                 getType(char);
                 //getCustomImages(); --> called after we get type.. refactor now that we have axios understood better
             }else if(sensorType === 'xproto'){

@@ -6,6 +6,7 @@ import date from '../images/DATECODE1-Model.png';
 //define generator function
 //(sensorType, sensorCode, sensorData, customData, images, html)
 const generatePDF = (S_Type, sensor, data, customData, images, text) => {
+    console.log(text)
     //logic depends on sensor type
     if(S_Type === 'catalog') {
         //destructure redefine data/props
@@ -178,3 +179,4 @@ export default generatePDF;
 
 
         //https://codepen.io/AndreKelling/pen/BaoLWao
+        //https://pdfmake.github.io/docs/0.1/getting-started/client-side/methods/

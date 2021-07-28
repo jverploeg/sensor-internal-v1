@@ -26,6 +26,7 @@ const CustomHTML = (option, data) => {
         spec_text = spec_text.replace(/\n{2,8}/g, '');
         spec_text = spec_text.replace(/\t/g, '');
         let s_text = spec_text.split("\n\n");//'\n');("\\r?\\n")
+        console.log(s_text)
         return s_text;
     } 
 
