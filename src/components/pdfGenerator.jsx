@@ -69,21 +69,21 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         let desc_lines = doc.splitTextToSize(description, 762)//margins.width)
         doc.text(desc_lines, margins.left, margins.top + 20);//+20?
     } else if(S_Type === 'custom') {
-        //option1
+        ////////option1
         //need to split text, but need to start on first line with indent...
-        // let length = (sensor.length) + 15; //? what value do we want here...csxxxx should always be relatively same length
-        // let indent = new Array(length + 1).join(' ');
-        // let indentedText = indent.concat(type_description);//empty text shouldnt overwrite visible text
-        // doc.setFont('times', 'italic');
-        // let desc_lines = doc.splitTextToSize(indentedText, 720);//762)720 keeps right end even with images...
-        // doc.text(desc_lines, margins.left, margins.top);//+20?
-
-        //option2
-        doc.text(type_description2, margins.left + (newX * 18.6), margins.top);
-        //break sensor description down based on text width so it fits within the page
+        let length = (sensor.length) + 15; //? what value do we want here...csxxxx should always be relatively same length
+        let indent = new Array(length + 1).join(' ');
+        let indentedText = indent.concat(type_description);//empty text shouldnt overwrite visible text
         doc.setFont('times', 'italic');
-        let desc_lines = doc.splitTextToSize(description2, 762)//margins.width)
-        doc.text(desc_lines, margins.left, margins.top + 20);//+20?
+        let desc_lines = doc.splitTextToSize(indentedText, 720);//762)720 keeps right end even with images...
+        doc.text(desc_lines, margins.left, margins.top);//+20?
+
+        ///////option2
+        // doc.text(type_description2, margins.left + (newX * 18.6), margins.top);
+        // //break sensor description down based on text width so it fits within the page
+        // doc.setFont('times', 'italic');
+        // let desc_lines = doc.splitTextToSize(description2, 762)//margins.width)
+        // doc.text(desc_lines, margins.left, margins.top + 20);//+20?
     }
 
 
@@ -133,13 +133,20 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         let desc_lines = doc.splitTextToSize(description, 762)//margins.width)
         doc.text(desc_lines, margins.left, margins.top + 20);//+20?
     } else if(S_Type === 'custom') {
-        //need to split text, but need to start on first line with indent...
-        let length = (sensor.length) + 15; //? what value do we want here...csxxxx should always be relatively same length
-        let indent = new Array(length + 1).join(' ');
-        let indentedText = indent.concat(type_description);//empty text shouldnt overwrite visible text
+        ////////option1
+        // let length = (sensor.length) + 15; //? what value do we want here...csxxxx should always be relatively same length
+        // let indent = new Array(length + 1).join(' ');
+        // let indentedText = indent.concat(type_description);//empty text shouldnt overwrite visible text
+        // doc.setFont('times', 'italic');
+        // let desc_lines = doc.splitTextToSize(indentedText, 720);//762)720 keeps right end even with images...
+        // doc.text(desc_lines, margins.left, margins.top);//+20?
+
+        ///////option2
+        doc.text(type_description2, margins.left + (newX * 18.6), margins.top);
+        //break sensor description down based on text width so it fits within the page
         doc.setFont('times', 'italic');
-        let desc_lines = doc.splitTextToSize(indentedText, 720);//762)720 keeps right end even with images...
-        doc.text(desc_lines, margins.left, margins.top);//+20?
+        let desc_lines = doc.splitTextToSize(description2, 762)//margins.width)
+        doc.text(desc_lines, margins.left, margins.top + 20);//+20?
     }
 
     //images

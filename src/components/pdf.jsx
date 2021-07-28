@@ -50,17 +50,19 @@ const PDF = (input) => {
     //breakdown of part states
     const [type, setType] = useState('');
     const [type_description, setTypeD] = useState('');
+    const [type_description2, setTypeD2] = useState('');
     const [housing, setHousing] = useState('');
     const [char, setChar] = useState('');
     const [connect, setConnect] = useState('');
     const [option, setOption] = useState('');
     const [rev, setRev] = useState('');
     const [description, setDescription] = useState('');
+    const [description2, setDescription2] = useState('');
     //images
     const [images, setImages] = useState({});
     //html
     const [html, setHtml] = useState({});
-    const [htmlFormatted, setHtmlFormatted] = useState({});
+    const [htmlFormatted, setHtmlFormatted] = useState({});//need?
 
     
 
@@ -212,6 +214,15 @@ const PDF = (input) => {
         setRev(specs.rev);
         setDescription(specs.title);
 
+        //option2
+        let temp = specs.title;
+        temp = temp.split(', ');
+        var type_description2 = temp[0];
+        temp.unshift();
+        var description2 = temp.join(', ');
+        setTypeD2(type_description2);
+        setDescription2(description2);
+
         //getCustomHtml
         getCustomHtml(char, sensorCode);
     }
@@ -322,11 +333,21 @@ const PDF = (input) => {
                 <div className="pdf-preview">
                     {/* <button onClick={() => print()}>{sensorCode}</button> */}
                     <div className="page1">
-                        <div className="header" >
-                            <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
-                            <br></br>
-                            <span style={{fontSize:'12pt'}}><i>{description}</i></span>
-                        </div>
+                        {(sensorType === 'catalog') && 
+                            <div className="header" >
+                                <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
+                                <br></br>
+                                <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+                            </div>
+                        }
+                        {(sensorType === 'custom') && 
+                            <div className="headerCust" >
+                                <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+                                {/* <br></br>
+                                <span style={{fontSize:'12pt'}}><i>{description}</i></span> */}
+                            </div>
+                        }
+
                         <div className="bullets">
                             <ul className="bullets2">
                                 {!!html.bullets && html.bullets.map((item,index) => (
@@ -353,11 +374,20 @@ const PDF = (input) => {
                         </div>           
                     </div>
                     <div className="page2">
-                        <div className="header" >
-                            <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
-                            <br></br>
-                            <span style={{fontSize:'12pt'}}><i>{description}</i></span>
-                        </div>
+                        {(sensorType === 'catalog') && 
+                            <div className="header" >
+                                <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
+                                <br></br>
+                                <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+                            </div>
+                        }
+                        {(sensorType === 'custom') && 
+                            <div className="headerCust" >
+                                <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description2}</b></span>
+                                <br></br>
+                                <span style={{fontSize:'12pt'}}><i>{description2}</i></span>
+                            </div>
+                        }
                         <div className="images">
                             <img className="spec_chart" src={images.spec_chart} alt='no image found'/>
                             <img className="picture" src={images.picture} alt='no image found'/>

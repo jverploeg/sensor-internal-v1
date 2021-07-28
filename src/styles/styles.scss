@@ -68,6 +68,12 @@ $transition-duration: .5s;
     left: 27px;
     top: 27px;
 }
+.headerCust {
+    position: absolute;
+    width: 720px;
+    left: 27px; //right is 70 instead of 27...
+    top: 27px;
+}
 .type {
     //xywh: 160,120,320,240
     position: absolute;
