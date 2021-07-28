@@ -73,6 +73,11 @@ const html2text = (option, char, text) => {
         //console.log(text_array);
 
         return text_array;
+    }  else if(option === 4) {
+        //testing just using html file
+        const html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
+
+        return html;
     } 
 }
 export default html2text;

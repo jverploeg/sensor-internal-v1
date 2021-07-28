@@ -70,7 +70,7 @@ const PDF = (input) => {
     //html
     const [html, setHtml] = useState({});
     const [descArray, setDescArray] = useState([]);
-    const [htmlFormatted, setHtmlFormatted] = useState({});//need?
+    const [htmlRaw, setHtmlRaw] = useState({});
 
     
 
@@ -201,6 +201,11 @@ const PDF = (input) => {
         //format and set html object with text...
         let bullets = html2text(1, char);
         let desc = html2text(2, char);
+        //get html to see if we can directly use
+        let raw = html2text(4, char);
+        setHtmlRaw(raw);
+        ///////////THIS WORKS AND FORMATs>>>how to get to generator???
+        //<div className="description" dangerouslySetInnerHTML={createMarkup(htmlRaw)}/>
         //get description array for preview
         let desc_array = html2text(3, char, desc);
         console.log({desc, desc_array})
@@ -242,7 +247,9 @@ const PDF = (input) => {
         //getCustomHtml
         getCustomHtml(char, sensorCode);
     }
-
+    const createMarkup = (input) => {
+        return {__html: input};
+    }
     const getCustomHtml = async(char, sensor) => {
         try {
             const response = await Promise.all([
@@ -387,14 +394,18 @@ const PDF = (input) => {
                         {/* <div className="description" style={{fontSize:'10pt'}}>
                             <span style={{fontSize:'10pt'}}>{html.desc}</span>
                         </div> */}
-                        <div className="description">
+
+                        {/* <div className="description">
                             {!!descArray && descArray.map((paragraph, index) => {
                                 return(
                                     <p>{paragraph}</p>
                                 )
                             })}
-                        </div>
+                        </div> */}
+                        {/* <div className="description" dangerouslySetInnerHTML={htmlRaw}/> */}
                         
+                        <div className="description" dangerouslySetInnerHTML={createMarkup(htmlRaw)}/>
+
                         <div className='footer'>
                             <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>           
