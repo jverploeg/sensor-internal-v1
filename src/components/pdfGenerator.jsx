@@ -79,7 +79,7 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         // doc.text(desc_lines, margins.left, margins.top);//+20?
 
         //option2
-        doc.text(type_description2, margins.left + (newX * 18.6), margins.top);//22
+        doc.text(type_description2, margins.left + (newX * 18.6), margins.top);
         //break sensor description down based on text width so it fits within the page
         doc.setFont('times', 'italic');
         let desc_lines = doc.splitTextToSize(description2, 762)//margins.width)
@@ -88,6 +88,7 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
 
 
     //bullets
+    //TODO: move up slightly???
     let bulletLines = doc.splitTextToSize(text.bullets,391);//final, 391);
     doc.text(bulletLines, 398.5, 106.25);//300, 80)
     
@@ -104,8 +105,8 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     //Bottom text
     doc.setFontSize(10);//font size isnt 12 when looking at spec sheets printed currently
     doc.setFont('times', 'normal');
-    let char_lines = doc.splitTextToSize(text.desc, 762);//s_text, 762);
-    doc.text(char_lines, margins.left, 770);//580);
+    let char_lines = doc.splitTextToSize(text.desc, 762);//change to 720px?????
+    doc.text(char_lines, margins.left, 770);//580pt);
 
     //footer(centered on page)
     doc.setFontSize(10);
