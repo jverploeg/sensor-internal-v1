@@ -6,7 +6,6 @@ import date from '../images/DATECODE1-Model.png';
 //define generator function
 //(sensorType, sensorCode, sensorData, customData, images, html)
 const generatePDF = (S_Type, sensor, data, customData, images, text) => {
-    console.log(text)
     //logic depends on sensor type
     if(S_Type === 'catalog') {
         //destructure redefine data/props
@@ -106,11 +105,35 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
 
     //Bottom text
     //default line height = 1.15
-    doc.setLineHeightFactor(1.05);//this seems like the smallest we should go
-    doc.setFontSize(10);//font size isnt 12 when looking at spec sheets printed currently
-    doc.setFont('times', 'normal');
-    let char_lines = doc.splitTextToSize(text.desc, 720);//762);//change to 720px?????
-    doc.text(char_lines, margins.left, 770);//580pt);
+    // doc.setLineHeightFactor(1.05);//this seems like the smallest we should go
+    // doc.setFontSize(10);//font size isnt 12 when looking at spec sheets printed currently
+    // doc.setFont('times', 'normal');
+    // let char_lines = doc.splitTextToSize(text.desc, 720);//762);//change to 720px?????
+    // doc.text(char_lines, margins.left, 770);//580pt);
+    // var descHTML = $('#description').html();
+    var descHTML = window.document.getElementById('description')
+    console.log(descHTML)
+    // doc.html(descHTML, (doc) => {
+
+    // })
+    var specialElementHandlers = {
+        '#editor': function (element, renderer) {
+            return true;
+        }
+      };
+    doc.html(descHTML, 27, 770,
+        {
+            'width': 720,
+            'elementHandlers': specialElementHandlers
+        }
+    );
+
+    //(method) jsPDF.html(src: string | HTMLElement, options?: HTMLOptions): Promise<HTMLWorker>
+
+
+    // var specialHandlers = {
+
+    // }
     //reset line height
     doc.setLineHeightFactor(1.15);
 

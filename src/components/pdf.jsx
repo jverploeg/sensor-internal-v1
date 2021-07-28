@@ -6,6 +6,7 @@ import generatePDF from './pdfGenerator';
 import html2text from './html2text';
 import CustomHTML from './customHtml2text';
 import checkType from './checkType';
+import generate from './pdfTest';
 
 import calls from './axiosCalls';
 
@@ -208,7 +209,7 @@ const PDF = (input) => {
         //<div className="description" dangerouslySetInnerHTML={createMarkup(htmlRaw)}/>
         //get description array for preview
         let desc_array = html2text(3, char, desc);
-        console.log({desc, desc_array})
+        //console.log({desc, desc_array})
         setDescArray(desc_array);
         //set formatted html for generator
         let template = {
@@ -353,11 +354,12 @@ const PDF = (input) => {
     return (
         <div>
             {/* <button onClick={() => print()}>{sensorCode}</button> */}
-            <button onClick={() => generatePDF(sensorType, sensorCode, sensorData, customData, images, html)}>{sensorCode}</button>
+            {/* <button onClick={() => generatePDF(sensorType, sensorCode, sensorData, customData, images, html)}>{sensorCode}</button> */}
+            <button onClick={() => generate(sensorCode)}>{sensorCode}</button>
             {!!images &&
                 <div className="pdf-preview">
                     {/* <button onClick={() => print()}>{sensorCode}</button> */}
-                    <div className="page1">
+                    <div className="page1" id="page1">
                         {(sensorType === 'catalog') && 
                             <div className="header" >
                                 <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
@@ -404,13 +406,13 @@ const PDF = (input) => {
                         </div> */}
                         {/* <div className="description" dangerouslySetInnerHTML={htmlRaw}/> */}
                         
-                        <div className="description" dangerouslySetInnerHTML={createMarkup(htmlRaw)}/>
+                        <div className="description" id="description" dangerouslySetInnerHTML={createMarkup(htmlRaw)}/>
 
                         <div className='footer'>
                             <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>           
                     </div>
-                    <div className="page2">
+                    <div className="page2" id="page2">
                         {(sensorType === 'catalog') && 
                             <div className="header" >
                                 <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
@@ -440,3 +442,5 @@ const PDF = (input) => {
 }
 export default PDF;
 //https://stackoverflow.com/questions/48215965/how-to-display-an-array-of-strings-in-react-component
+
+//https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml

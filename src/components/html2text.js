@@ -34,7 +34,7 @@ const html2text = (option, char, text) => {
     } else if(option === 2) {
         //description
         const description_html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
-        console.log(description_html)
+        //console.log(description_html)
         // const test = convertToPlain(description_html)//same as after step 1 below
         // console.log(test)
         //console.log(description_html)
