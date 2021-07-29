@@ -6,6 +6,9 @@ import date from '../images/DATECODE1-Model.png';
 //define generator function
 //(sensorType, sensorCode, sensorData, customData, images, html)
 const generatePDF = (S_Type, sensor, data, customData, images, text) => {
+
+    var done = false;
+
     //logic depends on sensor type
     if(S_Type === 'catalog') {
         //destructure redefine data/props
@@ -111,24 +114,37 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     // let char_lines = doc.splitTextToSize(text.desc, 720);//762);//change to 720px?????
     // doc.text(char_lines, margins.left, 770);//580pt);
     // var descHTML = $('#description').html();
-    var descHTML = window.document.getElementById('description')
-    console.log(descHTML)
+    // var descHTML = window.document.getElementById('description')
+    // console.log(descHTML)
     // doc.html(descHTML, (doc) => {
 
     // })
-    var specialElementHandlers = {
-        '#editor': function (element, renderer) {
-            return true;
-        }
-      };
-    doc.html(descHTML, 27, 770,
-        {
-            'width': 720,
-            'elementHandlers': specialElementHandlers
-        }
-    );
+    // var specialElementHandlers = {
+    //     '#editor': function (element, renderer) {
+    //         return true;
+    //     }
+    //   };
+    // doc.html(descHTML, 27, 770,
+    //     {
+    //         'width': 720,
+    //         'elementHandlers': specialElementHandlers
+    //     }
+    // );
 
     //(method) jsPDF.html(src: string | HTMLElement, options?: HTMLOptions): Promise<HTMLWorker>
+    var descHTML = window.document.getElementById('description')
+
+    doc.html(descHTML, {
+        callback: function (doc) {
+            //done = true; doesnt save
+            console.log('html')
+            //finish();
+            doc.save(`${sensor}.pdf`);
+        },
+        //margin: [],//[left, bottom, right, top]
+        x: 0,
+        y: 0,//750,//0
+     });
 
 
     // var specialHandlers = {
@@ -189,7 +205,30 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     doc.text(footer, 175, 1047);
 
     //save pdf image
-    doc.save(`${sensor}.pdf`);
+    // doc.save(`${sensor}.pdf`);
+    // doc.text('I am on page 2', 10, 10)
+    // doc.setPage(1);//not working....
+    // doc.text('I am on page 1', 10, 10)
+    //const finish = () => {
+        // var descHTML = window.document.getElementById('description')
+        // console.log(descHTML)
+        // doc.html(descHTML, {
+        //     callback: function (doc) {
+        //         doc.save(`${sensor}.pdf`);
+        //     },
+        //     //margin: [],//[left, bottom, right, top]
+        //     x: 27,
+        //     y: 750
+        //  });
+    //}
+    console.log('done with second page');
+    const finish = () => {
+        doc.save(`${sensor}.pdf`);
+    }
+    // if(done === true) {
+    //     doc.save(`${sensor}.pdf`);
+    // }
+
 }
 export default generatePDF;
         // //TODO: either here or in parser, logic to differentiate between 3 sensor types...

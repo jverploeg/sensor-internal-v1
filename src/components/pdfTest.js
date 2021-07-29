@@ -15,26 +15,28 @@ const generate = (sensor) => {
     // });
 
 
-    var p1 = window.document.getElementById('page1');
-    var p2 = window.document.getElementById('page2');
-    let positionInfoP1 = p1.getBoundingClientRect();
-    var scaleX = positionInfoP1.width / p1.offsetWidth; //0.6958332970028832
-    var scaleY = positionInfoP1.height / p1.offsetHeight;//0.7000000115596887
-    let reverseScaleX = 1.0/scaleX; //1.4371258235373816
-    let reverseScaleY = 1.0/scaleY; //1.4285714049802274
-    //console.log({scaleX,scaleY, reverseScaleX, reverseScaleY})
-    //console.log(positionInfoP1)
-        // bottom: 1096.4666748046875
-        // height: 739.2000122070312
-        // left: 91.18333435058594
-        // right: 479.3333282470703
-        // top: 357.26666259765625
-        // width: 388.1499938964844
-        // x: 91.18333435058594
-        // y: 357.26666259765625
-    let DOMwidth = positionInfoP1.width * reverseScaleX;//616
-    let DOMheight = positionInfoP1.height * reverseScaleY;//1056
-    console.log(DOMwidth,DOMheight)
+    // var p1 = window.document.getElementById('page1');
+    // var p2 = window.document.getElementById('page2');
+    // //let desc = window.document.getElementById('description');
+    // let pages = [p1,p2];
+    // let positionInfoP1 = p1.getBoundingClientRect();
+    // var scaleX = positionInfoP1.width / p1.offsetWidth; //0.6958332970028832
+    // var scaleY = positionInfoP1.height / p1.offsetHeight;//0.7000000115596887
+    // let reverseScaleX = 1.0/scaleX; //1.4371258235373816
+    // let reverseScaleY = 1.0/scaleY; //1.4285714049802274
+    // //console.log({scaleX,scaleY, reverseScaleX, reverseScaleY})
+    // //console.log(positionInfoP1)
+    //     // bottom: 1096.4666748046875
+    //     // height: 739.2000122070312
+    //     // left: 91.18333435058594
+    //     // right: 479.3333282470703
+    //     // top: 357.26666259765625
+    //     // width: 388.1499938964844
+    //     // x: 91.18333435058594
+    //     // y: 357.26666259765625
+    // let DOMwidth = positionInfoP1.width * reverseScaleX;//616
+    // let DOMheight = positionInfoP1.height * reverseScaleY;//1056
+    // console.log(DOMwidth,DOMheight)
 
 
     //initialize
@@ -54,19 +56,83 @@ const generate = (sensor) => {
         width: 816, //612 - (right + left)
         height: 1054, //792 - (top + bottom)
     };
-    html2canvas(p1)
-    .then((canvas) => {
-    const imgData = canvas.toDataURL('image/jpeg');
-    // pdf.addImage(imgData, 'JPEG', 0, 0, 614.39, 793.58);
-    doc.addImage(imgData, 'JPEG', 0, 0, DOMwidth, DOMheight);
+    // let img1 = html2canvas(p1)
+    // .then((canvas) => {
+    // const imgData = canvas.toDataURL('image/jpeg');
+    // // pdf.addImage(imgData, 'JPEG', 0, 0, 614.39, 793.58);
+    // //doc.addImage(imgData, 'JPEG', 0, 0, DOMwidth, DOMheight);
+    // return imgData;
+    // });
+    // console.log(img1)
+    // let img2 = html2canvas(p2)
+    // .then((canvas) => {
+    // const imgData = canvas.toDataURL('image/jpeg');
+    // // pdf.addImage(imgData, 'JPEG', 0, 0, 614.39, 793.58);
+    // //doc.addImage(imgData, 'JPEG', 0, 0, DOMwidth, DOMheight);
+    // return imgData;
+    // });
+    // console.log(img2)
+    // const getImages = async() => {
+    //     try {
+    //         const response = await Promise.all([
+    //             img1,
+    //             img2
+    //         ])
+    //         return response;
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+    // let images = getImages();
+    // console.log({images})
+    // html2canvas(p2)
+    // .then((canvas) => {
+    //     console.log({canvas})
+    // const imgData2 = canvas.toDataURL('image/jpeg');
+    // doc.addPage();
+    // doc.addImage(imgData2, 'JPEG', 0, 0, DOMwidth, DOMheight);
+    // doc.save(`${sensor}.pdf`);
+    // });
+    let desc = window.document.getElementById('description');
+    let positionInfo = desc.getBoundingClientRect();// height=193.66, width=504
+    var scaleX = positionInfo.width / desc.offsetWidth;//0.7
+    var scaleY = positionInfo.height / desc.offsetHeight;//0.6999
+    console.log({positionInfo,scaleX,scaleY})
+    let reverseScaleX = 1.0/scaleX;//1.4285714285714286
+    let reverseScaleY = 1.0/scaleY;//1.4302925614035584
+    console.log(reverseScaleX, reverseScaleY)
+    let newW = positionInfo.width * reverseScaleX;
+    let newH = positionInfo.height * reverseScaleY;
+    console.log({newW, newH})
+
+    html2canvas(desc, {
+        //scale: reverseScaleX
+    }).then((canvas) => {
+        const imgData = canvas.toDataURL('image/jpeg');
+        doc.addImage(imgData, 'JPEG', 27, 750);//, positionInfo.width, positionInfo.height);
+        doc.save(`${sensor}.pdf`);
     });
-    html2canvas(p2)
-    .then((canvas) => {
-    const imgData2 = canvas.toDataURL('image/jpeg');
-    doc.addPage();
-    doc.addImage(imgData2, 'JPEG', 0, 0, DOMwidth, DOMheight);
-    doc.save(`${sensor}.pdf`);
-    });
+
+    // const loop = async(p1,p2) => {
+    //     var pages = [p1,p2]
+    //     for (var i = 0; i < pages.length; i++) {
+    //       await new Promise(function(resolve) {
+    //         html2canvas(pages[i], {scale: 1}).then(function(canvas) {
+    
+    //           var img=canvas.toDataURL("image/png");
+    //           doc.addImage(img,'JPEG', 0, 0);
+    //           if ((i+1) == pages.length) {
+    //             doc.save('menu.pdf');
+    //           } else {
+    //             doc.addPage();
+    //           }
+    //           resolve();
+    //         });
+    //       });
+    //     }
+    // };
+    // loop(p1,p2);
+
 
     // var specialElementHandlers = {
     //     '#editor': function (element, renderer) {
@@ -88,6 +154,9 @@ export default generate;
 //https://stackoverflow.com/questions/294250/how-do-i-retrieve-an-html-elements-actual-width-and-height
 //https://www.npmjs.com/package/rasterizehtml
 //https://shamaahlawat.medium.com/page-split-using-jspdf-and-html2canvas-in-react-js-while-downloading-pdf-6c75da960019
+//https://oribi.io/tech-blog/creating-pdf-from-a-react-component
+//https://www.npmjs.com/package/dom-to-image-more
+//https://stackoverflow.com/questions/60277409/html2canvs-how-to-loop-or-reuse-for-multiple-div-html-dom-elements
 
 // const quality = 1 // Higher the better but larger file
 // html2canvas(document.querySelector('#html'),
