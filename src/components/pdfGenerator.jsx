@@ -92,7 +92,7 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     }
 
     //bullets
-    //TODO: move up slightly???
+    //TODO: move up slightly??? -> moved
     let bulletLines = doc.splitTextToSize(text.bullets,391);//final, 391);
     doc.text(bulletLines, 398.5, 100);//106.25);//300, 80)
     
@@ -113,25 +113,7 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     // doc.setFont('times', 'normal');
     // let char_lines = doc.splitTextToSize(text.desc, 720);//762);//change to 720px?????
     // doc.text(char_lines, margins.left, 770);//580pt);
-    // var descHTML = $('#description').html();
-    // var descHTML = window.document.getElementById('description')
-    // console.log(descHTML)
-    // doc.html(descHTML, (doc) => {
 
-    // })
-    // var specialElementHandlers = {
-    //     '#editor': function (element, renderer) {
-    //         return true;
-    //     }
-    //   };
-    // doc.html(descHTML, 27, 770,
-    //     {
-    //         'width': 720,
-    //         'elementHandlers': specialElementHandlers
-    //     }
-    // );
-
-    //(method) jsPDF.html(src: string | HTMLElement, options?: HTMLOptions): Promise<HTMLWorker>
     var descHTML = window.document.getElementById('description')
 
     doc.html(descHTML, {
@@ -139,6 +121,8 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
             //done = true; doesnt save
             console.log('html')
             //finish();
+
+            doc.addImage(images.type, 'png', margins.left, 85, 336, 204);
             doc.save(`${sensor}.pdf`);
         },
         //margin: [],//[left, bottom, right, top]
@@ -146,10 +130,6 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         y: 0,//750,//0
      });
 
-
-    // var specialHandlers = {
-
-    // }
     //reset line height
     doc.setLineHeightFactor(1.15);
 
@@ -206,9 +186,7 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
 
     //save pdf image
     // doc.save(`${sensor}.pdf`);
-    // doc.text('I am on page 2', 10, 10)
-    // doc.setPage(1);//not working....
-    // doc.text('I am on page 1', 10, 10)
+
     //const finish = () => {
         // var descHTML = window.document.getElementById('description')
         // console.log(descHTML)
@@ -221,6 +199,7 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         //     y: 750
         //  });
     //}
+    
     console.log('done with second page');
     const finish = () => {
         doc.save(`${sensor}.pdf`);

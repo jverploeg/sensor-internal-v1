@@ -6,7 +6,6 @@ import generatePDF from './pdfGenerator';
 import html2text from './html2text';
 import CustomHTML from './customHtml2text';
 import checkType from './checkType';
-// import generate from './pdfTest';
 
 import calls from './axiosCalls';
 
@@ -353,12 +352,9 @@ const PDF = (input) => {
     //DOM
     return (
         <div>
-            {/* <button onClick={() => print()}>{sensorCode}</button> */}
             <button onClick={() => generatePDF(sensorType, sensorCode, sensorData, customData, images, html)}>{sensorCode}</button>
-            {/* <button onClick={() => generate(sensorCode)}>{sensorCode}</button> */}
             {!!images &&
                 <div className="pdf-preview">
-                    {/* <button onClick={() => print()}>{sensorCode}</button> */}
                     <div className="page1" id="page1">
                         {(sensorType === 'catalog') && 
                             <div className="header" >
@@ -393,18 +389,6 @@ const PDF = (input) => {
                             <img className="conn_chart" src={images.conn_chart} alt='no image found'/>
                             <img className="date" src={date}></img>
                         </div>
-                        {/* <div className="description" style={{fontSize:'10pt'}}>
-                            <span style={{fontSize:'10pt'}}>{html.desc}</span>
-                        </div> */}
-
-                        {/* <div className="description">
-                            {!!descArray && descArray.map((paragraph, index) => {
-                                return(
-                                    <p>{paragraph}</p>
-                                )
-                            })}
-                        </div> */}
-                        {/* <div className="description" dangerouslySetInnerHTML={htmlRaw}/> */}
                         
                         <div className="description" id="description" dangerouslySetInnerHTML={createMarkup(htmlRaw)}/>
 
