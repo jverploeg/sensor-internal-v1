@@ -68,12 +68,37 @@ const PDF = (input) => {
     const [htmlRaw, setHtmlRaw] = useState({});
     //////////////////////////////////////////////////////////////////////////////////////
     
+    const clearDOM = () => {
+        setSensorType('');
+        setSensorCode('');
+        setSensorData({});
+        setCustomData({});
+
+        setType('');
+        setTypeD('');
+        setTypeD2('');
+        setHousing('');
+        setChar('');
+        setConnect('');
+        setOption('');
+        setRev('');
+        setDescription('');
+        setDescription2('');
+
+        setImages({});
+
+        setBullets([]);
+        setHtmlRaw({});
+    }
 
 
 
     /////////////////////RERENDER PAGE ON TRIGGERS////////////////////////////////////////////
     useEffect(() => {
-        let senstype = check.type(sensor); // 'standard', 'custom', 'xproto'
+        //clear all old states
+        clearDOM();
+        //check the input string
+        let senstype = check.type(sensor); // 'catalog', 'custom', 'xproto'
         //set state
         setSensorType(senstype);
 
@@ -138,9 +163,22 @@ const PDF = (input) => {
                 axios.get(`${host}/type`, {params: {type}}),
             ]);
             const data = response.map((response) => response.data);
-            let output = data.flat(); //DO WE NEED THE WHOLE ROW? --> yes it helps avoid wierd formatting as a data response
-            setSensorCode(sensor);
-            setSensorData(output);
+            console.log(data);
+            //does sensor exist?
+            if(data[0].length === 0) { // || if data[0].rev === 'obs' /??????????????????????
+                console.log('not found')
+                setSensorCode('');
+                setSensorData({});
+                setImages({});
+                setBullets([]);
+                setHtmlRaw({});
+            } else {
+                console.log('sensor found')
+                let output = data.flat(); //DO WE NEED THE WHOLE ROW? --> yes it helps avoid wierd formatting as a data response
+                setSensorCode(sensor);
+                setSensorData(output);
+            }
+
         } catch (error) {
             console.log(error)
         }

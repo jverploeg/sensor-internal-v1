@@ -56,6 +56,8 @@ const getSensor = (req, res) => {
         res.status(200).send(result.rows);
     })
     .catch(error => {
+        console.log('get sensor error')
+        console.log(error)
         res.status(500).send(error)
     })
 }

@@ -47,7 +47,7 @@ module.exports.getSensor = async(data) => {
         return response;
     }
     catch(error) {
-        return error;
+        return [error, 'Sensor Not Found'];
     }
 }
 
