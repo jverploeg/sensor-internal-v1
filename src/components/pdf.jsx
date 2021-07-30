@@ -353,7 +353,6 @@ const PDF = (input) => {
     //DOM
     return (
         <div>
-            {/* <button onClick={() => generatePDF(sensorType, sensorCode, sensorData, customData, images, html)}>{sensorCode}</button> */}
             <button onClick={() => generatePDF(sensorType, sensorCode, sensorData, customData, images, html)}>{sensorCode}</button>
             {!!images &&
                 <div className="pdf-preview">
