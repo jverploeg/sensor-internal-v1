@@ -30,11 +30,11 @@ const PDF = (input) => {
     } else if(temp === 'b') {
         var sensor = 'M1VE-MRS-E5CP2';//
     } else if(temp === 'c') {
-        var sensor = 'A47-HS-RTCP2';//'CS1111'
+        var sensor = 'CS1111';//'A47-HS-RTCP2';//'CS1111'
     } else if(temp === 'd') {
-        var sensor = 'S38S-MRS-E5T21';//'CS1193'
+        var sensor = 'CS1193';//'S38S-MRS-E5T21';//'CS1193'
     } else if(temp === 'e') {
-        var sensor = 'S63B-PHS-RGCD3';//'CS1066'
+        var sensor = 'CS1066';//'S63B-PHS-RGCD3';//'CS1066'
     } else if(temp === 'f') {
         var sensor = 'A63-37ADQO-LPCP4';//'CS1226'
     } else {
@@ -236,7 +236,7 @@ const PDF = (input) => {
         setRev(specs.rev);
         setDescription(specs.title);
 
-        //option2
+        //option2 for highlighting catalog code after csxxxx
         let temp = specs.title;
         temp = temp.split(', ');
         var type_description2 = temp[0];
@@ -261,7 +261,11 @@ const PDF = (input) => {
             // console.log(response[1]);
             //convert
             let bullets = CustomHTML(1, response[0]);
-            let desc = CustomHTML(2, response[1]);
+            let desc = CustomHTML(2, response[1]);//converting to text...
+            let raw = response[1];//still issues with <?>
+            //remove unicode
+            raw = raw.replace(/[\uFFFD]/g, ' ');//additional unicode symbols???
+            setHtmlRaw(raw);
             //set object template
             let template = {
                 bullets: bullets, 
