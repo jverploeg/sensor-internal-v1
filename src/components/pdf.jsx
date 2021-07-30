@@ -4,7 +4,8 @@ import axios from 'axios';
 //helper functions
 import generatePDF from './pdfGenerator';
 import generatePDF2 from './pdfGold';
-import html2text from './html2text';
+//import html2text from './html2text';
+import html2text from '../helpers/html2text';
 import CustomHTML from './customHtml2text';
 import checkType from './checkType';
 
@@ -69,8 +70,8 @@ const PDF = (input) => {
     //images
     const [images, setImages] = useState({});
     //html
-    const [html, setHtml] = useState({});
-    const [descArray, setDescArray] = useState([]);
+    //const [html, setHtml] = useState({});
+    const [bullets, setBullets] = useState([]);
     const [htmlRaw, setHtmlRaw] = useState({});
 
     
@@ -201,22 +202,17 @@ const PDF = (input) => {
 
         //format and set html object with text...
         let bullets = html2text(1, char);
-        let desc = html2text(2, char);
+        setBullets(bullets);
+        //let desc = html2text(2, char); not using
         //get html to see if we can directly use
-        let raw = html2text(4, char);
+        let raw = html2text(3, char);
         setHtmlRaw(raw);
-        ///////////THIS WORKS AND FORMATs>>>how to get to generator???
-        //<div className="description" dangerouslySetInnerHTML={createMarkup(htmlRaw)}/>
-        //get description array for preview
-        let desc_array = html2text(3, char, desc);
-        //console.log({desc, desc_array})
-        setDescArray(desc_array);
         //set formatted html for generator
-        let template = {
-            bullets: bullets, 
-            desc: desc,
-        }
-        setHtml(template);
+        // let template = {
+        //     bullets: bullets, 
+        //     desc: desc,
+        // }
+        
     }
 
     const customBreakdown = (sensor) => {
@@ -227,8 +223,6 @@ const PDF = (input) => {
         setChar(char);
         let housing = specs.closest_housing;
         setHousing(housing);
-        //get type from <char -->axios on char table... FIXED!
-        // setType(specs.type); --> called elsewhere now
         let conn = specs.closest_connection;
         setConnect(conn);
         let opt = specs.closest_option;
@@ -257,21 +251,18 @@ const PDF = (input) => {
                 calls.checkBullets(sensor, char),
                 calls.checkDescription(sensor, char),
             ])
-            // console.log(response[0]);
-            // console.log(response[1]);
             //convert
-            let bullets = CustomHTML(1, response[0]);
-            let desc = CustomHTML(2, response[1]);//converting to text...
-            let raw = response[1];//still issues with <?>
-            //remove unicode
-            raw = raw.replace(/[\uFFFD]/g, ' ');//additional unicode symbols???
+            let bullets = html2text(1, null, response[0]);
+            setBullets(bullets);
+            //let desc = CustomHTML(2, response[1]);//converting to text...
+            let raw = html2text(3, null, response[1]);//
             setHtmlRaw(raw);
             //set object template
-            let template = {
-                bullets: bullets, 
-                desc: desc,
-            }
-            setHtml(template);
+            // let template = {
+            //     bullets: bullets, 
+            //     desc: desc,
+            // }
+            // setHtml(template);
         } catch(error) {
             console.log(error);
         }    
@@ -357,7 +348,7 @@ const PDF = (input) => {
     //DOM
     return (
         <div>
-            <button onClick={() => generatePDF(sensorType, sensorCode, sensorData, customData, images, html)}>{sensorCode}</button>
+            <button onClick={() => generatePDF(sensorType, sensorCode, sensorData, customData, images, bullets)}>{sensorCode}</button>
             {!!images &&
                 <div className="pdf-preview">
                     <div className="page1" id="page1">
@@ -378,7 +369,7 @@ const PDF = (input) => {
 
                         <div className="bullets">
                             <ul className="bullets2">
-                                {!!html.bullets && html.bullets.map((item,index) => (
+                                {!!bullets && bullets.map((item,index) => (
                                     <li style={{fontSize:'12pt'}}>
                                     <i>{item}</i>  
                                     </li>

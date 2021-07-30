@@ -5,7 +5,7 @@ import date from '../images/DATECODE1-Model.png';
 
 //define generator function
 //(sensorType, sensorCode, sensorData, customData, images, html)
-const generatePDF = (S_Type, sensor, data, customData, images, text) => {
+const generatePDF = (S_Type, sensor, data, customData, images, bullets) => {
 
     //logic depends on sensor type
     if(S_Type === 'catalog') {
@@ -101,7 +101,7 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
                 ////////////////////////////////////////////////////////
 
                 ////////////BULLETS////////////////////
-                let bulletLines = doc.splitTextToSize(text.bullets,391);//final, 391);
+                let bulletLines = doc.splitTextToSize(bullets,391);//final, 391);
                 doc.text(bulletLines, 398.5, 100);//106.25);//300, 80)
                 ///////////////////////////////////////
 

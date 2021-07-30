@@ -1,10 +1,14 @@
-//function for parsing catalog .html bullets and description files into text
+//function for parsing .html bullets and description files into text
 
 const html2text = (option, char, data) => {
     if(option === 1) {
         //bullets
-        const bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
-        let tester = bullets_html.split('\n');
+        if(!data){
+            var bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
+            var tester = bullets_html.split('\n');
+        } else {
+            var tester = data.split('\n');
+        }
         let final = [];
         tester.pop();
         tester.shift();
@@ -44,13 +48,14 @@ const html2text = (option, char, data) => {
         return output;
     }  else if(option === 3) {
         //raw html file
-        const html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
+        if(!data) {
+            var html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
+        } else {
+            var html = data;
+        }
         //remove unicode
-        raw = html.replace(/[\uFFFD]/g, ' ');//additional unicode symbols???
+        let raw = html.replace(/[\uFFFD]/g, ' ');//additional unicode symbols???
         return raw;
     } 
 }
 export default html2text;
-
-
-//https://stackoverflow.com/questions/37521893/determine-if-a-path-is-subdirectory-of-another-in-node-js
