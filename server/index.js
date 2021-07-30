@@ -1,34 +1,22 @@
-// import/declare dependencies
+// FUNCTIONAL DEPENDENCIES
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
 
+// HELPER FUNCTIONS/FILES
+const route = require('./controller');
+
+/////////////SETUP/////////////////////
+
 // define server
-// app object conventionally denotes the Express application
 const app = express();
 
 // render static files
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 
-
 // setup middleware for parsing
 app.use(express.json());
 app.use(cors());
-//Configure cors so other computers can access 
-
-//Needed????
-// app.use((req, res, next) => {
-//   res.setHeader('Access-Control-Allow-Origin', '*');
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-//   res.setHeader('Access-Control-Allow-Credentials', true);
-//   next();
-// });
-
-// import controller functions
-const route = require('./controller');
-// link to the database pool
-const db = require('../database/index');
 
 // set port
 const port = 3000;
@@ -37,7 +25,7 @@ const port = 3000;
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
-
+////////////////////////////////////////
 
 ////////////ROUTES//////////////////////
 
@@ -67,7 +55,7 @@ app.get('/connection', route.getData);
 app.post('/connection', route.addData);
 app.put('/connection', route.changeData);
 
-
+//SENSORS
 app.get('/sensor', route.getData);//for displaying sensors in the table selections
 app.get('/custom', route.getData);//for displaying sensors in the table selections
 app.get('/xproto', route.getData);//for displaying sensors in the table selections
@@ -78,11 +66,8 @@ app.get('/sensor/*', route.getSensor);
 app.get('/type', route.getType); //for the type description at the top of the pdf
 
 app.get('/custom/*', route.getCustom);
-//app.get('/custom/type', route.getCustomType);!!!!!!!!!!!!!!!You cant call subfolders if a wildcard has already been defined!!!!!!!!!!!!!!!!
 app.get('/ctype/*', route.getCustomType);//need options for image selection
 
 
-//get images for pdf
+//IMAGES
 app.get('/images/*', route.getImage);
-
-

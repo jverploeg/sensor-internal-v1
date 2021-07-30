@@ -83,4 +83,3 @@ module.exports.getCustom = async(sensor) => {
         return error;
     }
 }
-

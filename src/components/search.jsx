@@ -1,4 +1,7 @@
+// FUNCTIONAL DEPENDENCIES
 import React, { useState, useEffect } from 'react';
+
+// SUBCOMPONENTS
 import PDF from './pdf';
 
 
@@ -10,10 +13,7 @@ const Search = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [inputs, setInputs] = useState({}); // inputs from submission fields
 
-
-    const host = `http://192.168.1.118:3000`;
-
-    //EVENT HANDLERS WITH AXIOS REQUESTS
+    //EVENT HANDLERS
     const handleSubmit = () => {
         //set search term
         let val = Object.values(inputs);

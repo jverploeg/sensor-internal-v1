@@ -1,10 +1,11 @@
+// CONNECT TO THE DATABASE
 const db = require('../database/model.js');
+
 
 //ADAPTIVE FUNCTIONS THAT WORK FOR ANY TABLE//
 const getData = (req, res) => {
     //remove the / from the req.url
     let route = req.url.slice(1); // '/route' --> 'route'
-    console.log({route})
     db.getData(route)
     .then(result => {
         res.status(200).send(result.rows);
@@ -13,8 +14,8 @@ const getData = (req, res) => {
         res.status(500).send(error)
     })
 }
+
 const addData = (req, res) => {
-    //get path
     //remove the / from the req.url
     let route = req.url.slice(1); // '/route' --> 'route'
     const entry = req.body;
@@ -29,15 +30,15 @@ const addData = (req, res) => {
         res.status(500).send(error)
     })
 }
+
 const changeData = (req, res) => {
-    //get path
     //remove the / from the req.url
     let route = req.url.slice(1); // '/route' --> 'route'
     const entry = req.body;
     let id = entry.id;
     let col = entry.field;
     let val = entry.props.value;
-    //console.log({id, col, val})
+
     let values = [id, col, val];
     db.changeData(route, values)
     .then(result => {
@@ -49,7 +50,7 @@ const changeData = (req, res) => {
 }
 
 const getSensor = (req, res) => {
-    let sensor = req.url.slice(8);//MFM7-EHS1-F5P21
+    let sensor = req.url.slice(8);
     db.getSensor(sensor)
     .then(result => {
         res.status(200).send(result.rows);
@@ -71,7 +72,7 @@ const getType = (req, res) => {
 }
 
 const getCustom = (req, res) => {
-    let sensor = req.url.slice(8) //CS1111
+    let sensor = req.url.slice(8);
     db.getCustom(sensor)
     .then(result => {
         res.status(200).send(result.rows);
@@ -81,7 +82,7 @@ const getCustom = (req, res) => {
     })
 }
 const getCustomType = (req, res) => {
-    let sensor = req.url.slice(7) //275VPD
+    let sensor = req.url.slice(7);
     db.getCustomType(sensor)
     .then(result => {
         res.status(200).send(result.rows);
@@ -91,8 +92,9 @@ const getCustomType = (req, res) => {
     })
 }
 
-let filepath = `D:/DATA/Sensor/webApp/images`;
+
 const getImage = (req, res) => {
+  let filepath = `D:/DATA/Sensor/webApp/images`;
   let route = req.url.slice(8);
   //combine Absolute path to local storage with endpoint
   let package = `${filepath}/${route}.png`;
@@ -110,5 +112,4 @@ module.exports = {
     getCustom,
     getCustomType,
     getImage
-
 }

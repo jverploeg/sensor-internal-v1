@@ -1,12 +1,12 @@
+// FUNCTIONAL DEPENDENCIES
 import { useCallback, useState } from 'react';
 
-// Parameter is the boolean, with default "false" value
+///////////////////////////////////TOGGLES BOOLEAN VALUE//////////////////////////////////////////
 const useToggle = (initialState = false) => {
-    // Initialize the state
+    //////////////STATE DECLARATION////////////////////////////////////////////////////
     const [state, setState] = useState(initialState);
-    
-    // Define and memorize toggler function in case we pass down the comopnent,
-    // This function change the boolean value to it's opposite value
+    //////////////////////////////////////////////////////////////////////////////////
+
     const toggle = useCallback(() => setState(state => !state), []);
     
     return [state, toggle]

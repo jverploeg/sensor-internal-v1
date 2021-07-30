@@ -1,22 +1,22 @@
+// FUNCTIONAL DEPENDENCIES
 import jsPDF from 'jspdf';
+
+// STATIC ASSETS
 import date from '../images/DATECODE1-Model.png';
 
 
 
-//define generator function
-//(sensorType, sensorCode, sensorData, customData, images, html)
 const generatePDF = (S_Type, sensor, data, customData, images, bullets) => {
 
     //logic depends on sensor type
     if(S_Type === 'catalog') {
         //destructure redefine data/props
+        //get relavent text pieces from the data package
         var specs = data[0];
         var type_description = data[1].type_description;
-        //get relavent text pieces from the data package
         var revision = specs.rev;
         var description = specs.title;
     } else if(S_Type === 'custom') {
-        console.log(customData)
         var specs = customData[0];
         //type description is in the title
 
@@ -41,7 +41,7 @@ const generatePDF = (S_Type, sensor, data, customData, images, bullets) => {
 
 
 
-    //initialize
+    //initialize the document
     const doc = new jsPDF({
         hotfixes: ["px_scaling"],
         orientation:'portrait',

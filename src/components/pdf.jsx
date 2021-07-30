@@ -1,29 +1,28 @@
+// FUNCTIONAL DEPENDENCIES
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-//subcomponents
+// SUBCOMPONENTS
 import generatePDF from './pdfGenerator';
 
-//helper functions
+// HELPERS
 import html2text from '../helpers/html2text';
 import check from '../helpers/check';
-import calls from '../helpers/requests';
+import calls from '../helpers/PDF_requests';
 import convert from '../helpers/convert';
 
-//assets
+// ASSETS
 import date from '../images/DATECODE1-Model.png';
 
+// VARIABLES
+const host = `http://192.168.1.118:3000`;
+
 const PDF = (input) => {
-    const host = `http://192.168.1.118:3000`;
     //destructure props!!!!!!!!!!!!!!!
-    let temp = input.input;
+    let temp = input.input;//temp for testing
     //let sensor = input.input;
 
-
-    //temp define search
-    //var sensor = 'A47-18ADS-5KT21';
-    
-    //console.log(input, temp)
+    //////////////////TESTING//////////////////////
     //shortcuts for testing random sensors
     if(temp === "a") {
         var sensor = 'MFM7-EHS1-F5P21';//
@@ -37,45 +36,42 @@ const PDF = (input) => {
         var sensor = 'CS1066';//'S63B-PHS-RGCD3';//'CS1066'
     } else if(temp === 'f') {
         var sensor = 'A63-37ADQO-LPCP4';//'CS1226'
-    } 
-    // else {
-    //     var sensor = 'A47-18ADS-5KT21';
-    // }
-
-    //catalog issues
-    /*
-        'S63B-PHS-RGCD3' -> paragraphs not split for description
-        'A63-37ADQO-LPCP4' -> weird symbols(diamond w/ ?) <?>
-
-    */
+    } else {
+        var sensor = temp;
+    }
+    /////////////////////////////////////////////
 
 
-    //define which category of sensor ['standard', 'custom', 'xproto']
-    const [sensorType, setSensorType] = useState('');
-    //define key data pieces
+
+    //////////////STATE DECLARATION////////////////////////////////////////////////////
+    //define which category of sensor 
+    const [sensorType, setSensorType] = useState('');//['standard', 'custom', 'xproto']
+    //define key information
     const [sensorCode, setSensorCode] = useState('');
-    const [customData, setCustomData] = useState({});
     const [sensorData, setSensorData] = useState({});
-    //breakdown of part states
+    const [customData, setCustomData] = useState({});//different format than catalog
+    //breakdown of parts/components
     const [type, setType] = useState('');
     const [type_description, setTypeD] = useState('');
-    const [type_description2, setTypeD2] = useState('');
+    const [type_description2, setTypeD2] = useState('');//for option 2 with custom
     const [housing, setHousing] = useState('');
     const [char, setChar] = useState('');
     const [connect, setConnect] = useState('');
     const [option, setOption] = useState('');
     const [rev, setRev] = useState('');
     const [description, setDescription] = useState('');
-    const [description2, setDescription2] = useState('');
+    const [description2, setDescription2] = useState('');//for option 2 with custom
     //images
     const [images, setImages] = useState({});
     //html
     const [bullets, setBullets] = useState([]);
     const [htmlRaw, setHtmlRaw] = useState({});
-
+    //////////////////////////////////////////////////////////////////////////////////////
     
 
-    //RERENDER PAGE ON TRIGGERS////////////////////
+
+
+    /////////////////////RERENDER PAGE ON TRIGGERS////////////////////////////////////////////
     useEffect(() => {
         let senstype = check.type(sensor); // 'standard', 'custom', 'xproto'
         //set state
@@ -94,7 +90,6 @@ const PDF = (input) => {
             //getProto
         }
     },[input])//change to type later? no?
-
     //once we have sensor data package, call breakdown to split into relevant parts
     useEffect(() => {
         //console.log({sensorData})
@@ -111,7 +106,6 @@ const PDF = (input) => {
             customBreakdown(customData);
         }    
     },[customData])
-
     //once all part states have been set, fetch images from server
     useEffect(() => {
         if(description.length > 1) {
@@ -127,16 +121,16 @@ const PDF = (input) => {
             }
         }
     },[description])//trigger on description change.(last state to be set in Breakdown)
-
     //getCustomImages
     useEffect(() => {
         if(sensorType === 'custom' && type.length > 1) {
             getCustomImages();
         }
     },[type]);
+    /////////////////////////////////////////////////////////////////////////////////////////
 
 
-    //event handlers
+    //////////EVENT HANDLERS/////////////////////
     const getSensor = async(sensor, type) => {
         try {
             const response = await Promise.all([
@@ -170,10 +164,46 @@ const PDF = (input) => {
             console.log(error)
         }
     }
+    const getImages = async() => {
+        try {
+            //Promise.all to wait for all the images from server
+            const response = await Promise.all([
+                axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/mech/${housing}-Mech-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/housing/${housing}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/option/${option}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/connect/${connect}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/conn_charts/${connect}-${char}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/spec_charts/${char}-${option}-Model`, { responseType: 'arraybuffer' }),
+                axios.get(`${host}/images/pictures/${housing}-${char}-Model`, { responseType: 'arraybuffer' }),
+            ]);
+            const data = response.map((response) => response.data);
+            let images = convert.images(data);
+            setImages(images);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const getCustomImages = async() => {
+        //call all the waterfalls to get an image for each section
+        const response = await Promise.all([
+            calls.getCustomImageType(sensorCode, type),
+            calls.getCustomImageMech(sensorCode, housing),
+            calls.getCustomImageHousing(sensorCode, housing),
+            calls.getCustomImageOption(sensorCode, option),
+            calls.getCustomImageConnect(sensorCode, connect),
+            calls.getCustomImageConnChart(sensorCode, connect, char),
+            calls.getCustomImageSpec(sensorCode, char, option),
+            calls.getCustomImagePicture(sensorCode, housing, char, type),
+        ]);
+        const data = response.map((response) => response.data);
+        let images = convert.images(data);
+        setImages(images);
+    }
+    /////////////////////////////////////////////
 
 
-
-
+    /////////////DATA FORMATTING/////////////////
     const breakdown = (data, sensor) => {
         //break retrieved data into relevent variables
         let specs = data[0];
@@ -243,46 +273,10 @@ const PDF = (input) => {
             console.log(error);
         }    
     }
+    /////////////////////////////////////////////
 
-    //Get images from router
-    const getImages = async() => {
-        try {
-            //Promise.all to wait for all the images from server
-            const response = await Promise.all([
-                axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
-                axios.get(`${host}/images/mech/${housing}-Mech-Model`, { responseType: 'arraybuffer' }),
-                axios.get(`${host}/images/housing/${housing}-Model`, { responseType: 'arraybuffer' }),
-                axios.get(`${host}/images/option/${option}-Model`, { responseType: 'arraybuffer' }),
-                axios.get(`${host}/images/connect/${connect}-Model`, { responseType: 'arraybuffer' }),
-                axios.get(`${host}/images/conn_charts/${connect}-${char}-Model`, { responseType: 'arraybuffer' }),
-                axios.get(`${host}/images/spec_charts/${char}-${option}-Model`, { responseType: 'arraybuffer' }),
-                axios.get(`${host}/images/pictures/${housing}-${char}-Model`, { responseType: 'arraybuffer' }),
-            ]);
-            const data = response.map((response) => response.data);
-            let images = convert.images(data);
-            setImages(images);
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
-    //get custom images
-    const getCustomImages = async() => {
-        //call all the waterfalls to get an image for each section
-        const response = await Promise.all([
-            calls.getCustomImageType(sensorCode, type),
-            calls.getCustomImageMech(sensorCode, housing),
-            calls.getCustomImageHousing(sensorCode, housing),
-            calls.getCustomImageOption(sensorCode, option),
-            calls.getCustomImageConnect(sensorCode, connect),
-            calls.getCustomImageConnChart(sensorCode, connect, char),
-            calls.getCustomImageSpec(sensorCode, char, option),
-            calls.getCustomImagePicture(sensorCode, housing, char, type),
-        ]);
-        const data = response.map((response) => response.data);
-        let images = convert.images(data);
-        setImages(images);
-    }
+
 
 
     //DOM

@@ -1,19 +1,23 @@
 // FUNCTIONAL DEPENDENCIES
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+
 
 // STYLING DEPENDENCIES
 import { DataGrid } from '@material-ui/data-grid';
 
-// SUBCOMPONENTS/HELPERS/CUSTOM HOOKS
-import useToggle from './toggle';
+// SUBCOMPONENTS
 import Search from './search';
 
+// CUSTOM HOOKS
+import useToggle from './toggle';
+
+// HELPERS
+import calls from '../helpers/APP_requests';
 
 const App = () => {
     let viewports = ['Home', 'housing', 'char', 'option', 'char_op', 'connection', 'sensor', 'custom', 'xproto']; //array of view options. tables with all have similar setup, home is different
 
-    //DEFINE STATE//////////////////
+    //////////////STATE DECLARATION////////////////////////////////////////////////////
     const [page, setPage] = useState({}); //initialize to homepage on initial render
     const [data, setData] = useState([]); //data fetched from database
     const [inputs, setInputs] = useState({}); // inputs from submission fields
@@ -23,16 +27,15 @@ const App = () => {
     // custom state/hooks
     const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
     const [select, setButton] = useState(''); // sets the state for styling currentPage in navbar
-    
+    /////////////////////////////////////////////////////////////////////////////////////
 
 
-    //USEEFFECT AND PAGE RERENDERING?////////////
+    /////////////////////RERENDER PAGE ON TRIGGERS////////////////////////////////////////////
     useEffect(() => {
         //getData();
         setPage('Home');//initialize page to start on home
         selected();//highlight home tab
     },[]);
-
     //TODO: do we we need both these useEffects below????
     useEffect(() => {
         //getColumns();
@@ -44,37 +47,19 @@ const App = () => {
         getColumns();
         getRows();
     },[data])
-
     // USEEFFECT TO CHECK IF STATE HAS CHANGED PROPERLY
     // useEffect(() => {
     //     console.log({data, rows, columns})
     // },[data, isTextChanged])
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
-    //header for cors requests
-    //const header = {'Content-Type', undefined}
-    // set host to ip rather than localhost --> running into cors issues. come back and fix later if security issues with guest wifi?
-    const host = `http://192.168.1.118:3000`;
-
-
-    //define GET Functions
+    
+    //////////REQUESTS/////////////////////
     const getData = async() => {
-        //determine route -> db table based on pageSelection
-        let route = page;
-        try {
-            const response = await axios.get(`${host}/${route}`);
-            setData(response.data);
-        }
-        catch (error) {
-            console.log(error)
-        }
+        let data = calls.getData(page);
+        setData(data);
     }
-    //toggle for hiding/showing data not used anymore
-    // const showData = () => {
-    //     setIsTextChanged();
-    // }
     const getColumns = () => {
         let temp = [];
         let table = page;
@@ -149,38 +134,30 @@ const App = () => {
         ({ id, field, props }) => {
             // pass the col_name, row_id, and new_value to the router. will Update accordingly
             //determine route -> db table based on pageSelection
-            let route = page;
-            axios.put(`${host}/${route}`, {id, field, props})
-            .then(response => {
-              console.log(response);
-            })
-            .catch(error => {
-              console.log(error);
-            });
+            calls.handleEdit(page, {id, field, props});
+            // let route = page;
+            // axios.put(`${host}/${route}`, {id, field, props})
+            // .then(response => {
+            //   console.log(response);
+            // })
+            // .catch(error => {
+            //   console.log(error);
+            // });
         });
     const handleSubmit = () => {
-        //determine route -> db table based on pageSelection
-        let route = page;
-        axios.post(`${host}/${route}`, inputs)
-          .then(response => {
-            console.log(response);
-          })
-          .catch(error => {
-            console.log(error);
-          });
-
+        //run change submission
+        calls.submit(page, inputs);
         //clear input fields
         document.getElementById("data-form").reset();
         setInputs({});
         //update data
         getData();
+        //TODO: better way to update rather than calling entire database again?????
     }
-
     // const handleRowClick = (e) => {
     //     let target = e.target;
     //     console.log(target)
     // }
-
     const handlePageChange = (e) => {
         //get current page
         let current = page;
@@ -189,7 +166,6 @@ const App = () => {
         //set the page
         setPage(newPage);
     }
-
     const selected = (e) => {
         // if nothing selected yet, focus on home page
         if (!select) {
@@ -207,8 +183,12 @@ const App = () => {
                 target.classList.toggle('selected');
             }
         } 
-      };
+    };
+    //////////////////////////////////////////////////////
       
+
+
+
     //DOM
     return(
         <div className = "page">
