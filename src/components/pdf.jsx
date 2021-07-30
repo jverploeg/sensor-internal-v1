@@ -37,9 +37,10 @@ const PDF = (input) => {
         var sensor = 'CS1066';//'S63B-PHS-RGCD3';//'CS1066'
     } else if(temp === 'f') {
         var sensor = 'A63-37ADQO-LPCP4';//'CS1226'
-    } else {
-        var sensor = 'A47-18ADS-5KT21';
-    }
+    } 
+    // else {
+    //     var sensor = 'A47-18ADS-5KT21';
+    // }
 
     //catalog issues
     /*
@@ -227,9 +228,6 @@ const PDF = (input) => {
         //getCustomHtml
         getCustomHtml(char, sensorCode);
     }
-    // const createMarkup = (input) => {
-    //     return {__html: input};
-    // }
     const getCustomHtml = async(char, sensor) => {
         try {
             const response = await Promise.all([
@@ -239,15 +237,8 @@ const PDF = (input) => {
             //convert
             let bullets = html2text(1, null, response[0]);
             setBullets(bullets);
-            //let desc = CustomHTML(2, response[1]);//converting to text...
             let raw = html2text(3, null, response[1]);//
             setHtmlRaw(raw);
-            //set object template
-            // let template = {
-            //     bullets: bullets, 
-            //     desc: desc,
-            // }
-            // setHtml(template);
         } catch(error) {
             console.log(error);
         }    
@@ -255,10 +246,8 @@ const PDF = (input) => {
 
     //Get images from router
     const getImages = async() => {
-        // console.log(html)
-        // console.log(descArray)
         try {
-            //Promise.all to get all the images from server
+            //Promise.all to wait for all the images from server
             const response = await Promise.all([
                 axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
                 axios.get(`${host}/images/mech/${housing}-Mech-Model`, { responseType: 'arraybuffer' }),
@@ -270,7 +259,8 @@ const PDF = (input) => {
                 axios.get(`${host}/images/pictures/${housing}-${char}-Model`, { responseType: 'arraybuffer' }),
             ]);
             const data = response.map((response) => response.data);
-            convertAll(data);
+            let images = convert.images(data);
+            setImages(images);
         } catch (error) {
             console.log(error)
         }
@@ -290,43 +280,8 @@ const PDF = (input) => {
             calls.getCustomImagePicture(sensorCode, housing, char, type),
         ]);
         const data = response.map((response) => response.data);
-        convertAll(data);
-    }
-    //convert images to the correct format
-    const convertAll = (data) => {
-        //console.log(data)
-        let template = {
-            type: '',
-            mech: '',
-            housing: '',
-            option: '',
-            connect: '',
-            conn_chart: '',
-            spec_chart: '',
-            picture: '',
-        }
-        let convertedArray = [];
-        //iterate through array buffer and convert to base64
-        for(let i = 0; i < data.length; i++){
-            let base64 = btoa(
-                new Uint8Array(data[i]).reduce(
-                      (data, byte) => data + String.fromCharCode(byte),
-                      '',
-                ),
-            );
-            //append data format declaration and add to object;
-            convertedArray[i] = ( "data:;base64," + base64 );
-        }
-        //save to template... -> better way to do this????
-        template.type = convertedArray[0];
-        template.mech = convertedArray[1];
-        template.housing = convertedArray[2];
-        template.option = convertedArray[3];
-        template.connect = convertedArray[4];
-        template.conn_chart = convertedArray[5];
-        template.spec_chart = convertedArray[6];
-        template.picture = convertedArray[7];
-        setImages(template);
+        let images = convert.images(data);
+        setImages(images);
     }
 
 
