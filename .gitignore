@@ -25,3 +25,5 @@ dist/bundle.js
 package-lock.json
 excel.txt
 options.txt
+TODO.txt
+sensorIssues.txt

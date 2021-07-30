@@ -58,46 +58,43 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         width: 816, //612 - (right + left)
         height: 1054, //792 - (top + bottom)
     };
+    //////////////////HEADER////////////////////////////////
     doc.setFont('times','bold');
     doc.setFontSize(14);
     doc.text(sensor + '  -  ', margins.left,margins.top);
     //get location/width of this string so that type_description placed accordingly for catalog
-    let newX = doc.getStringUnitWidth(sensor + '  -  ');
-    //console.log(newX) == 9.369 * 18.6 = 179.28 + m.left = 207.3
+    let newX = doc.getStringUnitWidth(sensor + '  -  ');//9.369 * 18.6 = 179.28 + m.left = 207.3
     doc.setFontSize(12);
+    doc.setFont('times', 'italic');
     if(S_Type === 'catalog') {
         doc.text(type_description, margins.left + (newX * 18.6), margins.top);//22
         //break sensor description down based on text width so it fits within the page
-        doc.setFont('times', 'italic');
         let desc_lines = doc.splitTextToSize(description, 720);//762)//margins.width)
         doc.text(desc_lines, margins.left, margins.top + 20);//+20?
     } else if(S_Type === 'custom') {
-        ////////option1
+        ////////option1/////////////
         //need to split text, but need to start on first line with indent...
         let length = (sensor.length) + 15; //? what value do we want here...csxxxx should always be relatively same length
         let indent = new Array(length + 1).join(' ');
         let indentedText = indent.concat(type_description);//empty text shouldnt overwrite visible text
-        doc.setFont('times', 'italic');
         let desc_lines = doc.splitTextToSize(indentedText, 720);//762)720 keeps right end even with images...
         doc.text(desc_lines, margins.left, margins.top);//+20?
 
-
-
-        ///////option2
+        ///////option2 for custom, example can be seen on second page of pdf currently
         // doc.text(type_description2, margins.left + (newX * 18.6), margins.top);
         // //break sensor description down based on text width so it fits within the page
-        // doc.setFont('times', 'italic');
         // let desc_lines = doc.splitTextToSize(description2, 762)//margins.width)
         // doc.text(desc_lines, margins.left, margins.top + 20);//+20?
     }
+    ////////////////////////////////////////////////////////
 
-    //bullets
-    //TODO: move up slightly??? -> moved
+    ////////////BULLETS////////////////////
     let bulletLines = doc.splitTextToSize(text.bullets,391);//final, 391);
     doc.text(bulletLines, 398.5, 100);//106.25);//300, 80)
+    ///////////////////////////////////////
     
 
-    //ADD IMAGES FOR 1st Page
+    /////////////////1st PAGE IMAGES////////
     doc.addImage(images.type, 'png', margins.left, 85, 336, 204);
     doc.addImage(images.mech, 'png', 398, 193, 348, 96);
     doc.addImage(images.housing, 'png', margins.left, 306, 480, 216);
@@ -105,6 +102,7 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     doc.addImage(images.connect, 'png', margins.left, 531, 480, 216);
     doc.addImage(images.conn_chart, 'png', 541, 531, 204, 108);
     doc.addImage(date, 'png', 541, 651, 204, 96);
+    //////////////////////////////////////////
 
     //Bottom text
     //default line height = 1.15
@@ -114,8 +112,8 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     // let char_lines = doc.splitTextToSize(text.desc, 720);//762);//change to 720px?????
     // doc.text(char_lines, margins.left, 770);//580pt);
 
+    /////////////////DESCRIPTION////////////////
     var descHTML = window.document.getElementById('description')
-
     doc.html(descHTML, {
         callback: function (doc) {
             //done = true; doesnt save
@@ -129,32 +127,40 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         x: 0,
         y: 0,//750,//0
      });
+     //////////////////////////////////////////////
 
     //reset line height
-    doc.setLineHeightFactor(1.15);
+    //doc.setLineHeightFactor(1.15);
 
-    //footer(centered on page)
+    /////////////////////FOOTER////////////////////////
+    //(centered on page)
     doc.setFontSize(10);
     doc.setFont('times', 'italic');
     doc.text(footer, 175, 1047)
+    ////////////////////////////////////////////////////
 
-    //SECOND PAGE
 
-    //header
+    /////////////////////////////////////////////////////
+    //////////////////SECOND PAGE///////////////////////
+    ///////////////////////////////////////////////////
+
     doc.addPage();
+
+    ///////////////HEADER//////////////////////////////
     doc.setFont('times','bold');
     doc.setFontSize(14);
     doc.text(sensor + '  -  ', margins.left,margins.top);
+    ///////////////////////////////////////////////////
 
     //doc.setFontSize(12);
     //doc.text(type_description, margins.left + (newX * 18.6), margins.top)//(newX * 22), margins.top);
     // doc.setFont('times', 'italic');
     // doc.text(desc_lines, margins.left, margins.top + 20);
     doc.setFontSize(12);
+    doc.setFont('times', 'italic');
     if(S_Type === 'catalog') {
         doc.text(type_description, margins.left + (newX * 18.6), margins.top);//22
         //break sensor description down based on text width so it fits within the page
-        doc.setFont('times', 'italic');
         let desc_lines = doc.splitTextToSize(description, 720);//762)//margins.width)
         doc.text(desc_lines, margins.left, margins.top + 20);//+20?
     } else if(S_Type === 'custom') {
@@ -169,20 +175,21 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         ///////option2
         doc.text(type_description2, margins.left + (newX * 18.6), margins.top);
         //break sensor description down based on text width so it fits within the page
-        doc.setFont('times', 'italic');
         let desc_lines = doc.splitTextToSize(description2, 762)//margins.width)
         doc.text(desc_lines, margins.left, margins.top + 20);//+20?
     }
 
-    //images
+    /////////////////2nd PAGE IMAGES//////////////////////
     doc.addImage(images.spec_chart, 'png', margins.left, 85, 720, 529);
     doc.addImage(images.picture, 'png', margins.left, 650, 720, 384);//598, 720, 384);
+    //////////////////////////////////////////////////////
 
-
-    //footer
-    doc.setFontSize(10);    
+    /////////////////////FOOTER////////////////////////
+    //(centered on page)
+    doc.setFontSize(10);
     doc.setFont('times', 'italic');
-    doc.text(footer, 175, 1047);
+    doc.text(footer, 175, 1047)
+    ////////////////////////////////////////////////////
 
     //save pdf image
     // doc.save(`${sensor}.pdf`);
