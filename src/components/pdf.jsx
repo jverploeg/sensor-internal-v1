@@ -3,6 +3,7 @@ import axios from 'axios';
 
 //helper functions
 import generatePDF from './pdfGenerator';
+import generatePDF2 from './pdfGold';
 import html2text from './html2text';
 import CustomHTML from './customHtml2text';
 import checkType from './checkType';
@@ -352,6 +353,7 @@ const PDF = (input) => {
     //DOM
     return (
         <div>
+            {/* <button onClick={() => generatePDF(sensorType, sensorCode, sensorData, customData, images, html)}>{sensorCode}</button> */}
             <button onClick={() => generatePDF(sensorType, sensorCode, sensorData, customData, images, html)}>{sensorCode}</button>
             {!!images &&
                 <div className="pdf-preview">

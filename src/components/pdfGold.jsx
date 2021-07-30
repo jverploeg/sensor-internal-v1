@@ -5,7 +5,7 @@ import date from '../images/DATECODE1-Model.png';
 
 //define generator function
 //(sensorType, sensorCode, sensorData, customData, images, html)
-const generatePDF = (S_Type, sensor, data, customData, images, text) => {
+const generatePDF2 = (S_Type, sensor, data, customData, images, text) => {
 
     var done = false;
 
@@ -58,9 +58,40 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
         width: 816, //612 - (right + left)
         height: 1054, //792 - (top + bottom)
     };
+    //////////////////HEADER////////////////////////////////
+    doc.setFont('times','bold');
+    doc.setFontSize(14);
+    doc.text(sensor + '  -  ', margins.left,margins.top);
+    //get location/width of this string so that type_description placed accordingly for catalog
+    let newX = doc.getStringUnitWidth(sensor + '  -  ');//9.369 * 18.6 = 179.28 + m.left = 207.3
+    doc.setFontSize(12);
+    doc.setFont('times', 'italic');
+    if(S_Type === 'catalog') {
+        doc.text(type_description, margins.left + (newX * 18.6), margins.top);//22
+        //break sensor description down based on text width so it fits within the page
+        let desc_lines = doc.splitTextToSize(description, 720);//762)//margins.width)
+        doc.text(desc_lines, margins.left, margins.top + 20);//+20?
+    } else if(S_Type === 'custom') {
+        ////////option1/////////////
+        //need to split text, but need to start on first line with indent...
+        let length = (sensor.length) + 15; //? what value do we want here...csxxxx should always be relatively same length
+        let indent = new Array(length + 1).join(' ');
+        let indentedText = indent.concat(type_description);//empty text shouldnt overwrite visible text
+        let desc_lines = doc.splitTextToSize(indentedText, 720);//762)720 keeps right end even with images...
+        doc.text(desc_lines, margins.left, margins.top);//+20?
 
+        ///////option2 for custom, example can be seen on second page of pdf currently
+        // doc.text(type_description2, margins.left + (newX * 18.6), margins.top);
+        // //break sensor description down based on text width so it fits within the page
+        // let desc_lines = doc.splitTextToSize(description2, 762)//margins.width)
+        // doc.text(desc_lines, margins.left, margins.top + 20);//+20?
+    }
+    ////////////////////////////////////////////////////////
 
-
+    ////////////BULLETS////////////////////
+    let bulletLines = doc.splitTextToSize(text.bullets,391);//final, 391);
+    doc.text(bulletLines, 398.5, 100);//106.25);//300, 80)
+    ///////////////////////////////////////
     
 
     /////////////////1st PAGE IMAGES////////
@@ -85,47 +116,11 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     var descHTML = window.document.getElementById('description')
     doc.html(descHTML, {
         callback: function (doc) {
-            //Add top 1/3 of page
-                //////////////////HEADER////////////////////////////////
-                doc.setFont('times','bold');
-                doc.setFontSize(14);
-                doc.text(sensor + '  -  ', margins.left,margins.top);
-                //get location/width of this string so that type_description placed accordingly for catalog
-                let newX = doc.getStringUnitWidth(sensor + '  -  ');//9.369 * 18.6 = 179.28 + m.left = 207.3
-                doc.setFontSize(12);
-                doc.setFont('times', 'italic');
-                if(S_Type === 'catalog') {
-                    doc.text(type_description, margins.left + (newX * 18.6), margins.top);//22
-                    //break sensor description down based on text width so it fits within the page
-                    let desc_lines = doc.splitTextToSize(description, 720);//762)//margins.width)
-                    doc.text(desc_lines, margins.left, margins.top + 20);//+20?
-                } else if(S_Type === 'custom') {
-                    ////////option1/////////////
-                    //need to split text, but need to start on first line with indent...
-                    let length = (sensor.length) + 15; //? what value do we want here...csxxxx should always be relatively same length
-                    let indent = new Array(length + 1).join(' ');
-                    let indentedText = indent.concat(type_description);//empty text shouldnt overwrite visible text
-                    let desc_lines = doc.splitTextToSize(indentedText, 720);//762)720 keeps right end even with images...
-                    doc.text(desc_lines, margins.left, margins.top);//+20?
+            //done = true; doesnt save
+            console.log('html')
+            //finish();
 
-                    ///////option2 for custom, example can be seen on second page of pdf currently
-                    // doc.text(type_description2, margins.left + (newX * 18.6), margins.top);
-                    // //break sensor description down based on text width so it fits within the page
-                    // let desc_lines = doc.splitTextToSize(description2, 762)//margins.width)
-                    // doc.text(desc_lines, margins.left, margins.top + 20);//+20?
-                }
-                ////////////////////////////////////////////////////////
-
-                ////////////BULLETS////////////////////
-                let bulletLines = doc.splitTextToSize(text.bullets,391);//final, 391);
-                doc.text(bulletLines, 398.5, 100);//106.25);//300, 80)
-                ///////////////////////////////////////
-
-                //type and mech images
-                doc.addImage(images.type, 'png', margins.left, 85, 336, 204);
-                doc.addImage(images.mech, 'png', 398, 193, 348, 96);
-
-            //save pdf
+            doc.addImage(images.type, 'png', margins.left, 85, 336, 204);
             doc.save(`${sensor}.pdf`);
         },
         //margin: [],//[left, bottom, right, top]
@@ -221,20 +216,4 @@ const generatePDF = (S_Type, sensor, data, customData, images, text) => {
     // }
 
 }
-export default generatePDF;
-        // //TODO: either here or in parser, logic to differentiate between 3 sensor types...
-
-        // //break the search term down accordingly
-        // var segments = sensor.split('-');
-        // var housing = segments[0];
-        // var char = segments[1];
-        // var optConn = segments[2];
-        // var type = specs.type;
-        // var sensor_code = specs.sensor_code;
-        // var splitOps = sensor_code.split(housing); 
-        // var connect = splitOps[1]; //get accurate connection code(not always same length)
-        // var option = splitOps[0].slice(char.length); //get accurate option code
-
-
-        //https://codepen.io/AndreKelling/pen/BaoLWao
-        //https://pdfmake.github.io/docs/0.1/getting-started/client-side/methods/
+export default generatePDF2;
