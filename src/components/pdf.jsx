@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-//helper functions
+//subcomponents
 import generatePDF from './pdfGenerator';
-import generatePDF2 from './pdfGold';
-//import html2text from './html2text';
-import html2text from '../helpers/html2text';
-import CustomHTML from './customHtml2text';
-import checkType from './checkType';
 
-import calls from './axiosCalls';
+//helper functions
+import html2text from '../helpers/html2text';
+import check from '../helpers/check';
+import calls from '../helpers/requests';
+import convert from '../helpers/convert';
 
 //assets
 import date from '../images/DATECODE1-Model.png';
@@ -70,7 +69,6 @@ const PDF = (input) => {
     //images
     const [images, setImages] = useState({});
     //html
-    //const [html, setHtml] = useState({});
     const [bullets, setBullets] = useState([]);
     const [htmlRaw, setHtmlRaw] = useState({});
 
@@ -78,7 +76,7 @@ const PDF = (input) => {
 
     //RERENDER PAGE ON TRIGGERS////////////////////
     useEffect(() => {
-        let senstype = checkType(sensor); // 'standard', 'custom', 'xproto'
+        let senstype = check.type(sensor); // 'standard', 'custom', 'xproto'
         //set state
         setSensorType(senstype);
 
@@ -136,10 +134,6 @@ const PDF = (input) => {
         }
     },[type]);
 
-    // useEffect(() => {
-    //     console.log(descArray)
-    // },[html])
-
 
     //event handlers
     const getSensor = async(sensor, type) => {
@@ -181,8 +175,6 @@ const PDF = (input) => {
 
     const breakdown = (data, sensor) => {
         //break retrieved data into relevent variables
-
-        //destructure redefine data/props
         let specs = data[0];
         setTypeD(data[1].type_description);
         //break the search term down accordingly
@@ -203,16 +195,9 @@ const PDF = (input) => {
         //format and set html object with text...
         let bullets = html2text(1, char);
         setBullets(bullets);
-        //let desc = html2text(2, char); not using
-        //get html to see if we can directly use
+        //get raw html and perform minor regex changes
         let raw = html2text(3, char);
         setHtmlRaw(raw);
-        //set formatted html for generator
-        // let template = {
-        //     bullets: bullets, 
-        //     desc: desc,
-        // }
-        
     }
 
     const customBreakdown = (sensor) => {
@@ -242,9 +227,9 @@ const PDF = (input) => {
         //getCustomHtml
         getCustomHtml(char, sensorCode);
     }
-    const createMarkup = (input) => {
-        return {__html: input};
-    }
+    // const createMarkup = (input) => {
+    //     return {__html: input};
+    // }
     const getCustomHtml = async(char, sensor) => {
         try {
             const response = await Promise.all([
@@ -386,7 +371,7 @@ const PDF = (input) => {
                             <img className="date" src={date}></img>
                         </div>
                         
-                        <div className="description" id="description" dangerouslySetInnerHTML={createMarkup(htmlRaw)}/>
+                        <div className="description" id="description" dangerouslySetInnerHTML={convert.createMarkup(htmlRaw)}/>
 
                         <div className='footer'>
                             <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>

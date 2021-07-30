@@ -1,3 +1,7 @@
-const createMarkup = (input) => {
-    return {__html: input};
+const convert = {
+    createMarkup: (input) => {
+        return {__html: input};
+    },
+
 }
+export default convert;
