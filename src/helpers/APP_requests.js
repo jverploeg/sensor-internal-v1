@@ -9,7 +9,7 @@ const callDB = {
         try {
             const { data } = await axios.get(`${host}/${route}`); //response.data
             //setData(response.data);
-            console.log({data});
+            //console.log({data});
             return data;
         }
         catch (error) {

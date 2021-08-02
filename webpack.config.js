@@ -4,6 +4,10 @@
 
 // All packages, presets, and plugins need to be configured here
 
+
+//https://webpack.js.org/guides/caching/
+//https://dev.to/ckotzbauer/cache-reset-with-webpack-2jh4
+
 //IMPORTS
 const path = require('path');
 

@@ -1,5 +1,6 @@
 // FUNCTIONAL DEPENDENCIES
 import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 
 
 // STYLING DEPENDENCIES
@@ -40,9 +41,8 @@ const App = () => {
     useEffect(() => {
         //getColumns();
         //getRows();
-        console.log('calling get data')
-        getData(page);
-        console.log('have called getdata')
+        // let temp = callDB.getData(page);
+        getData();
     },[page, isTextChanged])
     //get new row values whenever data is modified in database
     useEffect(() => {
@@ -56,14 +56,29 @@ const App = () => {
     /////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    
+    const host = `http://192.168.1.118:3000`;
     //////////REQUESTS/////////////////////
-    const getData = (input) => {
-        console.log(input)
-        let data = callDB.getData(page);//await callDB.getData(page);
-        console.log('appdata', data)
-        setData(data);
+    const getData = () => {
+        //determine route -> db table based on pageSelection
+        // let route = page;
+        // try {
+        //     const response = await axios.get(`${host}/${route}`);
+        //     console.log(response.data)
+        //     setData(response.data);
+        // }
+        // catch (error) {
+        //     console.log(error)
+        // }
+        let temp = callDB.getData(page);//await callDB.getData(page);
+        console.log('appdata', temp)
     }
+    // const getData = (input) => {
+    //     console.log(input)
+
+    //     let data = callDB.getData(page);//await callDB.getData(page);
+    //     console.log('appdata', data)
+    //     setData(data);
+    // }
     const getColumns = () => {
         let temp = [];
         let table = page;
@@ -138,19 +153,25 @@ const App = () => {
         ({ id, field, props }) => {
             // pass the col_name, row_id, and new_value to the router. will Update accordingly
             //determine route -> db table based on pageSelection
-            callDB.handleEdit(page, {id, field, props});
-            // let route = page;
-            // axios.put(`${host}/${route}`, {id, field, props})
-            // .then(response => {
-            //   console.log(response);
-            // })
-            // .catch(error => {
-            //   console.log(error);
-            // });
+            let route = page;
+            axios.put(`${host}/${route}`, {id, field, props})
+            .then(response => {
+              console.log(response);
+            })
+            .catch(error => {
+              console.log(error);
+            });
         });
     const handleSubmit = () => {
         //run change submission
-        callDB.submit(page, inputs);
+        let route = page;
+        axios.post(`${host}/${route}`, inputs)
+          .then(response => {
+            console.log(response);
+          })
+          .catch(error => {
+            console.log(error);
+          });
         //clear input fields
         document.getElementById("data-form").reset();
         setInputs({});
