@@ -5,7 +5,7 @@ const check = {
         let type = '';
         let first = temp.slice(0,1);
     
-        if(first === 'C') {
+        if(first === 'C') { //no catalog housings start with C...
             type = 'custom';
         } else if (first === 'X'){
             type = 'xproto';

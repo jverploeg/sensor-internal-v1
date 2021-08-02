@@ -12,7 +12,7 @@ import Search from './search';
 import useToggle from './toggle';
 
 // HELPERS
-import calls from '../helpers/APP_requests';
+import callDB from '../helpers/APP_requests';
 
 const App = () => {
     let viewports = ['Home', 'housing', 'char', 'option', 'char_op', 'connection', 'sensor', 'custom', 'xproto']; //array of view options. tables with all have similar setup, home is different
@@ -40,7 +40,9 @@ const App = () => {
     useEffect(() => {
         //getColumns();
         //getRows();
-        getData();
+        console.log('calling get data')
+        getData(page);
+        console.log('have called getdata')
     },[page, isTextChanged])
     //get new row values whenever data is modified in database
     useEffect(() => {
@@ -56,8 +58,10 @@ const App = () => {
 
     
     //////////REQUESTS/////////////////////
-    const getData = async() => {
-        let data = calls.getData(page);
+    const getData = (input) => {
+        console.log(input)
+        let data = callDB.getData(page);//await callDB.getData(page);
+        console.log('appdata', data)
         setData(data);
     }
     const getColumns = () => {
@@ -134,7 +138,7 @@ const App = () => {
         ({ id, field, props }) => {
             // pass the col_name, row_id, and new_value to the router. will Update accordingly
             //determine route -> db table based on pageSelection
-            calls.handleEdit(page, {id, field, props});
+            callDB.handleEdit(page, {id, field, props});
             // let route = page;
             // axios.put(`${host}/${route}`, {id, field, props})
             // .then(response => {
@@ -146,7 +150,7 @@ const App = () => {
         });
     const handleSubmit = () => {
         //run change submission
-        calls.submit(page, inputs);
+        callDB.submit(page, inputs);
         //clear input fields
         document.getElementById("data-form").reset();
         setInputs({});

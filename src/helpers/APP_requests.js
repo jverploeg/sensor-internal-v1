@@ -2,13 +2,14 @@ import axios from 'axios';
 
 const host = `http://192.168.1.118:3000`;
 
-const calls = {
+const callDB = {
     getData: async(page) => {
         //determine route -> db table based on pageSelection
         let route = page;
         try {
             const { data } = await axios.get(`${host}/${route}`); //response.data
             //setData(response.data);
+            console.log({data});
             return data;
         }
         catch (error) {
@@ -38,4 +39,4 @@ const calls = {
 
 
 }
-export default calls;
+export default callDB;
