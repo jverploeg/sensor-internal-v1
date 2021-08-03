@@ -49,6 +49,30 @@ const changeData = (req, res) => {
     })
 }
 
+const checkSensor = (req, res) => {
+    let pathway = req.url.slice(7); // /valid/ 7
+    //get type and code;
+    let data = pathway.split('/');
+    let type = data[0];
+    let sensor = data[1];
+    console.log(type, sensor);
+    if(type === 'catalog'){
+        db.sensorExists(sensor)    
+        .then(result => {
+            console.log({result})
+            res.send(result);
+        })
+        .catch(error => {
+            res.status(500).send(error)
+        })
+    } else if(type === 'custom'){
+        db.getCustom(sensor)
+        .then(result => {
+            res.status(200).send(result);
+        })
+    }
+}
+
 const getSensor = (req, res) => {
     let sensor = req.url.slice(8);
     db.getSensor(sensor)
@@ -56,8 +80,6 @@ const getSensor = (req, res) => {
         res.status(200).send(result.rows);
     })
     .catch(error => {
-        console.log('get sensor error')
-        console.log(error)
         res.status(500).send(error)
     })
 }
@@ -109,6 +131,7 @@ module.exports = {
     getData,
     addData,
     changeData,
+    checkSensor,
     getSensor,
     getType,
     getCustom,

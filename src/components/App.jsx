@@ -13,7 +13,7 @@ import Search from './search';
 import useToggle from './toggle';
 
 // HELPERS
-import callDB from '../helpers/APP_requests';
+import callDB from '../helpers/appRequests';
 
 const App = () => {
     let viewports = ['Home', 'housing', 'char', 'option', 'char_op', 'connection', 'sensor', 'custom', 'xproto']; //array of view options. tables with all have similar setup, home is different
@@ -58,19 +58,23 @@ const App = () => {
 
     const host = `http://192.168.1.118:3000`;
     //////////REQUESTS/////////////////////
-    const getData = () => {
+    const getData = async() => {
         //determine route -> db table based on pageSelection
-        // let route = page;
-        // try {
-        //     const response = await axios.get(`${host}/${route}`);
-        //     console.log(response.data)
-        //     setData(response.data);
-        // }
-        // catch (error) {
-        //     console.log(error)
-        // }
-        let temp = callDB.getData(page);//await callDB.getData(page);
-        console.log('appdata', temp)
+        let route = page;
+        try {
+            const response = await axios.get(`${host}/${route}`);
+            //console.log(response.data)
+            setData(response.data);
+        }
+        catch (error) {
+            console.log(error)
+        }
+
+        /////////////////////////////////////////////////
+        //TODO: implement helpers later. these are causing errors right now...
+        //let temp = callDB.getData(page);//await callDB.getData(page);
+        //console.log('appdata', temp)
+        ///////////////////////////////////////////////////////////////////
     }
     // const getData = (input) => {
     //     console.log(input)

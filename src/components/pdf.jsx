@@ -45,7 +45,7 @@ const PDF = (input) => {
 
     //////////////STATE DECLARATION////////////////////////////////////////////////////
     //define which category of sensor 
-    const [sensorType, setSensorType] = useState('');//['standard', 'custom', 'xproto']
+    const [sensorType, setSensorType] = useState('');//options = ['catalog', 'custom', 'xproto', 'invalid']
     //define key information
     const [sensorCode, setSensorCode] = useState('');
     const [sensorData, setSensorData] = useState({});
@@ -66,6 +66,8 @@ const PDF = (input) => {
     //html
     const [bullets, setBullets] = useState([]);
     const [htmlRaw, setHtmlRaw] = useState({});
+    //booleans for flipping
+    const [valid, setValid] = useState(false); //true until proven false?
     //////////////////////////////////////////////////////////////////////////////////////
     
     const clearDOM = () => {
@@ -89,118 +91,168 @@ const PDF = (input) => {
 
         setBullets([]);
         setHtmlRaw({});
+        
+        setValid(false);
     }
 
 
 
     /////////////////////RERENDER PAGE ON TRIGGERS////////////////////////////////////////////
-    useEffect(() => {
+    useEffect(() => { //////CHECK SENSOR VALIDITY ON INPUT CHANGE
         //clear all old states
-        clearDOM();
+        //clearDOM();
         //check the input string
         let senstype = check.type(sensor); // 'catalog', 'custom', 'xproto'
-        //set state
+        //set type
         setSensorType(senstype);
 
-        if (senstype === 'catalog') {
-            //breakdown the 3 part code
-            let segments = sensor.split('-');
-            let typeTemp = segments[1];
-            getSensor(sensor, typeTemp);
-        } else if(senstype === 'custom') {
-            setSensorCode(sensor);
-            getCustom(sensor);
-        } else if(senstype === 'xproto') {
-            //TODO LATER: implement logic for xproto sensors
-            //getProto
-        }
+        let find = (senstype, sensor) => {
+            check.valid(senstype, sensor)
+            .then(result => {
+                if(result){
+                    console.log('valid')
+                    setValid(true);
+                    setSensorCode(sensor);
+                } else {
+                    console.log('not valid')
+                    //setValid(false);
+                    clearDOM();
+                }
+            })
+        };
+        find(senstype, sensor);
     },[input])//change to type later? no?
+
+    useEffect(() => {
+        console.log(valid, sensor);
+        
+        if(valid){
+            setSensorCode(sensor);//input string
+        } 
+        else{
+            // clearDOM();
+            setSensorCode('');
+        }
+    },[valid])
+    useEffect(() => {
+        if(sensorCode.length > 1) {
+            if (sensorType === 'catalog') {
+                //breakdown the 3 part code
+                // let segments = sensor.split('-');
+                // let typeTemp = segments[1];
+                // getSensor(sensor, typeTemp);
+                console.log('get catalog sensor')
+                getSensor(sensorCode);//, typeTemp);
+            } else if(sensorType === 'custom') {
+                //setSensorCode(sensor);
+                getCustom(sensorCode);
+            } else if(sensorType === 'xproto') {
+                //TODO LATER: implement logic for xproto sensors
+                //getProto
+            }
+        }
+
+    },[sensorCode])
+
+
     //once we have sensor data package, call breakdown to split into relevant parts
     useEffect(() => {
-        //console.log({sensorData})
-        if(sensorData.length > 1) {
+        console.log({sensorData})
+        if(sensorData.part_number) {
+            console.log('about to get type', sensorCode, sensorData)
             //setCustomData({});//reset custom
-            breakdown(sensorData, sensorCode);
+            //breakdown(sensorData, sensorCode);sensordata = [0,1] because of the flattening
+            let segments = sensorCode.split('-');
+            let typeTemp = segments[1];
+            getType(typeTemp);
         }
     },[sensorData])
     //once we have custom data package, call special breakdown to split into relevant parts
     useEffect(() => {
         //console.log({customData})
-        if(customData.length > 0) {
+        if(customData.part_number) {
+            let data = customData[0];
+            let char = data.closest_char;
+            setChar(char);
+            getType(char);
             //setSensorData({});
-            customBreakdown(customData);
+            //customBreakdown(customData, sensorCode);
         }    
     },[customData])
+    useEffect(() => {
+        if(sensorType === 'catalog' && type.length > 1) {
+            console.log('catalog', type)
+            breakdown(sensorData, type, sensorCode);
+            //getCustomImages();
+        }
+        if(sensorType === 'custom' && type.length > 1) {
+            //getCustomImages();
+        }
+    },[type]);
     //once all part states have been set, fetch images from server
     useEffect(() => {
         if(description.length > 1) {
             console.log(sensorType)
             if(sensorType === 'catalog') {
+                //getType
                 getImages();
             }else if(sensorType === 'custom'){
                 //need to get type for image selection first
-                getType(char);
-                //getCustomImages(); --> called after we get type.. refactor now that we have axios understood better
+                //getType(char);
+                getCustomImages();// --> called after we get type.. refactor now that we have axios understood better
             }else if(sensorType === 'xproto'){
                 //getProtoImages();
             }
         }
     },[description])//trigger on description change.(last state to be set in Breakdown)
     //getCustomImages
-    useEffect(() => {
-        if(sensorType === 'custom' && type.length > 1) {
-            getCustomImages();
-        }
-    },[type]);
+
     /////////////////////////////////////////////////////////////////////////////////////////
 
 
     //////////EVENT HANDLERS/////////////////////
-    const getSensor = async(sensor, type) => {
+    const getSensor = async(sensor) => {
         try {
-            const response = await Promise.all([
-                axios.get(`${host}/sensor/${sensor}`),
-                axios.get(`${host}/type`, {params: {type}}),
-            ]);
-            const data = response.map((response) => response.data);
-            console.log(data);
-            //does sensor exist?
-            if(data[0].length === 0) { // || if data[0].rev === 'obs' /??????????????????????
-                console.log('not found')
-                setSensorCode('');
-                setSensorData({});
-                setImages({});
-                setBullets([]);
-                setHtmlRaw({});
-            } else {
-                console.log('sensor found')
-                let output = data.flat(); //DO WE NEED THE WHOLE ROW? --> yes it helps avoid wierd formatting as a data response
-                setSensorCode(sensor);
-                setSensorData(output);
-            }
-
+            const { data } = await axios.get(`${host}/sensor/${sensor}`);
+            //axios.get(`${host}/type`, {params: {type}}),
+            // const data = response.map((response) => response.data);
+            console.log(data)//array
+            setSensorData(data[0]);//set to object
         } catch (error) {
             console.log(error)
         }
     }
     const getCustom = async(sensor) => {
         try {
-            const response = await axios.get(`${host}/custom/${sensor}`);
-            setCustomData(response.data);
+            const { data } = await axios.get(`${host}/custom/${sensor}`);
+            setCustomData(data);
         }
         catch (error) {
             console.log(error)
         }
     }
-    const getType = async(input) => {
-        try {
-            const response = await axios.get(`${host}/ctype/${input}`);
-            let tempType = response.data[0].type;
-            setType(tempType);
+    const getType = async(type) => {
+        if(sensorType === 'custom') {
+            try {
+                const response = await axios.get(`${host}/ctype/${type}`);
+                let tempType = response.data[0].type;
+                setType(tempType);
+            }
+            catch (error) {
+                console.log(error)
+            }
+        } else {
+            try {
+                const { data } = await axios.get(`${host}/type`, {params: {type}});
+                let tempType = data[0].type_description;
+                // console.log(tempType)
+                setType(tempType);
+            }
+            catch (error) {
+                console.log(error)
+            }
         }
-        catch (error) {
-            console.log(error)
-        }
+
     }
     const getImages = async() => {
         try {
@@ -242,24 +294,26 @@ const PDF = (input) => {
 
 
     /////////////DATA FORMATTING/////////////////
-    const breakdown = (data, sensor) => {
-        //break retrieved data into relevent variables
-        let specs = data[0];
-        setTypeD(data[1].type_description);
+    const breakdown = (data, typeDesc, sensor) => {
+        // console.log(sensorData,type,sensorCode)
+        // console.log(data, typeDesc, sensor)
+        //break retrieved data into relevent variables data is an object
+        setTypeD(typeDesc);
         //break the search term down accordingly
         let segments = sensor.split('-');
-        let char = segments[1];
-        setHousing(segments[0]);
+
         let housing = segments[0];
+        setHousing(segments[0]);
+        let char = segments[1];
         setChar(segments[1]);
-        setType(specs.type);
-        let sensor_code = specs.sensor_code;
+        setType(data.type);
+        let sensor_code = data.sensor_code;
         let splitOps = sensor_code.split(housing); 
         setConnect(splitOps[1]);
         let opt = splitOps[0].slice(char.length); //get accurate option code
         setOption(opt);
-        setRev(specs.rev)
-        setDescription(specs.title)
+        setRev(data.rev)
+        setDescription(data.title)
 
         //format and set html object with text...
         let bullets = html2text(1, char);
@@ -273,8 +327,8 @@ const PDF = (input) => {
         //destructure redefine data/props
         let specs = sensor[0];
         setTypeD('');//dont need type description, its part of the title for custom sensors...
-        let char = specs.closest_char;
-        setChar(char);
+        //let char = specs.closest_char;
+        //setChar(char);
         let housing = specs.closest_housing;
         setHousing(housing);
         let conn = specs.closest_connection;
@@ -313,6 +367,11 @@ const PDF = (input) => {
     }
     /////////////////////////////////////////////
 
+    // useEffect(() => {
+    //     console.log({images});
+
+    // },[images])
+
 
 
 
@@ -321,7 +380,7 @@ const PDF = (input) => {
     return (
         <div>
             <button onClick={() => generatePDF(sensorType, sensorCode, sensorData, customData, images, bullets)}>{sensorCode}</button>
-            {!!images &&
+            {(images !== {}) &&
                 <div className="pdf-preview">
                     <div className="page1" id="page1">
                         {(sensorType === 'catalog') && 

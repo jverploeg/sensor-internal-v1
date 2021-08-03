@@ -38,16 +38,38 @@ module.exports.changeData = async(path, values) => {
     }
 }
 
+////////////EXISTENCE/////////////////////////////
+module.exports.sensorExists = async(data) => {
+    //let qString = `SELECT * FROM sensor where EXISTS( SELECT 1 from sensor where part_number = '${data}')`;
+    let qString = `SELECT * FROM sensor where part_number = '${data}'`;
+    try {
+        const response = await pool.query(qString);
+        //console.log(response.rowCount);
+        //return response.rowCount;
+        return response;
+    }
+    catch(error) {
+        // return [error, 'Sensor Not Found'];
+        //console.log('not found in database')
+        //return false;
+        console.log(error)
+    }
+}
+
+
 
 ///////////SENSOR SPEC SEARCHES////////////////////
 module.exports.getSensor = async(data) => {
     let qString = `SELECT * FROM sensor where part_number = '${data}'`;
     try {
         const response = await pool.query(qString);
+        //console.log({response}, response.rowCount);
         return response;
     }
     catch(error) {
-        return [error, 'Sensor Not Found'];
+        // return [error, 'Sensor Not Found'];
+        console.log('not found in database')
+        return false;
     }
 }
 
