@@ -6,27 +6,26 @@ import date from '../images/DATECODE1-Model.png';
 
 
 
-const generatePDF = (S_Type, sensor, data, customData, images, bullets) => {
+const generatePDF = (S_Type, sensor, type_description, data, customData, images, bullets) => {
 
     //logic depends on sensor type
     if(S_Type === 'catalog') {
         //destructure redefine data/props
         //get relavent text pieces from the data package
-        var specs = data[0];
-        var type_description = data[1].type_description;
-        var revision = specs.rev;
-        var description = specs.title;
+        //var type_description = data[1].type_description;
+        var revision = data.rev;
+        var description = data.title;
     } else if(S_Type === 'custom') {
         var specs = customData[0];
         //type description is in the title
 
         //option1
-        var type_description = specs.title;
-        var revision = specs.rev;
+        var type_description = customData.title;
+        var revision = customData.rev;
         //no description
 
         //option2
-        let temp = specs.title;
+        let temp = customData.title;
         temp = temp.split(', ');
         var type_description2 = temp[0];
         temp.unshift();
