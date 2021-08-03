@@ -166,7 +166,7 @@ const PDF = (input) => {
     //once we have sensor data package, call breakdown to split into relevant parts
     useEffect(() => {
         if(sensorType === 'catalog' && type.length > 1) {
-            breakdown(sensorData, type, sensorCode);
+            breakdown(sensorData, sensorCode);
         }
         if(sensorType === 'custom' && type.length > 1) {
             customBreakdown();
@@ -274,7 +274,7 @@ const PDF = (input) => {
 
 
     /////////////DATA FORMATTING/////////////////
-    const breakdown = (data, typeDesc, sensor) => {
+    const breakdown = (data, sensor) => {
         //setTypeD(typeDesc);
         //break the search term down accordingly
         let segments = sensor.split('-');
@@ -348,8 +348,10 @@ const PDF = (input) => {
     //DOM
     return (
         <div>
+            
+            {(valid === true) &&
+            <div>
             <button onClick={() => generatePDF(sensorType, sensorCode, type_description, sensorData, customData, images, bullets)}>{sensorCode}</button>
-            {(images !== {}) &&
                 <div className="pdf-preview">
                     <div className="page1" id="page1">
                         {(sensorType === 'catalog') && 
@@ -415,9 +417,16 @@ const PDF = (input) => {
                             <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
                         </div>    
                     </div>
-                </div>         
+                </div>   
+            </div>            
             }
+            {(valid === false) && (sensor.length > 0) &&
+                <div>
+                    <span>NOT A VALID SENSOR</span>
+                </div>    
+            }    
         </div>
+      
     )
 }
 export default PDF;
