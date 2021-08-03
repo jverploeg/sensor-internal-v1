@@ -144,6 +144,7 @@ const PDF = (input) => {
                 console.log('get catalog sensor')
                 getSensor(sensorCode);//, typeTemp);
             } else if(sensorType === 'custom') {
+                console.log('get custom sensor')
                 //setSensorCode(sensor);
                 getCustom(sensorCode);
             } else if(sensorType === 'xproto') {
@@ -171,8 +172,9 @@ const PDF = (input) => {
     useEffect(() => {
         //console.log({customData})
         if(customData.part_number) {
-            let data = customData[0];
-            let char = data.closest_char;
+            console.log('about to get type', sensorCode, customData)
+            //need char for type description
+            let char = customData.closest_char;
             setChar(char);
             getType(char);
             //setSensorData({});
@@ -181,12 +183,11 @@ const PDF = (input) => {
     },[customData])
     useEffect(() => {
         if(sensorType === 'catalog' && type.length > 1) {
-            console.log('catalog', type)
             breakdown(sensorData, type, sensorCode);
-            //getCustomImages();
         }
         if(sensorType === 'custom' && type.length > 1) {
             //getCustomImages();
+            customBreakdown(customData, type, sensorCode);
         }
     },[type]);
     //once all part states have been set, fetch images from server
@@ -194,11 +195,8 @@ const PDF = (input) => {
         if(description.length > 1) {
             console.log(sensorType)
             if(sensorType === 'catalog') {
-                //getType
                 getImages();
             }else if(sensorType === 'custom'){
-                //need to get type for image selection first
-                //getType(char);
                 getCustomImages();// --> called after we get type.. refactor now that we have axios understood better
             }else if(sensorType === 'xproto'){
                 //getProtoImages();
@@ -225,7 +223,8 @@ const PDF = (input) => {
     const getCustom = async(sensor) => {
         try {
             const { data } = await axios.get(`${host}/custom/${sensor}`);
-            setCustomData(data);
+            console.log(data)
+            setCustomData(data[0]);//set to object
         }
         catch (error) {
             console.log(error)
@@ -234,8 +233,9 @@ const PDF = (input) => {
     const getType = async(type) => {
         if(sensorType === 'custom') {
             try {
-                const response = await axios.get(`${host}/ctype/${type}`);
-                let tempType = response.data[0].type;
+                const { data } = await axios.get(`${host}/ctype/${type}`);
+                let tempType = data[0].type;
+                console.log(tempType)
                 setType(tempType);
             }
             catch (error) {
@@ -245,7 +245,6 @@ const PDF = (input) => {
             try {
                 const { data } = await axios.get(`${host}/type`, {params: {type}});
                 let tempType = data[0].type_description;
-                // console.log(tempType)
                 setType(tempType);
             }
             catch (error) {
@@ -325,21 +324,20 @@ const PDF = (input) => {
 
     const customBreakdown = (sensor) => {
         //destructure redefine data/props
-        let specs = sensor[0];
         setTypeD('');//dont need type description, its part of the title for custom sensors...
         //let char = specs.closest_char;
         //setChar(char);
-        let housing = specs.closest_housing;
+        let housing = customData.closest_housing;
         setHousing(housing);
-        let conn = specs.closest_connection;
+        let conn = customData.closest_connection;
         setConnect(conn);
-        let opt = specs.closest_option;
+        let opt = customData.closest_option;
         setOption(opt);
-        setRev(specs.rev);
-        setDescription(specs.title);
+        setRev(customData.rev);
+        setDescription(customData.title);
 
         //option2 for highlighting catalog code after csxxxx
-        let temp = specs.title;
+        let temp = customData.title;
         temp = temp.split(', ');
         var type_description2 = temp[0];
         temp.unshift();
