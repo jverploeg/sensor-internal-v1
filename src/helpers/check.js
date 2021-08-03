@@ -21,37 +21,12 @@ const check = {
     },
     valid: async(type, code) => {
         //check if sensor exists in the database
-        //let result = true;
         try {
             const { data } = await axios.get(`${host}/valid/${type}/${code}`);
-            let found = data.rowCount;
-            console.log({found})
-            return found;
-            // if(found === 0) {result = false};
-            // return result;
-            // Promise.resolve(result)
-            // .then(() => {
-            //     return result;
-            // })
+            return data.rowCount;
         } catch(error) {
             console.log(error)
         }
-        // Promise.resolve(data)
-        // .then(() => {
-        //     return result;
-        // })
     },
-    // valid: (type, code) => {
-    //     //check if sensor exists in the database
-    //     let found = true;
-    //     axios.get(`${host}/valid/${type}/${code}`)
-    //     .then((result) => {
-    //         console.log(result.data)
-    //         let rows = result.data.rowCount;
-    //         if(rows === 0) {found = false};
-    //         console.log(found)
-    //         return found;
-    //     })
-    // },
 }
 export default check;

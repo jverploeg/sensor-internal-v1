@@ -55,20 +55,21 @@ const checkSensor = (req, res) => {
     let data = pathway.split('/');
     let type = data[0];
     let sensor = data[1];
-    console.log(type, sensor);
     if(type === 'catalog'){
         db.sensorExists(sensor)    
         .then(result => {
-            console.log({result})
             res.send(result);
         })
         .catch(error => {
             res.status(500).send(error)
         })
     } else if(type === 'custom'){
-        db.getCustom(sensor)
+        db.customExists(sensor)   
         .then(result => {
-            res.status(200).send(result);
+            res.send(result);
+        })
+        .catch(error => {
+            res.status(500).send(error)
         })
     }
 }

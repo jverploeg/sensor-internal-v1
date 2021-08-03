@@ -100,11 +100,12 @@ const PDF = (input) => {
     /////////////////////RERENDER PAGE ON TRIGGERS////////////////////////////////////////////
     useEffect(() => { //////CHECK SENSOR VALIDITY ON INPUT CHANGE
         //clear all old states
-        //clearDOM();
+        clearDOM();
         //check the input string
         let senstype = check.type(sensor); // 'catalog', 'custom', 'xproto'
         //set type
         setSensorType(senstype);
+        console.log(senstype, sensor);
 
         let find = (senstype, sensor) => {
             check.valid(senstype, sensor)
@@ -115,23 +116,23 @@ const PDF = (input) => {
                     setSensorCode(sensor);
                 } else {
                     console.log('not valid')
-                    //setValid(false);
-                    clearDOM();
+                    setValid(false);
+                    //clearDOM();
                 }
             })
         };
         find(senstype, sensor);
-    },[input])
+    },[sensor])
 
-    //if valid state changes, continue with data retrieval
-    useEffect(() => {
-        if(valid){
-            setSensorCode(sensor);//input string
-        } 
-        else{
-            setSensorCode('');//set code to empty string
-        }
-    },[valid])
+    // //if valid state changes, continue with data retrieval
+    // useEffect(() => {
+    //     if(valid){
+    //         setSensorCode(sensor);//input string
+    //     } 
+    //     else{
+    //         setSensorCode('');//set code to empty string
+    //     }
+    // },[sensor,valid])
 
     //once code is set, get data
     useEffect(() => {
@@ -166,7 +167,7 @@ const PDF = (input) => {
     //once we have sensor data package, call breakdown to split into relevant parts
     useEffect(() => {
         if(sensorType === 'catalog' && type.length > 1) {
-            breakdown(sensorData, sensorCode);
+            breakdown();//sensorData, sensorCode);
         }
         if(sensorType === 'custom' && type.length > 1) {
             customBreakdown();
@@ -211,7 +212,6 @@ const PDF = (input) => {
 
     }
     const getType = async(type) => {
-        console.log(type)
         if(sensorType === 'custom') {
             try {
                 const { data } = await axios.get(`${host}/ctype/${type}`);
@@ -223,10 +223,8 @@ const PDF = (input) => {
         } else {
             try {
                 const { data } = await axios.get(`${host}/type`, {params: {type}});
-                console.log(data[0])
                 setType(sensorData.type);
                 setTypeD(data[0].type_description);
-                //setType(data[0].type_description);
             }
             catch (error) {
                 console.log(error)
@@ -275,22 +273,19 @@ const PDF = (input) => {
 
     /////////////DATA FORMATTING/////////////////
     const breakdown = (data, sensor) => {
-        //setTypeD(typeDesc);
         //break the search term down accordingly
-        let segments = sensor.split('-');
+        let segments = sensorCode.split('-');
         let housing = segments[0];
         setHousing(segments[0]);
         let char = segments[1];
         setChar(segments[1]);
-        // console.log(data.type)
-        // setType(data.type);
-        let sensor_code = data.sensor_code;
+        let sensor_code = sensorData.sensor_code;
         let splitOps = sensor_code.split(housing); 
         setConnect(splitOps[1]);
         let opt = splitOps[0].slice(char.length); //get accurate option code
         setOption(opt);
-        setRev(data.rev)
-        setDescription(data.title)
+        setRev(sensorData.rev)
+        setDescription(sensorData.title)
 
         //format and set html object with text...
         let bullets = html2text(1, char);

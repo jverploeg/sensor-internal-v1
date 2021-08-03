@@ -40,18 +40,22 @@ module.exports.changeData = async(path, values) => {
 
 ////////////EXISTENCE/////////////////////////////
 module.exports.sensorExists = async(data) => {
-    //let qString = `SELECT * FROM sensor where EXISTS( SELECT 1 from sensor where part_number = '${data}')`;
     let qString = `SELECT * FROM sensor where part_number = '${data}'`;
     try {
         const response = await pool.query(qString);
-        //console.log(response.rowCount);
-        //return response.rowCount;
         return response;
     }
     catch(error) {
-        // return [error, 'Sensor Not Found'];
-        //console.log('not found in database')
-        //return false;
+        console.log(error)
+    }
+}
+module.exports.customExists = async(data) => {
+    let qString = `SELECT * FROM custom where part_number = '${data}'`;
+    try {
+        const response = await pool.query(qString);
+        return response;
+    }
+    catch(error) {
         console.log(error)
     }
 }
@@ -63,13 +67,22 @@ module.exports.getSensor = async(data) => {
     let qString = `SELECT * FROM sensor where part_number = '${data}'`;
     try {
         const response = await pool.query(qString);
-        //console.log({response}, response.rowCount);
         return response;
     }
     catch(error) {
-        // return [error, 'Sensor Not Found'];
         console.log('not found in database')
-        return false;
+        return error;
+    }
+}
+
+module.exports.getCustom = async(sensor) => {
+    let qString = `SELECT * FROM custom where part_number = '${sensor}'`;
+    try {
+        const response = await pool.query(qString);
+        return response;
+    }
+    catch(error) {
+        return error;
     }
 }
 
@@ -85,18 +98,6 @@ module.exports.getType = async(data) => {
 }
 module.exports.getCustomType = async(data) => {
     let qString = `SELECT type from char where char_code = '${data}' limit 1`;
-    try {
-        const response = await pool.query(qString);
-        return response;
-    }
-    catch(error) {
-        return error;
-    }
-}
-
-module.exports.getCustom = async(sensor) => {
-    // let qString = `SELECT (custom_sensor_code, rev, title) FROM custom where part_number = '${sensor}'`; //issues with formatting... just get the whole row
-    let qString = `SELECT * FROM custom where part_number = '${sensor}'`;
     try {
         const response = await pool.query(qString);
         return response;
