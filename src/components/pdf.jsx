@@ -345,7 +345,7 @@ const PDF = (input) => {
         <div>
             
             {(valid === true) &&
-            <div>
+            <div className="overview">
             <button onClick={() => generatePDF(sensorType, sensorCode, type_description, sensorData, customData, images, bullets)}>{sensorCode}</button>
                 <div className="pdf-preview">
                     <div className="page1" id="page1">
