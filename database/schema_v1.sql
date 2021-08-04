@@ -97,18 +97,24 @@ DROP TABLE IF EXISTS housing CASCADE;
 CREATE TABLE housing
 (
     housing_id          integer GENERATED ALWAYS AS IDENTITY,
-    housing_code        varchar UNIQUE,
+    housing_code        varchar, --UNIQUE,
     part_number         varchar, --UNIQUE
     rev                 varchar,
     Title               varchar,
     web_valid           varchar,
     png_file            varchar,
     mech_file           varchar,
-    PRIMARY KEY (housing_code)--, housing_code)
+    material            varchar,
+    mount_type          varchar,
+    thread_pitch        varchar,
+    length              varchar,
+    integral_connector  varchar,
+    integral_connector2 varchar,
+    PRIMARY KEY (housing_id)--, housing_code)
 );
-DROP INDEX if EXISTS housing_key;
-CREATE INDEX housing_key ON housing (housing_code);
-copy housing (housing_code, part_number, rev, Title, web_valid, png_file, mech_file) from 'D:\DATA\Sensor\webApp\csv_files\v2\housing_v2.csv'  delimiter ',' csv header;
+-- DROP INDEX if EXISTS housing_key;
+-- CREATE INDEX housing_key ON housing (housing_id);
+copy housing (housing_code, part_number, rev, Title, web_valid, png_file, mech_file, material, mount_type, thread_pitch, length, integral_connector, integral_connector2) from 'D:\DATA\Sensor\webApp\csv_files\housings.csv'  delimiter ',' csv header;
 
 
 
