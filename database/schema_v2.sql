@@ -60,37 +60,26 @@ CREATE TABLE option
 DROP INDEX if EXISTS option_key;
 CREATE INDEX option_key ON option (option_code);
 copy option (option_code, Title, web_valid, png_file) from 'D:\DATA\Sensor\webApp\csv_files\v2\option_v2.csv'  delimiter ',' csv header;
-
 ----------------------------------
 
--- ----------CHAR OPTION--------------------
--- DROP TABLE IF EXISTS char_op CASCADE;
--- CREATE TABLE char_op
--- (
---     char_op_id          integer GENERATED ALWAYS AS IDENTITY,
---     char_op_code        varchar UNIQUE,
---     option_code         varchar,
---     rev                 varchar,
---     Title               varchar NOT NULL,
---     web_valid           varchar,
---     png_file            varchar NOT NULL,
---     wires               integer, 
---     supply_voltage      varchar,
---     PRIMARY KEY (char_op_id, char_op_code)--,
---     -- ERROR:  insert or update on table "char_op" violates foreign key constraint "fk_option"
---     -- DETAIL:  Key (option_code)=(xx) is not present in table "option"
---     -- GMRS-xx	xx	pre	N/A	no	GMRS-xx-Model.png	4
---     --TODO: fix this FK issue with xx option codes
---     -- CONSTRAINT fk_option FOREIGN KEY ( option_code ) REFERENCES option ( option_code )
---     --FOREIGN KEY (option_code)
--- );
--- DROP INDEX if EXISTS char_op_key;
--- CREATE INDEX char_op_key ON char_op (char_op_code);
--- copy char_op (char_op_code, option_code, rev, Title, web_valid, png_file, wires, supply_voltage) from 'D:\DATA\Sensor\webApp\csv_files\char_op.csv'  delimiter ',' csv header;
-
-
-
--- ----------------------------------
+----------CHAR OPTION--------------------
+DROP TABLE IF EXISTS char_op CASCADE;
+CREATE TABLE char_op
+(
+    char_op_id          integer GENERATED ALWAYS AS IDENTITY,
+    char_op_code        varchar UNIQUE,
+    option_code         varchar,
+    rev                 varchar,
+    Title               varchar NOT NULL,
+    web_valid           varchar,
+    png_file            varchar NOT NULL,
+    PRIMARY KEY (char_op_code)
+    --FOREIGN KEY ( option_code ) REFERENCES option( option_code ) NO! some option codes are obs....which isnt unique in option
+);
+DROP INDEX if EXISTS char_op_key;
+CREATE INDEX char_op_key ON char_op (char_op_code);
+copy char_op (char_op_code, option_code, rev, Title, web_valid, png_file) from 'D:\DATA\Sensor\webApp\csv_files\v2\char_op_v2.csv'  delimiter ',' csv header;
+----------------------------------
 
 -- ----------CONNECTION--------------------
 -- DROP TABLE IF EXISTS connection CASCADE;
