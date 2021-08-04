@@ -81,34 +81,26 @@ CREATE INDEX char_op_key ON char_op (char_op_code);
 copy char_op (char_op_code, option_code, rev, Title, web_valid, png_file) from 'D:\DATA\Sensor\webApp\csv_files\v2\char_op_v2.csv'  delimiter ',' csv header;
 ----------------------------------
 
--- ----------CONNECTION--------------------
--- DROP TABLE IF EXISTS connection CASCADE;
--- CREATE TABLE connection
--- (
---     connection_id       integer GENERATED ALWAYS AS IDENTITY,
---     connection_code     varchar,
---     web_code            varchar,-- UNIQUE,
---     rev                 varchar,
---     Title               varchar,
---     web_valid           varchar,
---     part_number         varchar,
---     png_file            varchar,
---     wires               integer,
---     connection_type     varchar,
---     wire_guage          varchar,
---     length              varchar,
---     insulation_material varchar,
---     PRIMARY KEY (connection_id) --, connection_code, web_code)
--- );
--- -- DROP INDEX if EXISTS connection_key;
--- -- CREATE INDEX connection_key ON connection (connection_id);
--- copy connection (connection_code, web_code, rev, Title, web_valid, part_number, png_file, wires, connection_type, wire_guage, length, insulation_material) from 'D:\DATA\Sensor\webApp\csv_files\connections.csv'  delimiter ',' csv header;
+----------CONNECTION--------------------
+DROP TABLE IF EXISTS connection CASCADE;
+CREATE TABLE connection
+(
+    connection_id       integer GENERATED ALWAYS AS IDENTITY,
+    connection_code     varchar,
+    web_code            varchar,-- UNIQUE, Failing row contains (425, CX6, null, x, Binder USA cable # 79 9003 12 04, no, none taken, null).
+    rev                 varchar,
+    Title               varchar,
+    web_valid           varchar,
+    part_number         varchar,
+    png_file            varchar,
+    PRIMARY KEY (connection_id) --, connection_code, web_code)
+);
+-- does indexing matter if we arent searching table by ID? TEST TIMES LATER....
+DROP INDEX if EXISTS connection_key;
+CREATE INDEX connection_key ON connection (connection_id);
+copy connection (connection_code, web_code, rev, Title, web_valid, part_number, png_file) from 'D:\DATA\Sensor\webApp\csv_files\v2\connection_v2.csv'  delimiter ',' csv header;
 
-
-
-
-
--- ----------------------------------
+----------------------------------
 
 -- ----------SENSOR-------------------
 -- DROP TABLE IF EXISTS sensor CASCADE;
