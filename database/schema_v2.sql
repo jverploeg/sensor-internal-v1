@@ -44,27 +44,24 @@ copy char (char_code, Title, Type, Type_Description, Web_Valid, Bullet_file) fro
 
 
 
--- ----------------------------------
+----------------------------------
 
--- ----------OPTION--------------------
--- DROP TABLE IF EXISTS option CASCADE;
--- CREATE TABLE option
--- (
---     option_id           integer GENERATED ALWAYS AS IDENTITY,
---     option_code         varchar UNIQUE,
---     rev                 varchar,
---     Title               varchar NOT NULL,
---     web_valid           varchar,
---     png_file            varchar NOT NULL,
---     output_type         varchar, 
---     output_type_2       varchar,
---     PRIMARY KEY (option_id, option_code)
--- );
--- DROP INDEX if EXISTS option_key;
--- CREATE INDEX option_key ON option (option_code);
--- copy option (option_code, rev, Title, web_valid, png_file, output_type, output_type_2) from 'D:\DATA\Sensor\webApp\csv_files\options.csv'  delimiter ',' csv header;
+----------OPTION--------------------
+DROP TABLE IF EXISTS option CASCADE;
+CREATE TABLE option
+(
+    option_id           integer GENERATED ALWAYS AS IDENTITY,
+    option_code         varchar UNIQUE,
+    Title               varchar NOT NULL,
+    web_valid           varchar,
+    png_file            varchar NOT NULL,
+    PRIMARY KEY (option_code)
+);
+DROP INDEX if EXISTS option_key;
+CREATE INDEX option_key ON option (option_code);
+copy option (option_code, Title, web_valid, png_file) from 'D:\DATA\Sensor\webApp\csv_files\v2\option_v2.csv'  delimiter ',' csv header;
 
--- ----------------------------------
+----------------------------------
 
 -- ----------CHAR OPTION--------------------
 -- DROP TABLE IF EXISTS char_op CASCADE;
