@@ -17,7 +17,7 @@ CREATE TABLE housing
     web_valid           varchar,
     png_file            varchar,
     mech_file           varchar,
-    PRIMARY KEY (housing_code)--, housing_code)
+    PRIMARY KEY (housing_id, housing_code)--, housing_code)
 );
 DROP INDEX if EXISTS housing_key;
 CREATE INDEX housing_key ON housing (housing_code);
@@ -35,7 +35,7 @@ CREATE TABLE char
     Type_Description    varchar NOT NULL,
     Web_Valid           varchar NOT NULL,
     Bullet_file         varchar NOT NULL,
-    PRIMARY KEY (char_id)
+    PRIMARY KEY (char_id, char_code)
 );
 DROP INDEX if EXISTS char_key;
 CREATE UNIQUE INDEX char_key ON char (char_code);
@@ -55,7 +55,7 @@ CREATE TABLE option
     Title               varchar NOT NULL,
     web_valid           varchar,
     png_file            varchar NOT NULL,
-    PRIMARY KEY (option_code)
+    PRIMARY KEY (option_id, option_code)
 );
 DROP INDEX if EXISTS option_key;
 CREATE INDEX option_key ON option (option_code);
@@ -73,7 +73,7 @@ CREATE TABLE char_op
     Title               varchar NOT NULL,
     web_valid           varchar,
     png_file            varchar NOT NULL,
-    PRIMARY KEY (char_op_code)
+    PRIMARY KEY (char_op_id, char_op_code)
     --FOREIGN KEY ( option_code ) REFERENCES option( option_code ) NO! some option codes are obs....which isnt unique in option
 );
 DROP INDEX if EXISTS char_op_key;
@@ -126,26 +126,19 @@ DROP TABLE IF EXISTS custom CASCADE;
 CREATE TABLE custom
 (
     custom_id           integer GENERATED ALWAYS AS IDENTITY,
-    custom_sensor_code  varchar, -- UNIQUE, issues with fish board codes n/a
-    part_number         varchar, -- UNIQUE, csNumbers have multiple entries with variations...
+    custom_sensor_code  varchar,
+    part_number         varchar UNIQUE,
     rev                 varchar,
-    Title               varchar, -- NOT NULL,
-    config_level        varchar,
+    Title               varchar,
     closest_housing     varchar,
     closest_char        varchar,
     closest_option      varchar,
     closest_connection  varchar,
-    notes               varchar,
-    customer            varchar,
-    gear                varchar,
-    --customer_pn         varchar, --UNIQUE? careful with escape character \ on P\N notes...
-    --customer_dwg_rev    varchar,
-    --probably more columns than we need right now...
-    PRIMARY KEY (custom_id)--, part_number) --, custom_sensor_code)
+    PRIMARY KEY (custom_id, part_number)
 );
--- DROP INDEX if EXISTS custom_key;
--- CREATE INDEX custom_key ON custom (part_number);
-copy custom (custom_sensor_code, part_number, rev, Title, config_level, closest_housing, closest_char, closest_option, closest_connection, notes, customer, gear) from 'D:\DATA\Sensor\webApp\csv_files\custom.csv'  delimiter ',' csv header;-- encoding 'latin1';
+DROP INDEX if EXISTS custom_key;
+CREATE INDEX custom_key ON custom (part_number);
+copy custom (custom_sensor_code, part_number, rev, Title, closest_housing, closest_char, closest_option, closest_connection) from 'D:\DATA\Sensor\webApp\csv_files\v2\custom_v2.csv'  delimiter ',' csv header;-- encoding 'latin1';
 
 ----------------------------------
 
@@ -170,3 +163,9 @@ copy custom (custom_sensor_code, part_number, rev, Title, config_level, closest_
 -- -- DROP INDEX if EXISTS xproto_key;
 -- -- CREATE INDEX xproto_key ON xproto (xproto_part_number);
 -- copy xproto (xproto_code, xproto_part_number, rev, Description, notes, housing, char, opt, connection, notes_additional, customer) from 'D:\DATA\Sensor\webApp\csv_files\xproto.csv'  delimiter ',' csv header encoding 'latin1';
+
+
+
+
+
+--https://trineo.com/blog/2018/08/using-copy-in-postgres-for-importing-large-csvs
