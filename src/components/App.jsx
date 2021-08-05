@@ -116,7 +116,8 @@ const App = () => {
         inputs.shift();
         setInputCols(inputs);
     }
-
+    
+    //https://material-ui.com/components/data-grid/columns/
     const getRows = () => {
         let format = {};
         let rowsTemp = [];
