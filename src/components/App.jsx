@@ -91,9 +91,10 @@ const App = () => {
             let arrayKeys = Object.keys(focus);
             let format = {
                 field: 'id',
-                headerName: `${table}_id`,
-                width: 150,
-                editable: true,
+                hide: true,
+                //headerName: `${table}_id`,
+                //width: 150,
+                //editable: true,
             }
             temp.push(format);
             for(let i = 1; i < arrayKeys.length; i++) {

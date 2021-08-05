@@ -11,13 +11,13 @@ CREATE TABLE housing
 (
     housing_id          integer GENERATED ALWAYS AS IDENTITY,
     housing_code        varchar UNIQUE,
-    part_number         varchar, --UNIQUE
+    part_number         varchar,
     rev                 varchar,
     Title               varchar,
     web_valid           varchar,
     png_file            varchar,
     mech_file           varchar,
-    PRIMARY KEY (housing_id, housing_code)--, housing_code)
+    PRIMARY KEY (housing_id, housing_code)
 );
 DROP INDEX if EXISTS housing_key;
 CREATE INDEX housing_key ON housing (housing_code);
@@ -29,7 +29,7 @@ DROP TABLE IF EXISTS char CASCADE;
 CREATE TABLE char
 (
     char_id             integer GENERATED ALWAYS AS IDENTITY,
-    char_code           varchar UNIQUE, --NOT NULL, --UNIQUE --repeated codes with variations... can't be unique
+    char_code           varchar UNIQUE,
     Title               varchar NOT NULL,
     Type                varchar NOT NULL,
     Type_Description    varchar NOT NULL,
@@ -74,7 +74,6 @@ CREATE TABLE char_op
     web_valid           varchar,
     png_file            varchar NOT NULL,
     PRIMARY KEY (char_op_id, char_op_code)
-    --FOREIGN KEY ( option_code ) REFERENCES option( option_code ) NO! some option codes are obs....which isnt unique in option
 );
 DROP INDEX if EXISTS char_op_key;
 CREATE INDEX char_op_key ON char_op (char_op_code);
@@ -93,9 +92,8 @@ CREATE TABLE connection
     web_valid           varchar,
     part_number         varchar,
     png_file            varchar,
-    PRIMARY KEY (connection_id) --, connection_code, web_code)
+    PRIMARY KEY (connection_id)
 );
--- does indexing matter if we arent searching table by ID? TEST TIMES LATER....
 DROP INDEX if EXISTS connection_key;
 CREATE INDEX connection_key ON connection (connection_id);
 copy connection (connection_code, web_code, rev, Title, web_valid, part_number, png_file) from 'D:\DATA\Sensor\webApp\csv_files\v2\connection_v2.csv'  delimiter ',' csv header;
@@ -108,13 +106,13 @@ CREATE TABLE sensor
 (
     sensor_id           integer GENERATED ALWAYS AS IDENTITY,
     sensor_code         varchar UNIQUE,
-    part_number         varchar, --UNIQUE,
+    part_number         varchar,
     rev                 varchar,
     Title               varchar NOT NULL,
     char                varchar,
     type                varchar,
     wizard_part         varchar, 
-    PRIMARY KEY (sensor_id, sensor_code) --, part_number)
+    PRIMARY KEY (sensor_id, sensor_code)
 );
 DROP INDEX if EXISTS sensor_key;
 CREATE INDEX sensor_key ON sensor (sensor_code);
