@@ -102,57 +102,52 @@ copy connection (connection_code, web_code, rev, Title, web_valid, part_number, 
 
 ----------------------------------
 
--- ----------SENSOR-------------------
--- DROP TABLE IF EXISTS sensor CASCADE;
--- CREATE TABLE sensor
--- (
---     sensor_id           integer GENERATED ALWAYS AS IDENTITY,
---     sensor_code         varchar UNIQUE,
---     part_number         varchar, --UNIQUE,
---     rev                 varchar,
---     Title               varchar NOT NULL,
---     char                varchar,
---     type                varchar,
---     wizard_part         varchar, 
---     PRIMARY KEY (sensor_id, sensor_code) --, part_number)
--- );
--- DROP INDEX if EXISTS sensor_key;
--- CREATE INDEX sensor_key ON sensor (sensor_code);
--- copy sensor (sensor_code, part_number, rev, Title, char, type, wizard_part) from 'D:\DATA\Sensor\webApp\csv_files\sensors(web&nonWiz).csv'  delimiter ',' csv header;
+----------SENSOR-------------------
+DROP TABLE IF EXISTS sensor CASCADE;
+CREATE TABLE sensor
+(
+    sensor_id           integer GENERATED ALWAYS AS IDENTITY,
+    sensor_code         varchar UNIQUE,
+    part_number         varchar, --UNIQUE,
+    rev                 varchar,
+    Title               varchar NOT NULL,
+    char                varchar,
+    type                varchar,
+    wizard_part         varchar, 
+    PRIMARY KEY (sensor_id, sensor_code) --, part_number)
+);
+DROP INDEX if EXISTS sensor_key;
+CREATE INDEX sensor_key ON sensor (sensor_code);
+copy sensor (sensor_code, part_number, rev, Title, char, type, wizard_part) from 'D:\DATA\Sensor\webApp\csv_files\v2\catalog_v2.csv'  delimiter ',' csv header;
+----------------------------------
 
+----------CUSTOM--------------------
+DROP TABLE IF EXISTS custom CASCADE;
+CREATE TABLE custom
+(
+    custom_id           integer GENERATED ALWAYS AS IDENTITY,
+    custom_sensor_code  varchar, -- UNIQUE, issues with fish board codes n/a
+    part_number         varchar, -- UNIQUE, csNumbers have multiple entries with variations...
+    rev                 varchar,
+    Title               varchar, -- NOT NULL,
+    config_level        varchar,
+    closest_housing     varchar,
+    closest_char        varchar,
+    closest_option      varchar,
+    closest_connection  varchar,
+    notes               varchar,
+    customer            varchar,
+    gear                varchar,
+    --customer_pn         varchar, --UNIQUE? careful with escape character \ on P\N notes...
+    --customer_dwg_rev    varchar,
+    --probably more columns than we need right now...
+    PRIMARY KEY (custom_id)--, part_number) --, custom_sensor_code)
+);
+-- DROP INDEX if EXISTS custom_key;
+-- CREATE INDEX custom_key ON custom (part_number);
+copy custom (custom_sensor_code, part_number, rev, Title, config_level, closest_housing, closest_char, closest_option, closest_connection, notes, customer, gear) from 'D:\DATA\Sensor\webApp\csv_files\custom.csv'  delimiter ',' csv header;-- encoding 'latin1';
 
-
--- ----------------------------------
-
--- ----------CUSTOM--------------------
--- DROP TABLE IF EXISTS custom CASCADE;
--- CREATE TABLE custom
--- (
---     custom_id           integer GENERATED ALWAYS AS IDENTITY,
---     custom_sensor_code  varchar, -- UNIQUE, issues with fish board codes n/a
---     part_number         varchar, -- UNIQUE, csNumbers have multiple entries with variations...
---     rev                 varchar,
---     Title               varchar, -- NOT NULL,
---     config_level        varchar,
---     closest_housing     varchar,
---     closest_char        varchar,
---     closest_option      varchar,
---     closest_connection  varchar,
---     notes               varchar,
---     customer            varchar,
---     gear                varchar,
---     --customer_pn         varchar, --UNIQUE? careful with escape character \ on P\N notes...
---     --customer_dwg_rev    varchar,
---     --probably more columns than we need right now...
---     PRIMARY KEY (custom_id)--, part_number) --, custom_sensor_code)
--- );
--- -- DROP INDEX if EXISTS custom_key;
--- -- CREATE INDEX custom_key ON custom (part_number);
--- copy custom (custom_sensor_code, part_number, rev, Title, config_level, closest_housing, closest_char, closest_option, closest_connection, notes, customer, gear) from 'D:\DATA\Sensor\webApp\csv_files\custom.csv'  delimiter ',' csv header;-- encoding 'latin1';
-
-
-
--- ----------------------------------
+----------------------------------
 
 -- ----------XPROTO--------------------
 -- DROP TABLE IF EXISTS xproto CASCADE;

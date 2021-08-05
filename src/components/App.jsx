@@ -62,9 +62,8 @@ const App = () => {
         //determine route -> db table based on pageSelection
         let route = page;
         try {
-            const response = await axios.get(`${host}/${route}`);
-            //console.log(response.data)
-            setData(response.data);
+            const { data } = await axios.get(`${host}/${route}`);
+            setData(data);
         }
         catch (error) {
             console.log(error)
@@ -121,6 +120,7 @@ const App = () => {
         let format = {};
         let rowsTemp = [];
         //now map the sample array to a rows state
+        //console.time('rows')
         for(let i = 0; i < data.length; i++) {
             //need to get the first key from data object
             let temp = data[i];
@@ -135,6 +135,7 @@ const App = () => {
             //clear the format object
             format = {};
         }
+        //console.timeEnd('rows')
         //set state
         setRows(rowsTemp);
     }

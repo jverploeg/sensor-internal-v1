@@ -29,7 +29,7 @@ module.exports.changeData = async(path, values) => {
     let id = values[0];
     //add tablename to id field
     let table_id = path.concat('_id');
-    const text = `UPDATE ${path} set ${col_name} = '${value}' where ${table_id} = ${id}`;
+    const text = `UPDATE ${path} set ${col_name} = '${value}' where ${table_id} = '${id}'`;
     // async/await
     try {
         const res = await pool.query(text)
