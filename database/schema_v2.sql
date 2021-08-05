@@ -142,28 +142,26 @@ copy custom (custom_sensor_code, part_number, rev, Title, closest_housing, close
 
 ----------------------------------
 
--- ----------XPROTO--------------------
--- DROP TABLE IF EXISTS xproto CASCADE;
--- CREATE TABLE xproto
--- (
---     xproto_id           integer GENERATED ALWAYS AS IDENTITY,
---     xproto_code         varchar, -- UNIQUE,
---     xproto_part_number  varchar, -- UNIQUE, multiple entries with variations...
---     rev                 varchar,
---     Description         varchar, -- NOT NULL,
---     notes               varchar,
---     housing             varchar,
---     char                varchar,
---     opt                 varchar,
---     connection          varchar,
---     notes_additional    varchar,
---     customer            varchar,
---     PRIMARY KEY (xproto_id)--, part_number) --, custom_sensor_code)
--- );
--- -- DROP INDEX if EXISTS xproto_key;
--- -- CREATE INDEX xproto_key ON xproto (xproto_part_number);
--- copy xproto (xproto_code, xproto_part_number, rev, Description, notes, housing, char, opt, connection, notes_additional, customer) from 'D:\DATA\Sensor\webApp\csv_files\xproto.csv'  delimiter ',' csv header encoding 'latin1';
-
+----------XPROTO--------------------
+DROP TABLE IF EXISTS xproto CASCADE;
+CREATE TABLE xproto
+(
+    xproto_id           integer GENERATED ALWAYS AS IDENTITY,
+    xproto_code         varchar, -- UNIQUE,
+    xproto_part_number  varchar, -- UNIQUE, multiple entries with variations...
+    rev                 varchar,
+    Description         varchar, -- NOT NULL,
+    notes               varchar,
+    housing             varchar,
+    char                varchar,
+    opt                 varchar,
+    connection          varchar,
+    PRIMARY KEY (xproto_id)--, part_number) --, custom_sensor_code)
+);
+-- DROP INDEX if EXISTS xproto_key;
+-- CREATE INDEX xproto_key ON xproto (xproto_part_number);
+copy xproto (xproto_code, xproto_part_number, rev, Description, notes, housing, char, opt, connection) from 'D:\DATA\Sensor\webApp\csv_files\v2\xproto_v2.csv'  delimiter ',' csv header encoding 'latin1';
+----------------------------------------
 
 
 
