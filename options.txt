@@ -8,3 +8,7 @@ connection pooling and standardized responses between different query clients an
 
 https://medium.com/@ipenywis/how-to-reduce-your-webpack-bundle-size-for-web-app-optimization-02-9b7086e30a6d
 
+
+
+
+https://www.toptal.com/react/webpack-react-tutorial-pt-1
