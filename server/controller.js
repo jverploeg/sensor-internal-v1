@@ -40,6 +40,7 @@ const changeData = (req, res) => {
     let val = entry.props.value;
 
     let values = [id, col, val];
+    console.log({values})
     db.changeData(route, values)
     .then(result => {
         res.status(200).send(result.rows);

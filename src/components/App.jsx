@@ -13,7 +13,7 @@ import Search from './search';
 import useToggle from './toggle';
 
 // HELPERS
-import callDB from '../helpers/appRequests';
+//import callDB from '../helpers/appRequests';
 
 const App = () => {
     let viewports = ['Home', 'housing', 'char', 'option', 'char_op', 'connection', 'sensor', 'custom', 'xproto']; //array of view options. tables with all have similar setup, home is different
@@ -43,7 +43,7 @@ const App = () => {
         //getRows();
         // let temp = callDB.getData(page);
         getData();
-    },[page, isTextChanged])
+    },[page])//, isTextChanged])
     //get new row values whenever data is modified in database
     useEffect(() => {
         getColumns();
@@ -161,6 +161,8 @@ const App = () => {
             // pass the col_name, row_id, and new_value to the router. will Update accordingly
             //determine route -> db table based on pageSelection
             let route = page;
+            console.log(route)
+            console.log({id, field, props})
             axios.put(`${host}/${route}`, {id, field, props})
             .then(response => {
               console.log(response);
@@ -168,10 +170,12 @@ const App = () => {
             .catch(error => {
               console.log(error);
             });
-        });
+    });
+
     const handleSubmit = () => {
         //run change submission
         let route = page;
+        console.log(inputs)
         axios.post(`${host}/${route}`, inputs)
           .then(response => {
             console.log(response);
@@ -191,8 +195,6 @@ const App = () => {
     //     console.log(target)
     // }
     const handlePageChange = (e) => {
-        //get current page
-        let current = page;
         //define the page we want to change to
         let newPage = e.target.attributes.value.value;
         //set the page
@@ -272,6 +274,7 @@ const App = () => {
                                 {!!inputCols && inputCols.map((item, index) => (
                                     <input
                                         className="data-input"
+                                        //id={key}
                                         name={item.field}
                                         placeholder={item.field}
                                         value={inputs.name}
