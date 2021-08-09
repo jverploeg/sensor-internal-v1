@@ -4,13 +4,15 @@ import axios from 'axios';
 
 
 // STYLING DEPENDENCIES
-import { DataGrid } from '@material-ui/data-grid';
+// import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@material-ui/data-grid';
 
 // SUBCOMPONENTS
 import Search from './search';
 
 // CUSTOM HOOKS
 import useToggle from './toggle';
+import { ControlCameraOutlined } from '@material-ui/icons';
 
 // HELPERS
 //import callDB from '../helpers/appRequests';
@@ -39,21 +41,24 @@ const App = () => {
     },[]);
     //TODO: do we we need both these useEffects below????
     useEffect(() => {
-        //getColumns();
-        //getRows();
-        // let temp = callDB.getData(page);
-        getData();
+        if(page !== 'Home'){
+            getData();
+        }
     },[page])//, isTextChanged])
     //get new row values whenever data is modified in database
     useEffect(() => {
-        getColumns();
-        getRows();
+        if(data.length > 1) {
+            getColumns();
+            getRows();
+        }
     },[data])
     // USEEFFECT TO CHECK IF STATE HAS CHANGED PROPERLY
-    // useEffect(() => {
-    //     console.log({data, rows, columns})
-    // },[data, isTextChanged])
+    useEffect(() => {
+        console.log(page)
+        console.log({rows, columns, inputCols})
+    },[rows])
     /////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
     const host = `http://192.168.1.118:3000`;
@@ -63,6 +68,7 @@ const App = () => {
         let route = page;
         try {
             const { data } = await axios.get(`${host}/${route}`);
+            console.log(data.length)
             setData(data);
         }
         catch (error) {

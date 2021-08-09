@@ -9,18 +9,18 @@
 
 
 # Distribution directories
-dist/
-dist/bundle.js
+# dist/
+# dist/bundle.js
 
 
 # misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# .DS_Store
+# .env.local
+# .env.development.local
+# .env.test.local
+# .env.production.local
 
-npm-debug.log*
+# npm-debug.log*
 
 
 #misc
