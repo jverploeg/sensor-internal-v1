@@ -18,3 +18,9 @@ https://material-table.com/#/docs/install
 https://github.com/atlassian/react-beautiful-dnd
 https://github.com/mbrn/material-table/issues/2720
 https://medium.com/age-of-awareness/setup-react-with-webpack-and-babel-5114a14a47e9
+
+
+https://webpack.js.org/loaders/sass-loader/
+https://material-table.com/#/docs/all-props
+https://www.npmjs.com/package/windows-build-tools
+https://spin.atomicobject.com/2019/03/27/node-gyp-windows/
