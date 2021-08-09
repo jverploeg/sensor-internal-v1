@@ -262,16 +262,23 @@ const App = () => {
                     <div className="data">    
                         <div className = "table">
                             {/* <button onClick={showData}>{isTextChanged ? 'Hide Data' : 'Show Data'}</button> */}
-                            {!!data &&
+                            {(data.length > 1) &&
                                 <div className = "foot" style={{ height: 600, width: '100%' }}>
-                                    {!!rows &&
+                                        <Basic 
+                                            title={page}
+                                            data={data}
+                                        />
+                                    {/* {(data.length > 1) &&
                                         // <DataGrid
                                         //     columns={columns}
                                         //     rows={rows}
                                         //     onEditCellChangeCommitted={handleEditCellChangeCommitted}
                                         // />
-                                        <Basic page={page} columns={columns} rows={data} />
-                                    }
+                                        <Basic 
+                                            title={page}
+                                            data={data}
+                                        />
+                                    } */}
                                 </div>
                             }
                         </div>
