@@ -9,8 +9,8 @@
 
 
 # Distribution directories
-dist/
-dist/bundle.js
+/dist
+/dist/bundle.js
 
 
 # misc
