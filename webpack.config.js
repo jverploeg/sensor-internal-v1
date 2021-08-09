@@ -57,16 +57,25 @@ module.exports = {
             },
           // sass loader
             {
-                test: /\.(sass|scss)$/,
+                test: /\.s[ac]ss$/i,
                 use: [
-                    MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                    },
-                    {
-                        loader: 'sass-loader',
-                    },
+                  // Creates `style` nodes from JS strings
+                  "style-loader",
+                  // Translates CSS into CommonJS
+                  "css-loader",
+                  // Compiles Sass to CSS
+                  "sass-loader",
                 ],
+                // test: /\.(sass|scss)$/,
+                // use: [
+                //     MiniCssExtractPlugin.loader,
+                //     {
+                //         loader: 'css-loader',
+                //     },
+                //     {
+                //         loader: 'sass-loader',
+                //     },
+                // ],
             },
             // image loader
             {
@@ -109,7 +118,7 @@ module.exports = {
   //   watching many files can result in a lot of CPU or memory usage -> exclude a huge folder like node_modules
   watchOptions: {
     aggregateTimeout: 300,
-    //poll: 1000,
+    poll: true,
     ignored: /node_modules/
   }
 
