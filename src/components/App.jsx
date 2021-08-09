@@ -9,10 +9,10 @@ import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@mat
 
 // SUBCOMPONENTS
 import Search from './search';
+import Basic from './table';
 
 // CUSTOM HOOKS
 import useToggle from './toggle';
-import { ControlCameraOutlined } from '@material-ui/icons';
 
 // HELPERS
 //import callDB from '../helpers/appRequests';
@@ -28,7 +28,7 @@ const App = () => {
     const [rows, setRows] = useState([]); // formatted rows from data so dataGrid can be filled correctly
     const [inputCols, setInputCols] = useState([]); // need to make a deep copy of cols and then shift so we dont alter cols 
     // custom state/hooks
-    const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
+    //const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
     const [select, setButton] = useState(''); // sets the state for styling currentPage in navbar
     /////////////////////////////////////////////////////////////////////////////////////
 
@@ -68,7 +68,7 @@ const App = () => {
         let route = page;
         try {
             const { data } = await axios.get(`${host}/${route}`);
-            console.log(data.length)
+            //console.log(data.length)
             setData(data);
         }
         catch (error) {
@@ -265,11 +265,12 @@ const App = () => {
                             {!!data &&
                                 <div className = "foot" style={{ height: 600, width: '100%' }}>
                                     {!!rows &&
-                                        <DataGrid
-                                            columns={columns}
-                                            rows={rows}
-                                            onEditCellChangeCommitted={handleEditCellChangeCommitted}
-                                        />
+                                        // <DataGrid
+                                        //     columns={columns}
+                                        //     rows={rows}
+                                        //     onEditCellChangeCommitted={handleEditCellChangeCommitted}
+                                        // />
+                                        <Basic page={page} columns={columns} rows={data} />
                                     }
                                 </div>
                             }
