@@ -12,3 +12,9 @@ https://medium.com/@ipenywis/how-to-reduce-your-webpack-bundle-size-for-web-app-
 
 
 https://www.toptal.com/react/webpack-react-tutorial-pt-1
+
+
+https://material-table.com/#/docs/install
+https://github.com/atlassian/react-beautiful-dnd
+https://github.com/mbrn/material-table/issues/2720
+https://medium.com/age-of-awareness/setup-react-with-webpack-and-babel-5114a14a47e9
