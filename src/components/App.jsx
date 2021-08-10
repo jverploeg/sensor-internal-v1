@@ -61,7 +61,7 @@ const App = () => {
             getRows();
         }
     },[data])
-    // USEEFFECT TO CHECK IF STATE HAS CHANGED PROPERLY
+    //on deletion, make sure delete button is hidden
     useEffect(() => {
         setShow(false);
         setDelete([]);
@@ -215,43 +215,40 @@ const App = () => {
     
     //ROW DELETION
     const handleSelect = React.useCallback(
-    (id) => {
-        console.log(id)
-        if(id.length === 0){
-            setShow(false);
-            setDelete([]);
-        }else {
-            setShow(true);
-            let row = id[0];
-            console.log(row);
-            setDelete(row);
-        }
-    },
-    [rows],
+        (id) => {
+            if(id.length === 0){
+                setShow(false);
+                setDelete([]);
+            }else {
+                setShow(true);
+                let row = id[0];
+                setDelete(row);
+            }
+        },
+        [rows],
     ); 
+
     const handleDelete = () => {
-        console.log('delete this row!')
         let id = deleteRow;
-        console.log(page, id)//housing 2
         //delete entry from database;
         axios.delete(`${host}/${page}/${id}`)//, id)
         .then(response => {
             console.log(response);
-          //get modified data
-          //getData();
-          //hide button and reset row selection...
-        //   setShow(false);
-        //   setDelete([]);
         })
         .catch(error => {
           console.log(error);
         });
         //get modified data
-        getData();
-        getRows();
-        //hide button and reset row selection...
-        // setShow(false);
-        // setDelete([]);
+        //update rows state to uncheck selection immediately, reove row immediately, and on page switch
+        let temp = JSON.parse(JSON.stringify(rows));//deep copy allows deletion
+        //find id in temp;
+        for(let i = 0; i < temp.length; i++){
+            if(temp[i].id === id){
+                temp.splice(i,1);
+            }
+        }
+        //update state
+        setRows(temp);
     }
 
 
