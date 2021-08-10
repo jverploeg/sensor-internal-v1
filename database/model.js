@@ -38,6 +38,17 @@ module.exports.changeData = async(path, data) => {
         console.log(err.stack)
     }
 }
+module.exports.deleteRow = async(path, id) => {
+    //add tablename to id field
+    let table_id = path.concat('_id');
+    const text = `DELETE FROM ${path} where ${table_id} = '${id}'`;
+    // async/await
+    try {
+        const res = await pool.query(text)
+    } catch (err) {
+        console.log(err.stack)
+    }
+}
 
 ////////////EXISTENCE/////////////////////////////
 module.exports.sensorExists = async(data) => {

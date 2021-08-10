@@ -44,6 +44,22 @@ const changeData = (req, res) => {
         res.status(500).send(error)
     })
 }
+const deleteRow = (req, res) => {
+    //remove the / from the req.url
+    let route = req.url.slice(1); // '/route' --> 'route/id'
+    let data = route.split('/');
+    let path = data[0];
+    let id = data[1];
+
+
+    db.deleteRow(path, id)
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error)
+    })
+}
 
 const checkSensor = (req, res) => {
     let pathway = req.url.slice(7); // /valid/ 7
@@ -128,6 +144,7 @@ module.exports = {
     getData,
     addData,
     changeData,
+    deleteRow,
     checkSensor,
     getSensor,
     getType,

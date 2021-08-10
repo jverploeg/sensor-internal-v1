@@ -31,7 +31,6 @@ const Tables = {
                 headerName: 'Description',
                 flex: 1,
                 minWidth: 500,
-                resizable: true,
                 editable:true,
             },
             {
@@ -73,7 +72,6 @@ const Tables = {
                 headerName: 'Description',
                 flex: 1,
                 minWidth: 500,
-                resizable: true,
                 editable:true,
             },
             {
@@ -121,7 +119,6 @@ const Tables = {
                 headerName: 'Description',
                 flex: 1,
                 minWidth: 500,
-                resizable: true,
                 editable:true,
             },
             {
@@ -169,7 +166,6 @@ const Tables = {
                 headerName: 'Description',
                 flex: 1,
                 minWidth: 500,
-                resizable: true,
                 editable:true,
             },
             {
@@ -183,7 +179,6 @@ const Tables = {
                 headerName: 'PNG',
                 width: 150,
                 editable:true,
-                resizable: true,
             },
         ]
         return format;
@@ -218,7 +213,6 @@ const Tables = {
                 headerName: 'Description',
                 flex: 1,
                 minWidth: 500,
-                resizable: true,
                 editable:true,
             },
             {
@@ -232,7 +226,6 @@ const Tables = {
                 headerName: 'PNG',
                 minWidth: 150,
                 editable:true,
-                resizable: true,
             },
         ]
         return format;
@@ -269,7 +262,6 @@ const Tables = {
                 headerName: 'Description',//can we split this into an array to fully display?
                 flex: 1,
                 minWidth: 500,
-                resizable: true,
                 editable:true,
             },
             {
@@ -323,7 +315,6 @@ const Tables = {
                 headerName: 'Description',
                 flex: 1,
                 minWidth: 500,
-                resizable: true,
                 editable:true,
             },
             {
@@ -383,7 +374,6 @@ const Tables = {
                 headerName: 'Description',
                 flex: 1,
                 minWidth: 400,
-                resizable: true,
                 editable:true,
             },
             {
@@ -391,7 +381,6 @@ const Tables = {
                 headerName: 'Notes',
                 flex: 1,
                 minWidth: 300,
-                resizable: true,
                 editable:true,
             },
             {

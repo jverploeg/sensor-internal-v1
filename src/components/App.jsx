@@ -31,6 +31,8 @@ const App = () => {
     // custom state/hooks
     const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
     const [select, setButton] = useState(''); // sets the state for styling currentPage in navbar
+    const [deleteShow, setShow] = useState(false);//useToggle();
+    const [deleteRow, setDelete] = useState([]);
     /////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -48,6 +50,8 @@ const App = () => {
     },[page])//, isTextChanged])
     //get new row values whenever data is modified in database
     useEffect(() => {
+        setShow(false);
+        setDelete([]);
         if(data.length > 1) {
             getColumns();
             getRows();
@@ -69,7 +73,6 @@ const App = () => {
         let route = page;
         try {
             const { data } = await axios.get(`${host}/${route}`);
-            console.log(data.length)
             setData(data);
         }
         catch (error) {
@@ -82,41 +85,8 @@ const App = () => {
         //console.log('appdata', temp)
         ///////////////////////////////////////////////////////////////////
     }
-    // const getData = (input) => {
-    //     console.log(input)
 
-    //     let data = callDB.getData(page);//await callDB.getData(page);
-    //     console.log('appdata', data)
-    //     setData(data);
-    // }
     const getColumns = () => {
-        // let cols = [];
-        // let table = page;
-        // //iterate through any object and get the key names
-        // if(data[0]){
-        //     let focus = data[0];
-        //     let arrayKeys = Object.keys(focus);
-        //     let format = {
-        //         field: 'id',
-        //         hide: true,
-        //         //headerName: `${table}_id`,
-        //         //width: 150,
-        //         //editable: true,
-        //     }
-        //     cols.push(format);
-        //     for(let i = 1; i < arrayKeys.length; i++) {
-        //         let item = arrayKeys[i];
-        //         let format = {
-        //             field: '',
-        //             headerName: '',
-        //             width: 150,
-        //             editable: true,
-        //         }
-        //         format.field = item; 
-        //         format.headerName = item;
-        //         cols.push(format);
-        //     }
-        // }
         var cols = [];
         if(page === 'housing'){
             cols = Tables.housing();
@@ -181,21 +151,19 @@ const App = () => {
         setInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
     }    
     //edit table data handler
-    // const handleEditCellChangeCommitted = useCallback(
-    //     ({ id, field, props }) => {
-    //         // pass the col_name, row_id, and new_value to the router. will Update accordingly
-    //         //determine route -> db table based on pageSelection
-    //         let route = page;
-    //         console.log(route)
-    //         console.log({id, field, props})
-    //         axios.put(`${host}/${route}`, {id, field, props})
-    //         .then(response => {
-    //           console.log(response);
-    //         })
-    //         .catch(error => {
-    //           console.log(error);
-    //         });
-    // });
+    const handleCellEditCommit = React.useCallback(
+        ({ id, field, value }) => {
+            //update database
+            axios.put(`${host}/${page}`, {id, field, value})
+            .then(response => {
+              console.log(response);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        },
+        [rows],
+      );
 
     const handleSubmit = () => {
         //run change submission
@@ -215,10 +183,6 @@ const App = () => {
         getData();
         //TODO: better way to update rather than calling entire database again?????
     }
-    // const handleRowClick = (e) => {
-    //     let target = e.target;
-    //     console.log(target)
-    // }
     const handlePageChange = (e) => {
         //define the page we want to change to
         let newPage = e.target.attributes.value.value;
@@ -244,21 +208,48 @@ const App = () => {
         } 
     };
     //////////////////////////////////////////////////////
-      
-    const handleCellEditCommit = React.useCallback(
-        ({ id, field, value }) => {
-            //update database
-            axios.put(`${host}/${page}`, {id, field, value})
-            .then(response => {
-              console.log(response);
-            })
-            .catch(error => {
-              console.log(error);
-            });
+    
+    //ROW DELETION
+    const handleSelect = React.useCallback(
+    (id) => {
+        console.log(id)
+        if(id.length === 0){
+            setShow(false);
+            setDelete([]);
+        }else {
+            setShow(true);
+            let row = id[0];
+            console.log(row);
+            setDelete(row);
+        }
+    },
+    [rows],
+    ); 
+    const handleDelete = () => {
+        console.log('delete this row!')
+        let id = deleteRow;
+        console.log(page, id)//housing 2
+        //delete entry from database;
+        axios.delete(`${host}/${page}/${id}`)//, id)
+        .then(response => {
+            console.log(response);
+          //get modified data
+          //getData();
+          //hide button and reset row selection...
+        //   setShow(false);
+        //   setDelete([]);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+        //get modified data
+        getData();
+        getRows();
+        //hide button and reset row selection...
+        setShow(false);
+        setDelete([]);
+    }
 
-        },
-        [rows],
-      );
 
 
     //DOM
@@ -303,12 +294,21 @@ const App = () => {
                                             rows={rows}
                                             //onEditCellChangeCommitted={handleEditCellChangeCommitted}
                                             onCellEditCommit={handleCellEditCommit}
+                                            checkboxSelection//={handleSelect}
+                                            onSelectionModelChange={handleSelect}
                                         />
                                     }
                                 </div>
                             }
+    
                         </div>
-
+                        <div className="delete">
+                                {!!deleteShow && 
+                                    <div>
+                                        <button onClick={handleDelete}>DELETE</button>
+                                    </div>    
+                                }
+                        </div>
                         <div className = "addData">
                             <form id="data-form">
                                 {!!inputCols && inputCols.map((item, index) => (
