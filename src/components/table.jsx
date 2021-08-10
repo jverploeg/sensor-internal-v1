@@ -36,3 +36,4 @@ export default Basic;
 //https://www.gitmemory.com/issue/mbrn/material-table/1754/603019449
 //https://github.com/mbrn/material-table/issues/1748
 //https://stackoverflow.com/questions/60798675/react-material-table-is-rerendering-table-with-new-data-only-if-i-update-data-tw
+//https://material-table.com/#/docs/features/remote-data
