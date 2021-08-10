@@ -16,6 +16,7 @@ import { ControlCameraOutlined } from '@material-ui/icons';
 
 // HELPERS
 //import callDB from '../helpers/appRequests';
+import Tables from './tables';
 
 const App = () => {
     let viewports = ['Home', 'housing', 'char', 'option', 'char_op', 'connection', 'sensor', 'custom', 'xproto']; //array of view options. tables with all have similar setup, home is different
@@ -89,36 +90,48 @@ const App = () => {
     //     setData(data);
     // }
     const getColumns = () => {
-        let temp = [];
-        let table = page;
-        //iterate through any object and get the key names
-        if(data[0]){
-            let focus = data[0];
-            let arrayKeys = Object.keys(focus);
-            let format = {
-                field: 'id',
-                hide: true,
-                //headerName: `${table}_id`,
-                //width: 150,
-                //editable: true,
-            }
-            temp.push(format);
-            for(let i = 1; i < arrayKeys.length; i++) {
-                let item = arrayKeys[i];
-                let format = {
-                    field: '',
-                    headerName: '',
-                    width: 150,
-                    editable: true,
-                }
-                format.field = item; 
-                format.headerName = item;
-                temp.push(format);
-            }
+        // let cols = [];
+        // let table = page;
+        // //iterate through any object and get the key names
+        // if(data[0]){
+        //     let focus = data[0];
+        //     let arrayKeys = Object.keys(focus);
+        //     let format = {
+        //         field: 'id',
+        //         hide: true,
+        //         //headerName: `${table}_id`,
+        //         //width: 150,
+        //         //editable: true,
+        //     }
+        //     cols.push(format);
+        //     for(let i = 1; i < arrayKeys.length; i++) {
+        //         let item = arrayKeys[i];
+        //         let format = {
+        //             field: '',
+        //             headerName: '',
+        //             width: 150,
+        //             editable: true,
+        //         }
+        //         format.field = item; 
+        //         format.headerName = item;
+        //         cols.push(format);
+        //     }
+        // }
+        var cols = [];
+        if(page === 'housing'){
+            cols = Tables.housing();
+        } else if(page === 'char'){
+            cols = Tables.char();
+        } else if(page === 'option'){
+            cols = Tables.option();
+        } else if(page === 'char_op'){
+            cols = Tables.char_op();
+        } else if(page === 'connection'){
+            cols = Tables.connection();
         }
         //set the column state now
-        setColumns(temp);
-        let inputs = JSON.parse(JSON.stringify(temp));
+        setColumns(cols);
+        let inputs = JSON.parse(JSON.stringify(cols));
         inputs.shift();
         setInputCols(inputs);
     }
@@ -162,21 +175,21 @@ const App = () => {
         setInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
     }    
     //edit table data handler
-    const handleEditCellChangeCommitted = useCallback(
-        ({ id, field, props }) => {
-            // pass the col_name, row_id, and new_value to the router. will Update accordingly
-            //determine route -> db table based on pageSelection
-            let route = page;
-            console.log(route)
-            console.log({id, field, props})
-            axios.put(`${host}/${route}`, {id, field, props})
-            .then(response => {
-              console.log(response);
-            })
-            .catch(error => {
-              console.log(error);
-            });
-    });
+    // const handleEditCellChangeCommitted = useCallback(
+    //     ({ id, field, props }) => {
+    //         // pass the col_name, row_id, and new_value to the router. will Update accordingly
+    //         //determine route -> db table based on pageSelection
+    //         let route = page;
+    //         console.log(route)
+    //         console.log({id, field, props})
+    //         axios.put(`${host}/${route}`, {id, field, props})
+    //         .then(response => {
+    //           console.log(response);
+    //         })
+    //         .catch(error => {
+    //           console.log(error);
+    //         });
+    // });
 
     const handleSubmit = () => {
         //run change submission
