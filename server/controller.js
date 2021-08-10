@@ -35,13 +35,24 @@ const changeData = (req, res) => {
     //remove the / from the req.url
     let route = req.url.slice(1); // '/route' --> 'route'
     const entry = req.body;
-    let id = entry.id;
-    let col = entry.field;
-    let val = entry.props.value;
 
-    let values = [id, col, val];
-    console.log({values})
-    db.changeData(route, values)
+    db.changeData(route, entry)
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error)
+    })
+}
+const deleteRow = (req, res) => {
+    //remove the / from the req.url
+    let route = req.url.slice(1); // '/route' --> 'route/id'
+    let data = route.split('/');
+    let path = data[0];
+    let id = data[1];
+
+
+    db.deleteRow(path, id)
     .then(result => {
         res.status(200).send(result.rows);
     })
@@ -133,6 +144,7 @@ module.exports = {
     getData,
     addData,
     changeData,
+    deleteRow,
     checkSensor,
     getSensor,
     getType,

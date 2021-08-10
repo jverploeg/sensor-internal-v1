@@ -16,6 +16,7 @@ import { ControlCameraOutlined } from '@material-ui/icons';
 
 // HELPERS
 //import callDB from '../helpers/appRequests';
+import Tables from './tables';
 
 const App = () => {
     let viewports = ['Home', 'housing', 'char', 'option', 'char_op', 'connection', 'sensor', 'custom', 'xproto']; //array of view options. tables with all have similar setup, home is different
@@ -30,6 +31,8 @@ const App = () => {
     // custom state/hooks
     const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
     const [select, setButton] = useState(''); // sets the state for styling currentPage in navbar
+    const [deleteShow, setShow] = useState(false);//useToggle();
+    const [deleteRow, setDelete] = useState([]);
     /////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -41,21 +44,27 @@ const App = () => {
     },[]);
     //TODO: do we we need both these useEffects below????
     useEffect(() => {
+        console.log(deleteShow,deleteRow)
+        setShow(false);
+        setDelete([]);
         if(page !== 'Home'){
             getData();
         }
     },[page])//, isTextChanged])
     //get new row values whenever data is modified in database
     useEffect(() => {
+        console.log(deleteShow,deleteRow)
+        setShow(false);
+        setDelete([]);
         if(data.length > 1) {
             getColumns();
             getRows();
         }
     },[data])
-    // USEEFFECT TO CHECK IF STATE HAS CHANGED PROPERLY
+    //on deletion, make sure delete button is hidden
     useEffect(() => {
-        console.log(page)
-        console.log({rows, columns, inputCols})
+        setShow(false);
+        setDelete([]);
     },[rows])
     /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -68,7 +77,6 @@ const App = () => {
         let route = page;
         try {
             const { data } = await axios.get(`${host}/${route}`);
-            console.log(data.length)
             setData(data);
         }
         catch (error) {
@@ -81,44 +89,29 @@ const App = () => {
         //console.log('appdata', temp)
         ///////////////////////////////////////////////////////////////////
     }
-    // const getData = (input) => {
-    //     console.log(input)
 
-    //     let data = callDB.getData(page);//await callDB.getData(page);
-    //     console.log('appdata', data)
-    //     setData(data);
-    // }
     const getColumns = () => {
-        let temp = [];
-        let table = page;
-        //iterate through any object and get the key names
-        if(data[0]){
-            let focus = data[0];
-            let arrayKeys = Object.keys(focus);
-            let format = {
-                field: 'id',
-                hide: true,
-                //headerName: `${table}_id`,
-                //width: 150,
-                //editable: true,
-            }
-            temp.push(format);
-            for(let i = 1; i < arrayKeys.length; i++) {
-                let item = arrayKeys[i];
-                let format = {
-                    field: '',
-                    headerName: '',
-                    width: 150,
-                    editable: true,
-                }
-                format.field = item; 
-                format.headerName = item;
-                temp.push(format);
-            }
+        var cols = [];
+        if(page === 'housing'){
+            cols = Tables.housing();
+        } else if(page === 'char'){
+            cols = Tables.char();
+        } else if(page === 'option'){
+            cols = Tables.option();
+        } else if(page === 'char_op'){
+            cols = Tables.char_op();
+        } else if(page === 'connection'){
+            cols = Tables.connection();
+        } else if(page === 'sensor'){
+            cols = Tables.sensor();
+        } else if(page === 'custom'){
+            cols = Tables.custom();
+        } else if(page === 'xproto'){
+            cols = Tables.xproto();
         }
         //set the column state now
-        setColumns(temp);
-        let inputs = JSON.parse(JSON.stringify(temp));
+        setColumns(cols);
+        let inputs = JSON.parse(JSON.stringify(cols));
         inputs.shift();
         setInputCols(inputs);
     }
@@ -162,21 +155,19 @@ const App = () => {
         setInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
     }    
     //edit table data handler
-    const handleEditCellChangeCommitted = useCallback(
-        ({ id, field, props }) => {
-            // pass the col_name, row_id, and new_value to the router. will Update accordingly
-            //determine route -> db table based on pageSelection
-            let route = page;
-            console.log(route)
-            console.log({id, field, props})
-            axios.put(`${host}/${route}`, {id, field, props})
+    const handleCellEditCommit = React.useCallback(
+        ({ id, field, value }) => {
+            //update database
+            axios.put(`${host}/${page}`, {id, field, value})
             .then(response => {
               console.log(response);
             })
             .catch(error => {
               console.log(error);
             });
-    });
+        },
+        [rows],
+      );
 
     const handleSubmit = () => {
         //run change submission
@@ -196,10 +187,6 @@ const App = () => {
         getData();
         //TODO: better way to update rather than calling entire database again?????
     }
-    // const handleRowClick = (e) => {
-    //     let target = e.target;
-    //     console.log(target)
-    // }
     const handlePageChange = (e) => {
         //define the page we want to change to
         let newPage = e.target.attributes.value.value;
@@ -225,7 +212,44 @@ const App = () => {
         } 
     };
     //////////////////////////////////////////////////////
-      
+    
+    //ROW DELETION
+    const handleSelect = React.useCallback(
+        (id) => {
+            if(id.length === 0){
+                setShow(false);
+                setDelete([]);
+            }else {
+                setShow(true);
+                let row = id[0];
+                setDelete(row);
+            }
+        },
+        [rows],
+    ); 
+
+    const handleDelete = () => {
+        let id = deleteRow;
+        //delete entry from database;
+        axios.delete(`${host}/${page}/${id}`)//, id)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+        //get modified data
+        //update rows state to uncheck selection immediately, reove row immediately, and on page switch
+        let temp = JSON.parse(JSON.stringify(rows));//deep copy allows deletion
+        //find id in temp;
+        for(let i = 0; i < temp.length; i++){
+            if(temp[i].id === id){
+                temp.splice(i,1);
+            }
+        }
+        //update state
+        setRows(temp);
+    }
 
 
 
@@ -266,15 +290,26 @@ const App = () => {
                                 <div className = "foot" style={{ height: 600, width: '100%' }}>
                                     {!!rows &&
                                         <DataGrid
+                                            //rowHeight={75}//{52}pixels is default
                                             columns={columns}
                                             rows={rows}
-                                            onEditCellChangeCommitted={handleEditCellChangeCommitted}
+                                            //onEditCellChangeCommitted={handleEditCellChangeCommitted}
+                                            onCellEditCommit={handleCellEditCommit}
+                                            checkboxSelection//={handleSelect}
+                                            onSelectionModelChange={handleSelect}
                                         />
                                     }
                                 </div>
                             }
+    
                         </div>
-
+                        <div className="delete">
+                                {!!deleteShow && 
+                                    <div>
+                                        <button onClick={handleDelete}>DELETE</button>
+                                    </div>    
+                                }
+                        </div>
                         <div className = "addData">
                             <form id="data-form">
                                 {!!inputCols && inputCols.map((item, index) => (

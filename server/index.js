@@ -33,33 +33,49 @@ app.listen(port, () => {
 app.get('/housing', route.getData);
 app.post('/housing', route.addData);
 app.put('/housing', route.changeData);
+app.delete('/housing/*', route.deleteRow);
 
 //CHAR
 app.get('/char', route.getData);
 app.post('/char', route.addData);
 app.put('/char', route.changeData);
+app.delete('/char/*', route.deleteRow);
 
 //OPTION
 app.get('/option', route.getData);
 app.post('/option', route.addData);
 app.put('/option', route.changeData);
+app.delete('/option/*', route.deleteRow);
 
 //char_op
 app.get('/char_op', route.getData);
 app.post('/char_op', route.addData);
 app.put('/char_op', route.changeData);
+app.delete('/char_op/*', route.deleteRow);
 
 //CONNECTION
 // rename to conn?
 app.get('/connection', route.getData);
 app.post('/connection', route.addData);
 app.put('/connection', route.changeData);
+app.delete('/connection/*', route.deleteRow);
 
+////////////////////////////////////////////////////////////////////////
 //SENSORS
 app.get('/sensor', route.getData);//for displaying sensors in the table selections
-app.get('/custom', route.getData);//for displaying sensors in the table selections
-app.get('/xproto', route.getData);//for displaying sensors in the table selections
+app.post('/sensor', route.addData);
+app.put('/sensor', route.changeData);
+app.delete('/sensor/*', route.deleteRow);
 
+app.get('/custom', route.getData);//for displaying sensors in the table selections
+app.post('/custom', route.addData);
+app.put('/custom', route.changeData);
+app.delete('/custom/*', route.deleteRow);
+
+app.get('/xproto', route.getData);//for displaying sensors in the table selections
+app.post('/xproto', route.addData);
+app.put('/xproto', route.changeData);
+app.delete('/xproto/*', route.deleteRow);
 
 ////VALID SENSOR////////
 app.get('/valid/*', route.checkSensor);

@@ -23,13 +23,25 @@ module.exports.addData = async(path, cols, values) => {
         console.log(err.stack)
     }
 }
-module.exports.changeData = async(path, values) => {
-    let col_name = values[1];
-    let value = values[2];
-    let id = values[0];
+module.exports.changeData = async(path, data) => {
+    let { id } = data;//.id;
+    let { field } = data;//.field;
+    let { value } = data;//.value;
+    
     //add tablename to id field
     let table_id = path.concat('_id');
-    const text = `UPDATE ${path} set ${col_name} = '${value}' where ${table_id} = '${id}'`;
+    const text = `UPDATE ${path} set ${field} = '${value}' where ${table_id} = '${id}'`;
+    // async/await
+    try {
+        const res = await pool.query(text)
+    } catch (err) {
+        console.log(err.stack)
+    }
+}
+module.exports.deleteRow = async(path, id) => {
+    //add tablename to id field
+    let table_id = path.concat('_id');
+    const text = `DELETE FROM ${path} where ${table_id} = '${id}'`;
     // async/await
     try {
         const res = await pool.query(text)
