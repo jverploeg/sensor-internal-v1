@@ -60,11 +60,22 @@ app.post('/connection', route.addData);
 app.put('/connection', route.changeData);
 app.delete('/connection/*', route.deleteRow);
 
+////////////////////////////////////////////////////////////////////////
 //SENSORS
 app.get('/sensor', route.getData);//for displaying sensors in the table selections
-app.get('/custom', route.getData);//for displaying sensors in the table selections
-app.get('/xproto', route.getData);//for displaying sensors in the table selections
+app.post('/sensor', route.addData);
+app.put('/sensor', route.changeData);
+app.delete('/sensor/*', route.deleteRow);
 
+app.get('/custom', route.getData);//for displaying sensors in the table selections
+app.post('/custom', route.addData);
+app.put('/custom', route.changeData);
+app.delete('/custom/*', route.deleteRow);
+
+app.get('/xproto', route.getData);//for displaying sensors in the table selections
+app.post('/xproto', route.addData);
+app.put('/xproto', route.changeData);
+app.delete('/xproto/*', route.deleteRow);
 
 ////VALID SENSOR////////
 app.get('/valid/*', route.checkSensor);
