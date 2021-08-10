@@ -128,6 +128,12 @@ const App = () => {
             cols = Tables.char_op();
         } else if(page === 'connection'){
             cols = Tables.connection();
+        } else if(page === 'sensor'){
+            cols = Tables.sensor();
+        } else if(page === 'custom'){
+            cols = Tables.custom();
+        } else if(page === 'xproto'){
+            cols = Tables.xproto();
         }
         //set the column state now
         setColumns(cols);
@@ -292,6 +298,7 @@ const App = () => {
                                 <div className = "foot" style={{ height: 600, width: '100%' }}>
                                     {!!rows &&
                                         <DataGrid
+                                            //rowHeight={75}//{52}pixels is default
                                             columns={columns}
                                             rows={rows}
                                             //onEditCellChangeCommitted={handleEditCellChangeCommitted}

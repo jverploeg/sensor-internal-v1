@@ -198,13 +198,13 @@ const Tables = {
             {
                 field: 'connection_code',
                 headerName: 'Connection',
-                width: 200,
+                width: 175,
                 editable:true,
             },
             {
                 field: 'web_code',
                 headerName: 'Web Code',
-                width: 200,
+                width: 175,
                 editable:true,
             },
             {
@@ -238,5 +238,189 @@ const Tables = {
         return format;
     },
     ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    sensor: () => {
+        let format = [
+            {
+                field: 'id',
+                hide: true,
+            },
+            {
+                field: 'sensor_code',
+                headerName: 'Code',
+                width: 200,
+                editable:true,
+            },
+            {
+                field: 'part_number',
+                headerName: 'Part #',
+                width: 200,
+                editable:true,
+            },
+            {
+                field: 'rev',
+                headerName: 'Rev',
+                width: 105,
+                editable:true,
+            },
+            {
+                field: 'title',
+                headerName: 'Description',//can we split this into an array to fully display?
+                flex: 1,
+                minWidth: 500,
+                resizable: true,
+                editable:true,
+            },
+            {
+                field: 'char',
+                headerName: 'Char',
+                width: 125,
+                editable:true,
+            },
+            {
+                field: 'type',
+                headerName: 'Type',
+                width: 125,
+                editable:true,
+            },
+            {
+                field: 'wizard_part',
+                headerName: 'Wizard Part',
+                width: 165,
+                editable:true,
+            },
+        ]
+        return format;
+    },
+    ///////////////////////////////////////////////////////////////////////
+    custom: () => {
+        let format = [
+            {
+                field: 'id',
+                hide: true,
+            },
+            {
+                field: 'custom_sensor_code',
+                headerName: 'Code',
+                width: 200,
+                editable:true,
+            },
+            {
+                field: 'part_number',
+                headerName: 'CS #',
+                width: 125,
+                editable:true,
+            },
+            {
+                field: 'rev',
+                headerName: 'Rev',
+                width: 105,
+                editable:true,
+            },
+            {
+                field: 'title',
+                headerName: 'Description',
+                flex: 1,
+                minWidth: 500,
+                resizable: true,
+                editable:true,
+            },
+            {
+                field: 'closest_housing',
+                headerName: 'Housing',
+                width: 125,
+                editable:true,
+            },
+            {
+                field: 'closest_char',
+                headerName: 'Char',
+                width: 125,
+                editable:true,
+            },
+            {
+                field: 'closest_option',
+                headerName: 'Option',
+                width: 125,
+                editable:true,
+            },
+            {
+                field: 'closest_connection',
+                headerName: 'Connection',
+                width: 125,
+                editable:true,
+            },
+        ]
+        return format;
+    },
+    ///////////////////////////////////////////////////////////////////////
+    xproto: () => {
+        let format = [
+            {
+                field: 'id',
+                hide: true,
+            },
+            {
+                field: 'xproto_code',
+                headerName: 'Code',
+                width: 175,
+                editable:true,
+            },
+            {
+                field: 'xproto_part_number',
+                headerName: 'Xproto #',
+                width: 125,
+                editable:true,
+            },
+            {
+                field: 'rev',
+                headerName: 'Rev',
+                width: 105,
+                editable:true,
+            },
+            {
+                field: 'title',
+                headerName: 'Description',
+                flex: 1,
+                minWidth: 400,
+                resizable: true,
+                editable:true,
+            },
+            {
+                field: 'notes',
+                headerName: 'Notes',
+                flex: 1,
+                minWidth: 300,
+                resizable: true,
+                editable:true,
+            },
+            {
+                field: 'housing',
+                headerName: 'Housing',
+                width: 125,
+                editable:true,
+            },
+            {
+                field: 'char',
+                headerName: 'Char',
+                width: 125,
+                editable:true,
+            },
+            {
+                field: 'opt',
+                headerName: 'Option',
+                width: 125,
+                editable:true,
+            },
+            {
+                field: 'connection',
+                headerName: 'Connection',
+                width: 125,
+                editable:true,
+            },
+        ]
+        return format;
+    },    
+    
 }
 export default Tables;
