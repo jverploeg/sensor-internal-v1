@@ -35,13 +35,8 @@ const changeData = (req, res) => {
     //remove the / from the req.url
     let route = req.url.slice(1); // '/route' --> 'route'
     const entry = req.body;
-    let id = entry.id;
-    let col = entry.field;
-    let val = entry.props.value;
 
-    let values = [id, col, val];
-    console.log({values})
-    db.changeData(route, values)
+    db.changeData(route, entry)
     .then(result => {
         res.status(200).send(result.rows);
     })

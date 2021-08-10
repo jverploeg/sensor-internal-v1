@@ -226,7 +226,20 @@ const App = () => {
     };
     //////////////////////////////////////////////////////
       
+    const handleCellEditCommit = React.useCallback(
+        ({ id, field, value }) => {
+            //update database
+            axios.put(`${host}/${page}`, {id, field, value})
+            .then(response => {
+              console.log(response);
+            })
+            .catch(error => {
+              console.log(error);
+            });
 
+        },
+        [rows],
+      );
 
 
     //DOM
@@ -268,7 +281,8 @@ const App = () => {
                                         <DataGrid
                                             columns={columns}
                                             rows={rows}
-                                            onEditCellChangeCommitted={handleEditCellChangeCommitted}
+                                            //onEditCellChangeCommitted={handleEditCellChangeCommitted}
+                                            onCellEditCommit={handleCellEditCommit}
                                         />
                                     }
                                 </div>
