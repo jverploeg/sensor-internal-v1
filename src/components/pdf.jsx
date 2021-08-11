@@ -36,6 +36,24 @@ const PDF = (input) => {
         var sensor = 'CS1066';//'S63B-PHS-RGCD3';//'CS1066'
     } else if(temp === 'f') {
         var sensor = 'A63-37ADQO-LPCP4';//'CS1226'
+    } else if(temp === '1') {
+        var sensor = 'CS1045';
+    } else if(temp === '2') {
+        var sensor = 'CS1046';
+    } else if(temp === '3') {
+        var sensor = 'CS1047';
+    } else if(temp === '4') {
+        var sensor = 'CS1048';
+    } else if(temp === '5') {
+        var sensor = 'CS1049';
+    } else if(temp === '6') {
+        var sensor = 'CS1050';
+    } else if(temp === '7') {
+        var sensor = 'CS1051';
+    } else if(temp === '8') {
+        var sensor = 'CS1052';
+    } else if(temp === '9') {
+        var sensor = 'CS1053';
     } else {
         var sensor = temp;
     }
@@ -53,7 +71,7 @@ const PDF = (input) => {
     //breakdown of parts/components
     const [type, setType] = useState('');
     const [type_description, setTypeD] = useState('');
-    const [type_description2, setTypeD2] = useState('');//for option 2 with custom
+    //const [type_description2, setTypeD2] = useState('');//for option 2 with custom
     const [housing, setHousing] = useState('');
     const [char, setChar] = useState('');
     const [connect, setConnect] = useState('');
@@ -78,7 +96,7 @@ const PDF = (input) => {
 
         setType('');
         setTypeD('');
-        setTypeD2('');
+        //setTypeD2('');
         setHousing('');
         setChar('');
         setConnect('');
@@ -414,7 +432,7 @@ const PDF = (input) => {
                         <div className="description" id="description" dangerouslySetInnerHTML={convert.createMarkup(htmlRaw)}/>
 
                         <div className='footer'>
-                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
+                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * Rev {rev}</i></span>
                         </div>           
                     </div>
                     <div className="page2" id="page2">
@@ -437,7 +455,7 @@ const PDF = (input) => {
                             <img className="picture" src={images.picture} alt={`pictures/${housing}-${char}-Model not found`}/>
                         </div>
                         <div className='footer'>
-                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * {rev}</i></span>
+                            <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * Rev {rev}</i></span>
                         </div>    
                     </div>
                 </div>   
