@@ -32,7 +32,7 @@ const generatePDF = (S_Type, sensor, type_description, data, customData, images,
         // var description2 = temp.join(', ');
     }
 
-    let footer = `Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * ${revision} `;
+    let footer = `Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * Rev ${revision} `;
 
 
 
