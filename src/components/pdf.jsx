@@ -232,27 +232,6 @@ const PDF = (input) => {
         }
 
     }
-    // const getImages = async() => {
-    //     try {
-    //         //Promise.all to wait for all the images from server
-    //         const response = await Promise.allSettled([
-    //             axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
-    //             axios.get(`${host}/images/mech/${housing}-Mech-Model`, { responseType: 'arraybuffer' }),
-    //             axios.get(`${host}/images/housing/${housing}-Model`, { responseType: 'arraybuffer' }),
-    //             axios.get(`${host}/images/option/${option}-Model`, { responseType: 'arraybuffer' }),
-    //             axios.get(`${host}/images/connect/${connect}-Model`, { responseType: 'arraybuffer' }),
-    //             axios.get(`${host}/images/conn_charts/${connect}-${char}-Model`, { responseType: 'arraybuffer' }),
-    //             axios.get(`${host}/images/spec_charts/${char}-${option}-Model`, { responseType: 'arraybuffer' }),
-    //             axios.get(`${host}/images/pictures/${housing}-${char}-Model`, { responseType: 'arraybuffer' }),
-    //         ]);
-    //         const data = response.map((response) => response.data);
-    //         console.log(data)
-    //         let images = convert.images(data);
-    //         setImages(images);
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
     const getImages = async() => {
         const responses = await Promise.allSettled([
             axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
@@ -264,7 +243,6 @@ const PDF = (input) => {
             axios.get(`${host}/images/spec_charts/${char}-${option}-Model`, { responseType: 'arraybuffer' }),
             axios.get(`${host}/images/pictures/${housing}-${char}-Model`, { responseType: 'arraybuffer' }),
         ])
-        console.log(responses)
         let results = [];
         for(let i = 0; i < responses.length; i++) {
             if(responses[i].status === 'fulfilled'){
@@ -273,24 +251,28 @@ const PDF = (input) => {
                 results.push(null)
             }
         }
-        console.log(results)
         let images = convert.images(results);
-        console.log(images);
         setImages(images);
-        // .then(axios.spread((...responses) => {
-        //     console.log(responses)
-        // })).catch(errors => {
-        //     console.log(errors);
-        // })
-            // const data = response.map((response) => response.data);
-            // console.log(data)
-            // let images = convert.images(data);
-            // setImages(images);
-
     }
+    // const getCustomImages = async() => {
+    //     //call all the waterfalls to get an image for each section
+    //     const response = await Promise.all([
+    //         calls.getCustomImageType(sensorCode, type),
+    //         calls.getCustomImageMech(sensorCode, housing),
+    //         calls.getCustomImageHousing(sensorCode, housing),
+    //         calls.getCustomImageOption(sensorCode, option),
+    //         calls.getCustomImageConnect(sensorCode, connect),
+    //         calls.getCustomImageConnChart(sensorCode, connect, char),
+    //         calls.getCustomImageSpec(sensorCode, char, option),
+    //         calls.getCustomImagePicture(sensorCode, housing, char, type),
+    //     ]);
+    //     const data = response.map((response) => response.data);
+    //     let images = convert.images(data);
+    //     setImages(images);
+    // }
     const getCustomImages = async() => {
         //call all the waterfalls to get an image for each section
-        const response = await Promise.all([
+        const responses = await Promise.allSettled([
             calls.getCustomImageType(sensorCode, type),
             calls.getCustomImageMech(sensorCode, housing),
             calls.getCustomImageHousing(sensorCode, housing),
@@ -300,8 +282,17 @@ const PDF = (input) => {
             calls.getCustomImageSpec(sensorCode, char, option),
             calls.getCustomImagePicture(sensorCode, housing, char, type),
         ]);
-        const data = response.map((response) => response.data);
-        let images = convert.images(data);
+        console.log(responses)//different than catalog. all fulfilled, some vals are undefined....
+        let results = [];
+        for(let i = 0; i < responses.length; i++) {
+            if(responses[i].value){
+                results.push(responses[i].value.data)//value is an object
+            } else {
+                results.push(null)
+            }
+        }
+        console.log(results)
+        let images = convert.images(results);
         setImages(images);
     }
     /////////////////////////////////////////////
@@ -344,13 +335,14 @@ const PDF = (input) => {
         setDescription(customData.title);
 
         //option2 for highlighting catalog code after csxxxx
-        let temp = customData.title;
-        temp = temp.split(', ');
-        var type_description2 = temp[0];
-        temp.unshift();
-        var description2 = temp.join(', ');
-        setTypeD2(type_description2);
-        setDescription2(description2);
+        //DAVE DIDN"T CARE FOR THIS
+        // let temp = customData.title;
+        // temp = temp.split(', ');
+        // var type_description2 = temp[0];
+        // temp.unshift();
+        // var description2 = temp.join(', ');
+        // setTypeD2(type_description2);
+        // setDescription2(description2);
 
         //getCustomHtml
         getCustomHtml(char, sensorCode);
@@ -435,9 +427,9 @@ const PDF = (input) => {
                         }
                         {(sensorType === 'custom') && 
                             <div className="headerCust" >
-                                <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description2}</b></span>
-                                <br></br>
-                                <span style={{fontSize:'12pt'}}><i>{description2}</i></span>
+                                <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+                                {/* <br></br>
+                                <span style={{fontSize:'12pt'}}><i>{description}</i></span> */}
                             </div>
                         }
                         <div className="images">

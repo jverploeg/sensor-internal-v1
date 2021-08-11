@@ -100,10 +100,8 @@ module.exports.getCustom = async(sensor) => {
 
 module.exports.getType = async(data) => {
     let qString = `SELECT type_description from char where char_code = '${data}' limit 1`;
-    console.log({qString})
     try {
         const response = await pool.query(qString);
-        //console.log(response)
         return response;
     }
     catch(error) {
