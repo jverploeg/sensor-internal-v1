@@ -221,6 +221,7 @@ const PDF = (input) => {
         } else if(sensorType === 'custom'){
             try {
                 const { data } = await axios.get(`${host}/custom/${sensor}`);
+                console.log({data})
                 setCustomData(data[0]);
             }
             catch (error) {
@@ -232,6 +233,7 @@ const PDF = (input) => {
     const getType = async(type) => {
         if(sensorType === 'custom') {
             try {
+                console.log(type)
                 const { data } = await axios.get(`${host}/ctype/${type}`);
                 setType(data[0].type);
             }
