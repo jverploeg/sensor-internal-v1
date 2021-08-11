@@ -16,14 +16,19 @@ const convert = {
         let convertedArray = [];
         //iterate through array buffer and convert to base64
         for(let i = 0; i < data.length; i++){
-            let base64 = btoa(
-                new Uint8Array(data[i]).reduce(
-                      (data, byte) => data + String.fromCharCode(byte),
-                      '',
-                ),
-            );
-            //append data format declaration and add to object;
-            convertedArray[i] = ( "data:;base64," + base64 );
+            if(data[i] !== null ){
+                let base64 = btoa(
+                    new Uint8Array(data[i]).reduce(
+                        (data, byte) => data + String.fromCharCode(byte),
+                        '',
+                    ),
+                );
+                //append data format declaration and add to object;
+                convertedArray[i] = ( "data:;base64," + base64 );
+            } else {
+                convertedArray[i] = undefined;
+            }
+
         }
         //save to template... -> better way to do this????
         template.type = convertedArray[0];
