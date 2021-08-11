@@ -44,7 +44,6 @@ const App = () => {
     },[]);
     //TODO: do we we need both these useEffects below????
     useEffect(() => {
-        console.log(deleteShow,deleteRow)
         setShow(false);
         setDelete([]);
         if(page !== 'Home'){
@@ -53,7 +52,6 @@ const App = () => {
     },[page])//, isTextChanged])
     //get new row values whenever data is modified in database
     useEffect(() => {
-        console.log(deleteShow,deleteRow)
         setShow(false);
         setDelete([]);
         if(data.length > 1) {

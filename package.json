@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jverploeg/test-windows.git"
+    "url": "git+https://github.com/jverploegsensor-internal-v1.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jverploeg/test-windows/issues"
+    "url": "https://github.com/jverploeg/sensor-internal-v1/issues"
   },
-  "homepage": "https://github.com/jverploeg/test-windows#readme",
+  "homepage": "https://github.com/jverploeg/sensor-internal-v1#readme",
   "dependencies": {
     "@material-ui/core": "^4.11.4",
     "@material-ui/data-grid": "^4.0.0-alpha.31",

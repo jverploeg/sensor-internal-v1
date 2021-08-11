@@ -25,11 +25,11 @@ const generatePDF = (S_Type, sensor, type_description, data, customData, images,
         //no description
 
         //option2
-        let temp = customData.title;
-        temp = temp.split(', ');
-        var type_description2 = temp[0];
-        temp.unshift();
-        var description2 = temp.join(', ');
+        // let temp = customData.title;
+        // temp = temp.split(', ');
+        // var type_description2 = temp[0];
+        // temp.unshift();
+        // var description2 = temp.join(', ');
     }
 
     let footer = `Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * ${revision} `;
@@ -128,11 +128,18 @@ const generatePDF = (S_Type, sensor, type_description, data, customData, images,
                         let desc_lines = doc.splitTextToSize(description, 720);//762)//margins.width)
                         doc.text(desc_lines, margins.left, margins.top + 20);//+20?
                     } else if(S_Type === 'custom') {
-                        ///////option2
-                        doc.text(type_description2, margins.left + (newX * 18.6), margins.top);
-                        //break sensor description down based on text width so it fits within the page
-                        let desc_lines = doc.splitTextToSize(description2, 762)//margins.width)
-                        doc.text(desc_lines, margins.left, margins.top + 20);//+20?
+                            ////////option1/////////////
+                        let length = (sensor.length) + 15; //? what value do we want here...csxxxx should always be relatively same length
+                        let indent = new Array(length + 1).join(' ');
+                        let indentedText = indent.concat(type_description);//empty text shouldnt overwrite visible text
+                        let desc_lines = doc.splitTextToSize(indentedText, 720);//762)720 keeps right end even with images...
+                        doc.text(desc_lines, margins.left, margins.top);//+20?
+
+                                ///////option2
+                        // doc.text(type_description2, margins.left + (newX * 18.6), margins.top);
+                        // //break sensor description down based on text width so it fits within the page
+                        // let desc_lines = doc.splitTextToSize(description2, 762)//margins.width)
+                        // doc.text(desc_lines, margins.left, margins.top + 20);//+20?
                     }
 
                     /////////////////2nd PAGE IMAGES//////////////////////
