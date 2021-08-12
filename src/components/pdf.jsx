@@ -15,7 +15,7 @@ import convert from '../helpers/convert';
 import date from '../images/DATECODE1-Model.png';
 
 // VARIABLES
-const host = `http://192.168.1.118:3000`;
+const host = ``;
 
 const PDF = (input) => {
     //destructure props!!!!!!!!!!!!!!!
@@ -62,7 +62,7 @@ const PDF = (input) => {
 
 
     //////////////STATE DECLARATION////////////////////////////////////////////////////
-    //define which category of sensor 
+    //define which category of sensor
     const [sensorType, setSensorType] = useState('');//options = ['catalog', 'custom', 'xproto', 'invalid']
     //define key information
     const [sensorCode, setSensorCode] = useState('');
@@ -87,7 +87,7 @@ const PDF = (input) => {
     //booleans for flipping
     const [valid, setValid] = useState(false); //true until proven false?
     //////////////////////////////////////////////////////////////////////////////////////
-    
+
     const clearDOM = () => {
         setSensorType('');
         setSensorCode('');
@@ -109,7 +109,7 @@ const PDF = (input) => {
 
         setBullets([]);
         setHtmlRaw({});
-        
+
         setValid(false);
     }
 
@@ -146,7 +146,7 @@ const PDF = (input) => {
     // useEffect(() => {
     //     if(valid){
     //         setSensorCode(sensor);//input string
-    //     } 
+    //     }
     //     else{
     //         setSensorCode('');//set code to empty string
     //     }
@@ -167,7 +167,7 @@ const PDF = (input) => {
         }
     },[sensorCode])
 
-    
+
     useEffect(() => {
         if(sensorData.part_number) {
             let segments = sensorCode.split('-');
@@ -179,7 +179,7 @@ const PDF = (input) => {
         if(customData.part_number) {
             setChar(customData.closest_char);
             getType(customData.closest_char);
-        }    
+        }
     },[customData])
 
     //once we have sensor data package, call breakdown to split into relevant parts
@@ -191,7 +191,7 @@ const PDF = (input) => {
             customBreakdown();
         }
     },[type]);
-    
+
     //once all part states have been set, fetch images from server
     useEffect(() => {
         if(description.length > 1) {
@@ -327,7 +327,7 @@ const PDF = (input) => {
         let char = segments[1];
         setChar(segments[1]);
         let sensor_code = sensorData.sensor_code;
-        let splitOps = sensor_code.split(housing); 
+        let splitOps = sensor_code.split(housing);
         setConnect(splitOps[1]);
         let opt = splitOps[0].slice(char.length); //get accurate option code
         setOption(opt);
@@ -380,7 +380,7 @@ const PDF = (input) => {
             setHtmlRaw(raw);
         } catch(error) {
             console.log(error);
-        }    
+        }
     }
     /////////////////////////////////////////////
 
@@ -391,20 +391,20 @@ const PDF = (input) => {
     //DOM
     return (
         <div>
-            
+
             {(valid === true) &&
             <div className="overview">
             <button onClick={() => generatePDF(sensorType, sensorCode, type_description, sensorData, customData, images, bullets)}>{sensorCode}</button>
                 <div className="pdf-preview">
                     <div className="page1" id="page1">
-                        {(sensorType === 'catalog') && 
+                        {(sensorType === 'catalog') &&
                             <div className="header" >
                                 <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
                                 <br></br>
                                 <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                             </div>
                         }
-                        {(sensorType === 'custom') && 
+                        {(sensorType === 'custom') &&
                             <div className="headerCust" >
                                 <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                                 {/* <br></br>
@@ -416,11 +416,11 @@ const PDF = (input) => {
                             <ul className="bullets2">
                                 {!!bullets && bullets.map((item,index) => (
                                     <li style={{fontSize:'12pt'}}>
-                                    <i>{item}</i>  
+                                    <i>{item}</i>
                                     </li>
                                 ))}
                             </ul>
-                        </div>    
+                        </div>
                         <div className="images">
                             <img className="type" src={images.type} alt={`type/Type-${type}-Model not found`}/>
                             <img className="mech" src={images.mech} alt={`mech/${housing}-Mech-Model not found`}/>
@@ -430,22 +430,22 @@ const PDF = (input) => {
                             <img className="conn_chart" src={images.conn_chart} alt={`type/conn_charts/${connect}-${char}-Model not found`}/>
                             <img className="date" src={date}></img>
                         </div>
-                        
+
                         <div className="description" id="description" dangerouslySetInnerHTML={convert.createMarkup(htmlRaw)}/>
 
                         <div className='footer'>
                             <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * Rev {rev}</i></span>
-                        </div>           
+                        </div>
                     </div>
                     <div className="page2" id="page2">
-                        {(sensorType === 'catalog') && 
+                        {(sensorType === 'catalog') &&
                             <div className="header" >
                                 <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
                                 <br></br>
                                 <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                             </div>
                         }
-                        {(sensorType === 'custom') && 
+                        {(sensorType === 'custom') &&
                             <div className="headerCust" >
                                 <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                                 {/* <br></br>
@@ -458,18 +458,18 @@ const PDF = (input) => {
                         </div>
                         <div className='footer'>
                             <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * Rev {rev}</i></span>
-                        </div>    
+                        </div>
                     </div>
-                </div>   
-            </div>            
+                </div>
+            </div>
             }
             {(valid === false) && (sensor.length > 0) &&
                 <div>
                     <span>NOT A VALID SENSOR</span>
-                </div>    
-            }    
+                </div>
+            }
         </div>
-      
+
     )
 }
 export default PDF;

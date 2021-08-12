@@ -27,7 +27,7 @@ const App = () => {
     const [inputs, setInputs] = useState({}); // inputs from submission fields
     const [columns, setColumns] = useState([]); // column name for tables
     const [rows, setRows] = useState([]); // formatted rows from data so dataGrid can be filled correctly
-    const [inputCols, setInputCols] = useState([]); // need to make a deep copy of cols and then shift so we dont alter cols 
+    const [inputCols, setInputCols] = useState([]); // need to make a deep copy of cols and then shift so we dont alter cols
     // custom state/hooks
     const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
     const [select, setButton] = useState(''); // sets the state for styling currentPage in navbar
@@ -63,18 +63,21 @@ const App = () => {
     useEffect(() => {
         setShow(false);
         setDelete([]);
+        console.log(columns,rows)
     },[rows])
     /////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-    const host = `http://192.168.1.118:3000`;
+    //const host = `http://192.168.1.118:3000`;
+    const host = `http://10.45.1.114:3000`;
     //////////REQUESTS/////////////////////
     const getData = async() => {
         //determine route -> db table based on pageSelection
         let route = page;
         try {
-            const { data } = await axios.get(`${host}/${route}`);
+            const { data } = await axios.get(`/${route}`);
+            console.log(data)
             setData(data);
         }
         catch (error) {
@@ -113,7 +116,7 @@ const App = () => {
         inputs.shift();
         setInputCols(inputs);
     }
-    
+
     //https://material-ui.com/components/data-grid/columns/
     const getRows = () => {
         let format = {};
@@ -143,7 +146,7 @@ const App = () => {
     TODO: may need to come back and actually customize each page individually to better display more relevant information in diff col widths
     */
     ///////////////////////////////////////
-    
+
 
 
 
@@ -151,12 +154,12 @@ const App = () => {
     // Universal input bar handler
     const handleChange = (e) => {
         setInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
-    }    
+    }
     //edit table data handler
     const handleCellEditCommit = React.useCallback(
         ({ id, field, value }) => {
             //update database
-            axios.put(`${host}/${page}`, {id, field, value})
+            axios.put(`/${page}`, {id, field, value})
             .then(response => {
               console.log(response);
             })
@@ -171,7 +174,7 @@ const App = () => {
         //run change submission
         let route = page;
         console.log(inputs)
-        axios.post(`${host}/${route}`, inputs)
+        axios.post(`/${route}`, inputs)
           .then(response => {
             console.log(response);
           })
@@ -207,10 +210,10 @@ const App = () => {
                 // toggle on new
                 target.classList.toggle('selected');
             }
-        } 
+        }
     };
     //////////////////////////////////////////////////////
-    
+
     //ROW DELETION
     const handleSelect = React.useCallback(
         (id) => {
@@ -224,12 +227,12 @@ const App = () => {
             }
         },
         [rows],
-    ); 
+    );
 
     const handleDelete = () => {
         let id = deleteRow;
         //delete entry from database;
-        axios.delete(`${host}/${page}/${id}`)//, id)
+        axios.delete(`/${page}/${id}`)//, id)
         .then(response => {
             console.log(response);
         })
@@ -257,7 +260,7 @@ const App = () => {
             <div className = "top">
                 <h1>SENSOR SOLUTIONS</h1>
             </div>
-            
+
             <div className="nav-bar">
                     {viewports && viewports.map((item, index) => (
                         <figure className="nav-container" onClick={(e) => selected(e)}>
@@ -273,15 +276,15 @@ const App = () => {
             </div>
 
             <div className = "body">
-                {(page === "Home") && 
+                {(page === "Home") &&
                     <div>
                         <Search/>
-                    </div>    
+                    </div>
                 }
 
 
-                {(page !== "Home") && 
-                    <div className="data">    
+                {(page !== "Home") &&
+                    <div className="data">
                         <div className = "table">
                             {/* <button onClick={showData}>{isTextChanged ? 'Hide Data' : 'Show Data'}</button> */}
                             {!!data &&
@@ -299,13 +302,13 @@ const App = () => {
                                     }
                                 </div>
                             }
-    
+
                         </div>
                         <div className="delete">
-                                {!!deleteShow && 
+                                {!!deleteShow &&
                                     <div>
                                         <button onClick={handleDelete}>DELETE</button>
-                                    </div>    
+                                    </div>
                                 }
                         </div>
                         <div className = "addData">

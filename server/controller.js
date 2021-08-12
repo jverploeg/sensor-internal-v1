@@ -6,6 +6,7 @@ const db = require('../database/model.js');
 const getData = (req, res) => {
     //remove the / from the req.url
     let route = req.url.slice(1); // '/route' --> 'route'
+    console.log(route)
     db.getData(route)
     .then(result => {
         res.status(200).send(result.rows);
@@ -68,7 +69,7 @@ const checkSensor = (req, res) => {
     let type = data[0];
     let sensor = data[1];
     if(type === 'catalog'){
-        db.sensorExists(sensor)    
+        db.sensorExists(sensor)
         .then(result => {
             res.send(result);
         })
@@ -76,7 +77,7 @@ const checkSensor = (req, res) => {
             res.status(500).send(error)
         })
     } else if(type === 'custom'){
-        db.customExists(sensor)   
+        db.customExists(sensor)
         .then(result => {
             res.send(result);
         })
@@ -131,13 +132,14 @@ const getCustomType = (req, res) => {
 
 
 const getImage = (req, res) => {
-  let filepath = `D:/DATA/Sensor/webApp/images`;
+    ///Users/jverploeg/Desktop/webApp/csv_files/v2/
+  let filepath = `/Users/jverploeg/Desktop/webApp/images`;
   let route = req.url.slice(8);
   //combine Absolute path to local storage with endpoint
   let package = `${filepath}/${route}.png`;
   //send image file to client
   res.sendFile(package);
-}  
+}
 
 
 module.exports = {

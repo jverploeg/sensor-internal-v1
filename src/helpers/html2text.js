@@ -4,7 +4,7 @@ const html2text = (option, char, data) => {
     if(option === 1) {
         //bullets
         if(!data){
-            var bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
+            var bullets_html = require(`/Users/jverploeg/Desktop/webApp/images/pdf_bullets/${char}.html`).default;
             var tester = bullets_html.split('\n');
         } else {
             var tester = data.split('\n');
@@ -26,7 +26,7 @@ const html2text = (option, char, data) => {
 
     } else if(option === 2) {
         //description
-        const description_html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
+        const description_html = require(`/Users/jverploeg/Desktop/webApp/images/descriptions/${char}.html`).default;
         var spec_text = description_html.replace(/<[^>]+>/g, '');
         spec_text = spec_text.replace(/\&nbsp\;/g, '');
         spec_text = spec_text.replace(/Title/, '');
@@ -49,13 +49,13 @@ const html2text = (option, char, data) => {
     }  else if(option === 3) {
         //raw html file
         if(!data) {
-            var html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
+            var html = require(`/Users/jverploeg/Desktop/webApp/images/descriptions/${char}.html`).default;
         } else {
             var html = data;
         }
         //remove unicode
         let raw = html.replace(/[\uFFFD]/g, ' ');//additional unicode symbols???
         return raw;
-    } 
+    }
 }
 export default html2text;

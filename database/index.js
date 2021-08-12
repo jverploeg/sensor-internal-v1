@@ -15,7 +15,6 @@ const login = require('./config');//config credentials are hidden
 const pool = new Pool({
     host: login.host,
     user: login.user,
-    password: login.password,
     database: login.database,
     port: login.port,
 })

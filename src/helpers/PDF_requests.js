@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = `http://192.168.1.118:3000`;
+const host = ``;
 
 const calls = {
     getCustomImageType : async(sensor, type) => {
@@ -119,7 +119,7 @@ const calls = {
                         console.log(error);
                         //TODO... figure out if all these are needed or if we need more....
                     }
-                }        
+                }
             }
         }
     },
@@ -153,18 +153,18 @@ const calls = {
                             //TODO... figure out if all these are needed or if we need more....
                         }
                     }
-                }        
+                }
             }
         }
     },
     //custom html calls
     checkBullets : async(file1, file2) => {
         try {
-            const found1 = await require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${file1}.html`).default;
+            const found1 = await require(`/Users/jverploeg/Desktop/webApp/images/pdf_bullets/${file1}.html`).default;
             return found1;
         } catch(error) {
             try {
-                const found2 = await require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${file2}.html`).default;
+                const found2 = await require(`/Users/jverploeg/Desktop/webApp/images/pdf_bullets/${file2}.html`).default;
                 return found2;
             } catch(error) {
                 console.log(error)
@@ -173,11 +173,11 @@ const calls = {
     },
     checkDescription : async(file1, file2) => {
         try {
-            const found1 = await require(`D:/DATA/Sensor/webApp/images/descriptions/${file1}.html`).default;
+            const found1 = await require(`/Users/jverploeg/Desktop/webApp/images/descriptions/${file1}.html`).default;
             return found1;
         } catch(error) {
             try {
-                const found2 = await require(`D:/DATA/Sensor/webApp/images/descriptions/${file2}.html`).default;
+                const found2 = await require(`/Users/jverploeg/Desktop/webApp/images/descriptions/${file2}.html`).default;
                 return found2;
             } catch(error) {
                 console.log(error)

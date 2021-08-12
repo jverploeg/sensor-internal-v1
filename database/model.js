@@ -4,8 +4,10 @@ module.exports.getData = async(path) => {
     //define vars based on path
     let id = path.concat('_id');
     let qString = `SELECT * FROM ${path} ORDER BY ${id} asc;`;
+    console.log(qString)
     try {
         const response = await pool.query(qString);
+        //console.log(response)
         return response;
     }
     catch(error) {
@@ -27,7 +29,7 @@ module.exports.changeData = async(path, data) => {
     let { id } = data;//.id;
     let { field } = data;//.field;
     let { value } = data;//.value;
-    
+
     //add tablename to id field
     let table_id = path.concat('_id');
     const text = `UPDATE ${path} set ${field} = '${value}' where ${table_id} = '${id}'`;
