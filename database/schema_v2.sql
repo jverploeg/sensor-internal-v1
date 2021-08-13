@@ -128,15 +128,19 @@ CREATE TABLE custom
     part_number         varchar UNIQUE,
     rev                 varchar,
     Title               varchar,
-    closest_housing     varchar,
-    closest_char        varchar,
-    closest_option      varchar,
-    closest_connection  varchar,
+    housing             varchar,
+    char                varchar,
+    option              varchar,
+    connection          varchar,
+    conn_chart          varchar,
+    spec_chart          varchar,
+    picture             varchar,
+
     PRIMARY KEY (custom_id, part_number)
 );
 DROP INDEX if EXISTS custom_key;
 CREATE INDEX custom_key ON custom (part_number);
-copy custom (custom_sensor_code, part_number, rev, Title, closest_housing, closest_char, closest_option, closest_connection) from 'D:\DATA\Sensor\webApp\csv_files\v2\custom_v2.csv'  delimiter ',' csv header;-- encoding 'latin1';
+copy custom (custom_sensor_code, part_number, rev, Title, housing, char, option, connection, conn_chart, spec_chart, picture) from 'D:\DATA\Sensor\webApp\csv_files\v3\custom_v3.csv'  delimiter ',' csv header;-- encoding 'latin1';
 
 ----------------------------------
 
