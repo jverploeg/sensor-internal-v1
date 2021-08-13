@@ -264,9 +264,12 @@ const PDF = (input) => {
             axios.get(`${host}/images/housing/${housing}-Model`, { responseType: 'arraybuffer' }),
             axios.get(`${host}/images/option/${option}-Model`, { responseType: 'arraybuffer' }),
             axios.get(`${host}/images/connect/${connect}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/conn_charts/${connect}-${char}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/spec_charts/${char}-${option}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/pictures/${housing}-${char}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/conn_charts/${connChart}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/spec_charts/${specChart}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/pictures/${picture}-Model`, { responseType: 'arraybuffer' }),
+            // axios.get(`${host}/images/conn_charts/${connect}-${char}-Model`, { responseType: 'arraybuffer' }),
+            // axios.get(`${host}/images/spec_charts/${char}-${option}-Model`, { responseType: 'arraybuffer' }),
+            // axios.get(`${host}/images/pictures/${housing}-${char}-Model`, { responseType: 'arraybuffer' }),
         ])
         let results = [];
         for(let i = 0; i < responses.length; i++) {
@@ -335,27 +338,31 @@ const PDF = (input) => {
 
 
     /////////////DATA FORMATTING/////////////////
-    const breakdown = (data, sensor) => {
+    const breakdown = () => {
         //break the search term down accordingly
         let segments = sensorCode.split('-');
-        let housing = segments[0];
-        setHousing(segments[0]);
-        let char = segments[1];
-        setChar(segments[1]);
+        let H = segments[0];
+        let C = segments[1];
+        setHousing(H);
+        setChar(C);
         let sensor_code = sensorData.sensor_code;
-        let splitOps = sensor_code.split(housing); 
-        setConnect(splitOps[1]);
-        let opt = splitOps[0].slice(char.length); //get accurate option code
+        let splitOps = sensor_code.split(H); 
+        let Conn = splitOps[1];
+        setConnect(Conn);
+        let opt = splitOps[0].slice(C.length); //get accurate option code
         setOption(opt);
         setRev(sensorData.rev)
         setDescription(sensorData.title)
 
+        setConnChart(Conn + '-' + C);//P21-EHS1-Model
+        setSpecChart(C + '-' + opt);
+        setPicture(H + '-' + C);
 
         //format and set html object with text...
-        let bullets = html2text(1, char);
+        let bullets = html2text(1, C);
         setBullets(bullets);
         //get raw html and perform minor regex changes
-        let raw = html2text(3, char);
+        let raw = html2text(3, C);
         setHtmlRaw(raw);
     }
 
@@ -449,7 +456,7 @@ const PDF = (input) => {
                             <img className="housing" src={images.housing} alt={`housing/${housing}-Model not found`}/>
                             <img className="option" src={images.option} alt={`option/${option}-Model not found`}/>
                             <img className="connect" src={images.connect} alt={`connect/${connect}-Model not found`}/>
-                            <img className="conn_chart" src={images.conn_chart} alt={`type/conn_charts/${connect}-${char}-Model not found`}/>
+                            <img className="conn_chart" src={images.conn_chart} alt={`type/conn_charts/${connChart}-Model not found`}/>
                             <img className="date" src={date}></img>
                         </div>
                         
