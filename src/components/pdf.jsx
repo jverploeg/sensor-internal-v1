@@ -78,8 +78,13 @@ const PDF = (input) => {
     const [option, setOption] = useState('');
     const [rev, setRev] = useState('');
     const [description, setDescription] = useState('');
-    const [description2, setDescription2] = useState('');//for option 2 with custom
+    //custom special states
+    const [connChart, setConnChart] = useState('');
+    const [specChart, setSpecChart] = useState('');
+    const [picture, setPicture] = useState('');
+    //const [description2, setDescription2] = useState('');//for option 2 with custom
     //images
+    const [fileNames, setFileNames] = useState({}); //for custom sensor image selection
     const [images, setImages] = useState({});
     //html
     const [bullets, setBullets] = useState([]);
@@ -103,7 +108,7 @@ const PDF = (input) => {
         setOption('');
         setRev('');
         setDescription('');
-        setDescription2('');
+        //setDescription2('');
 
         setImages({});
 
@@ -177,8 +182,8 @@ const PDF = (input) => {
     //once we have custom data package, call special breakdown to split into relevant parts
     useEffect(() => {
         if(customData.part_number) {
-            setChar(customData.closest_char);
-            getType(customData.closest_char);
+            setChar(customData.char);
+            getType(customData.char);
         }    
     },[customData])
 
@@ -291,17 +296,28 @@ const PDF = (input) => {
     //     setImages(images);
     // }
     const getCustomImages = async() => {
+        console.log({customData})
         //call all the waterfalls to get an image for each section
+        // const responses = await Promise.allSettled([
+        //     calls.getCustomImageType(sensorCode, type),
+        //     calls.getCustomImageMech(sensorCode, housing),
+        //     calls.getCustomImageHousing(sensorCode, housing),
+        //     calls.getCustomImageOption(sensorCode, option),
+        //     calls.getCustomImageConnect(sensorCode, connect),
+        //     calls.getCustomImageConnChart(sensorCode, connect, char),
+        //     calls.getCustomImageSpec(sensorCode, char, option),
+        //     calls.getCustomImagePicture(sensorCode, housing, char, type),
+        // ]);
         const responses = await Promise.allSettled([
-            calls.getCustomImageType(sensorCode, type),
-            calls.getCustomImageMech(sensorCode, housing),
-            calls.getCustomImageHousing(sensorCode, housing),
-            calls.getCustomImageOption(sensorCode, option),
-            calls.getCustomImageConnect(sensorCode, connect),
-            calls.getCustomImageConnChart(sensorCode, connect, char),
-            calls.getCustomImageSpec(sensorCode, char, option),
-            calls.getCustomImagePicture(sensorCode, housing, char, type),
-        ]);
+            axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/mech/${housing}-Mech-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/housing/${housing}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/option/${option}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/connect/${connect}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/conn_charts/${connChart}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/spec_charts/${specChart}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/pictures/${picture}-Model`, { responseType: 'arraybuffer' }),
+        ])
         console.log(responses)//different than catalog. all fulfilled, some vals are undefined....
         let results = [];
         for(let i = 0; i < responses.length; i++) {
@@ -334,6 +350,7 @@ const PDF = (input) => {
         setRev(sensorData.rev)
         setDescription(sensorData.title)
 
+
         //format and set html object with text...
         let bullets = html2text(1, char);
         setBullets(bullets);
@@ -345,14 +362,19 @@ const PDF = (input) => {
     const customBreakdown = (sensor) => {
         //destructure redefine data/props
         setTypeD('');
-        let housing = customData.closest_housing;
+        let housing = customData.housing;
         setHousing(housing);
-        let conn = customData.closest_connection;
+        let conn = customData.connection;
         setConnect(conn);
-        let opt = customData.closest_option;
+        let opt = customData.option;
         setOption(opt);
         setRev(customData.rev);
         setDescription(customData.title);
+
+        //special custom states for inconsistent file-naming
+        setConnChart(customData.conn_chart);
+        setSpecChart(customData.spec_chart);
+        setPicture(customData.picture);
 
         //option2 for highlighting catalog code after csxxxx
         //DAVE DIDN"T CARE FOR THIS
