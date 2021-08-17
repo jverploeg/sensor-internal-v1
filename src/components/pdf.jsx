@@ -237,7 +237,7 @@ const PDF = (input) => {
             catch (error) {
                 console.log(error)
             }
-        } else {
+        } else if(sensorType === 'custom'){
             try {
                 const { data } = await axios.get(`${host}/type`, {params: {type}});
                 setType(sensorData.type);
@@ -261,13 +261,14 @@ const PDF = (input) => {
         let Conn = splitOps[1];
         let opt = splitOps[0].slice(C.length); //get accurate option code
 
+        //set states for each component
         setHousing(H);
         setChar(C);
         setConnect(Conn);
         setOption(opt);
         setRev(sensorData.rev)
         setDescription(sensorData.title)
-        //combo image file format
+        //component-combo image file format
         setConnChart(Conn + '-' + C);
         setSpecChart(C + '-' + opt);
         setPicture(H + '-' + C);
@@ -275,8 +276,9 @@ const PDF = (input) => {
         //format and set html object with text...
         let bullets = html2text(1, C);
         setBullets(bullets);
-        //get raw html and perform minor regex changes
+        //get raw description html and perform minor regex changes
         let raw = html2text(3, C);
+        console.log(bullets, raw)
         setHtmlRaw(raw);
     }
 
@@ -286,7 +288,7 @@ const PDF = (input) => {
         let conn = customData.connection;
         let opt = customData.option;
 
-        //set states
+        //set states for each component
         setTypeD('');
         setHousing(housing);
         setConnect(conn);
@@ -304,19 +306,39 @@ const PDF = (input) => {
 
     /////////////////////HTML/////////////////////////
     const getCustomHtml = async(char, sensor) => {
-        try {
-            const response = await Promise.all([
-                calls.checkBullets(sensor, char),
-                calls.checkDescription(sensor, char),
-            ])
-            //convert
-            let bullets = html2text(1, null, response[0]);
+        const responses = await Promise.allSettled([
+            axios.get(`${host}/html/bullets/${sensor}`),
+            axios.get(`${host}/html/bullets/${char}`),
+            axios.get(`${host}/html/description/${sensor}`),
+            axios.get(`${host}/html/description/${char}`),
+        ])
+        
+        let results = [];
+        for(let i = 0; i < responses.length; i++) {
+            if(responses[i].status === 'fulfilled'){
+                results.push(responses[i].value.data)
+            } else {
+                results.push(null)
+            }
+        }
+        // console.log(results)
+
+        //convert correct html file
+        if(results[0].length > 1){
+            let bullets = html2text(1, null, results[0]);
             setBullets(bullets);
-            let raw = html2text(3, null, response[1]);//
+        } else {
+            let bullets = html2text(1, null, results[1]);
+            setBullets(bullets);
+        }
+
+        if(results[2].length > 1){
+            let raw = html2text(3, null, results[2]);
             setHtmlRaw(raw);
-        } catch(error) {
-            console.log(error);
-        }    
+        } else {
+            let raw = html2text(3, null, results[3]);
+            setHtmlRaw(raw);
+        }
     }
     /////////////////////////////////////////////
 

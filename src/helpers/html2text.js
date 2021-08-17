@@ -5,6 +5,7 @@ const html2text = (option, char, data) => {
         //bullets
         if(!data){
             var bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
+            //var bullets_html = axios.get(`${host}/html/bullets/${char}`);
             var tester = bullets_html.split('\n');
         } else {
             var tester = data.split('\n');
@@ -27,6 +28,7 @@ const html2text = (option, char, data) => {
     } else if(option === 2) {
         //description
         const description_html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
+        //const description_html = axios.get(`${host}/html/description/${char}`);
         var spec_text = description_html.replace(/<[^>]+>/g, '');
         spec_text = spec_text.replace(/\&nbsp\;/g, '');
         spec_text = spec_text.replace(/Title/, '');
