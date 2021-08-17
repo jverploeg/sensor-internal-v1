@@ -1,36 +1,12 @@
 //function for parsing .html bullets and description files into text
-import axios from 'axios';
 
-const host = `http://192.168.1.118:3000`;
-
-const html2text = async(option, char, data) => {
+const html2text = (option, char, data) => {
     if(option === 1) {
         //bullets
         if(!data){
-            // const responses = await Promise.allSettled([
-            //     axios.get(`${host}/html/bullets/${sensor}`),
-            //     axios.get(`${host}/html/bullets/${char}`),
-            //     axios.get(`${host}/html/description/${sensor}`),
-            //     axios.get(`${host}/html/description/${char}`),
-            // ])
-            
-            // let results = [];
-            // for(let i = 0; i < responses.length; i++) {
-            //     if(responses[i].status === 'fulfilled'){
-            //         results.push(responses[i].value.data)
-            //     } else {
-            //         results.push(null)
-            //     }
-            // }
-            //var bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
-            var response = await axios.get(`${host}/html/bullets/${char}`);
-            let bullets_html = [];
-            var tester = [];
-            if(response.status === 'fulfilled'){
-                bullets_html = response.value.data;
-                tester = bullets_html.split('\n');
-            } 
-            
+            var bullets_html = require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${char}.html`).default;
+            //var bullets_html = axios.get(`${host}/html/bullets/${char}`);
+            var tester = bullets_html.split('\n');
         } else {
             var tester = data.split('\n');
         }
@@ -47,13 +23,12 @@ const html2text = async(option, char, data) => {
                 final.push('o     ' + temp);//change 2 spaces to 3? 5 spaces currently
             }
         }
-        console.log(final)
         return final;
 
     } else if(option === 2) {
         //description
-        //const description_html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
-        const description_html = axios.get(`${host}/html/description/${char}`);
+        const description_html = require(`D:/DATA/Sensor/webApp/images/descriptions/${char}.html`).default;
+        //const description_html = axios.get(`${host}/html/description/${char}`);
         var spec_text = description_html.replace(/<[^>]+>/g, '');
         spec_text = spec_text.replace(/\&nbsp\;/g, '');
         spec_text = spec_text.replace(/Title/, '');

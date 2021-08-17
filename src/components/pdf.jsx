@@ -276,12 +276,13 @@ const PDF = (input) => {
 
         console.log('hey')
         //format and set html object with text...
-        let bullets = html2text(1, C);
-        setBullets(bullets);
-        //get raw description html and perform minor regex changes
-        let raw = html2text(3, C);
-        console.log(bullets, raw)
-        setHtmlRaw(raw);
+        getHtml(C);
+        // let bullets = html2text(1, C);
+        // setBullets(bullets);
+        // //get raw description html and perform minor regex changes
+        // let raw = html2text(3, C);
+        // console.log(bullets, raw)
+        // setHtmlRaw(raw);
     }
 
     const customBreakdown = (sensor) => {
@@ -306,6 +307,27 @@ const PDF = (input) => {
         getCustomHtml(char, sensorCode);
     }
 
+    const getHtml = async(char) => {
+        const responses = await Promise.allSettled([
+            axios.get(`${host}/html/bullets/${char}`),
+            axios.get(`${host}/html/description/${char}`),
+        ])
+        
+        let results = [];
+        for(let i = 0; i < responses.length; i++) {
+            if(responses[i].status === 'fulfilled'){
+                results.push(responses[i].value.data)
+            } else {
+                results.push(null)
+            }
+        }
+        //convert correct html file
+        let bullets = html2text(1, null, results[0]);
+        setBullets(bullets);
+        let raw = html2text(3, null, results[1]);
+        setHtmlRaw(raw);
+
+    }
     /////////////////////HTML/////////////////////////
     const getCustomHtml = async(char, sensor) => {
         const responses = await Promise.allSettled([
