@@ -253,7 +253,6 @@ const PDF = (input) => {
     /////////////DATA FORMATTING/////////////////
     const breakdown = () => {
         //break the search term down accordingly
-        console.log('catalog breakdown')
         let segments = sensorCode.split('-');
         let H = segments[0];
         let C = segments[1];
@@ -274,15 +273,8 @@ const PDF = (input) => {
         setSpecChart(C + '-' + opt);
         setPicture(H + '-' + C);
 
-        console.log('hey')
         //format and set html object with text...
         getHtml(C);
-        // let bullets = html2text(1, C);
-        // setBullets(bullets);
-        // //get raw description html and perform minor regex changes
-        // let raw = html2text(3, C);
-        // console.log(bullets, raw)
-        // setHtmlRaw(raw);
     }
 
     const customBreakdown = (sensor) => {
@@ -345,7 +337,6 @@ const PDF = (input) => {
                 results.push(null)
             }
         }
-        console.log(results)
 
         //convert correct html file
         if(results[0] !== null){
@@ -501,6 +492,3 @@ const PDF = (input) => {
     )
 }
 export default PDF;
-//https://stackoverflow.com/questions/48215965/how-to-display-an-array-of-strings-in-react-component
-
-//https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
