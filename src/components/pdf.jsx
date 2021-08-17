@@ -322,9 +322,9 @@ const PDF = (input) => {
             }
         }
         //convert correct html file
-        let bullets = html2text(1, null, results[0]);
+        let bullets = html2text(1, results[0]);
         setBullets(bullets);
-        let raw = html2text(3, null, results[1]);
+        let raw = html2text(2, results[1]);
         setHtmlRaw(raw);
 
     }
@@ -345,22 +345,22 @@ const PDF = (input) => {
                 results.push(null)
             }
         }
-        // console.log(results)
+        console.log(results)
 
         //convert correct html file
-        if(results[0].length > 1){
-            let bullets = html2text(1, null, results[0]);
+        if(results[0] !== null){
+            let bullets = html2text(1, results[0]);
             setBullets(bullets);
         } else {
-            let bullets = html2text(1, null, results[1]);
+            let bullets = html2text(1, results[1]);
             setBullets(bullets);
         }
 
-        if(results[2].length > 1){
-            let raw = html2text(3, null, results[2]);
+        if(results[2] !== null){
+            let raw = html2text(2, results[2]);
             setHtmlRaw(raw);
         } else {
-            let raw = html2text(3, null, results[3]);
+            let raw = html2text(2, results[3]);
             setHtmlRaw(raw);
         }
     }
