@@ -138,6 +138,22 @@ const getImage = (req, res) => {
   //send image file to client
   res.sendFile(package);
 }  
+//require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${file1}.html`).default;
+const getBullets = (req, res) => {
+    let folder = `D:/DATA/Sensor/webApp/images/pdf_bullets/`;
+    let file = req.url.slice(14);
+      //combine Absolute path to local storage with endpoint
+    let package = `${folder}/${file}.html`;
+    res.sendFile(package);
+}
+//require(`D:/DATA/Sensor/webApp/images/descriptions/${file1}.html`)
+const getHTML = (req, res) => {
+    let folder = `D:/DATA/Sensor/webApp/images/descriptions/`;
+    let file = req.url.slice(17);
+      //combine Absolute path to local storage with endpoint
+    let package = `${folder}/${file}.html`;
+    res.sendFile(package);
+}
 
 
 module.exports = {
@@ -150,5 +166,8 @@ module.exports = {
     getType,
     getCustom,
     getCustomType,
-    getImage
+    getImage,
+
+    getBullets,
+    getHTML,
 }

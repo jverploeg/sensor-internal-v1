@@ -90,3 +90,7 @@ app.get('/ctype/*', route.getCustomType);//need options for image selection
 
 //IMAGES
 app.get('/images/*', route.getImage);
+
+//HTML
+app.get('/html/bullets/*', route.getBullets);
+app.get('/html/description/*', route.getHTML);
