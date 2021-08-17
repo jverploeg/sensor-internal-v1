@@ -8,7 +8,7 @@ import generatePDF from './pdfGenerator';
 // HELPERS
 import html2text from '../helpers/html2text';
 import check from '../helpers/check';
-import calls from '../helpers/PDF_requests';
+//import calls from '../helpers/PDF_requests';
 import convert from '../helpers/convert';
 
 // ASSETS
@@ -237,7 +237,7 @@ const PDF = (input) => {
             catch (error) {
                 console.log(error)
             }
-        } else if(sensorType === 'custom'){
+        } else if(sensorType === 'catalog'){
             try {
                 const { data } = await axios.get(`${host}/type`, {params: {type}});
                 setType(sensorData.type);
@@ -253,6 +253,7 @@ const PDF = (input) => {
     /////////////DATA FORMATTING/////////////////
     const breakdown = () => {
         //break the search term down accordingly
+        console.log('catalog breakdown')
         let segments = sensorCode.split('-');
         let H = segments[0];
         let C = segments[1];
@@ -273,6 +274,7 @@ const PDF = (input) => {
         setSpecChart(C + '-' + opt);
         setPicture(H + '-' + C);
 
+        console.log('hey')
         //format and set html object with text...
         let bullets = html2text(1, C);
         setBullets(bullets);
