@@ -75,6 +75,8 @@ module.exports.customExists = async(data) => {
 
 
 ///////////SENSOR SPEC SEARCHES////////////////////
+
+///////////////////CATALOG///////////////////////////////
 module.exports.getSensor = async(data) => {
     let qString = `SELECT * FROM sensor where part_number = '${data}'`;
     try {
@@ -86,9 +88,8 @@ module.exports.getSensor = async(data) => {
         return error;
     }
 }
-
-module.exports.getCustom = async(sensor) => {
-    let qString = `SELECT * FROM custom where part_number = '${sensor}'`;
+module.exports.getType = async(data) => {
+    let qString = `SELECT type_description from char where char_code = '${data}' limit 1`;
     try {
         const response = await pool.query(qString);
         return response;
@@ -97,9 +98,11 @@ module.exports.getCustom = async(sensor) => {
         return error;
     }
 }
+/////////////////////////////////////////////////////////////
 
-module.exports.getType = async(data) => {
-    let qString = `SELECT type_description from char where char_code = '${data}' limit 1`;
+//////////////////////////CUSTOM/////////////////////////////
+module.exports.getCustom = async(sensor) => {
+    let qString = `SELECT * FROM custom where part_number = '${sensor}'`;
     try {
         const response = await pool.query(qString);
         return response;
@@ -118,3 +121,29 @@ module.exports.getCustomType = async(data) => {
         return error;
     }
 }
+//////////////////////////////////////////////////////////////
+
+//////////////////PROTO///////////////////////////////////////
+module.exports.getProto = async(sensor) => {
+    //TODO:
+    //xproto_code ??? or xproto_part_number??? neither are unique, so need to figure out how we want to modify xproto csv or schema
+    let qString = `SELECT * FROM xproto where xproto_code = '${sensor}'`;
+    try {
+        const response = await pool.query(qString);
+        return response;
+    }
+    catch(error) {
+        return error;
+    }
+}
+module.exports.getProtoType = async(data) => {
+    let qString = `SELECT type from char where char_code = '${data}' limit 1`;
+    try {
+        const response = await pool.query(qString);
+        return response;
+    }
+    catch(error) {
+        return error;
+    }
+}
+/////////////////////////////////////////////////////////////////////////

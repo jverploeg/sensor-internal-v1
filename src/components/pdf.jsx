@@ -69,6 +69,7 @@ const PDF = (input) => {
     const [sensorCode, setSensorCode] = useState('');
     const [sensorData, setSensorData] = useState({});
     const [customData, setCustomData] = useState({});//different format than catalog
+    const [protoData, setProtoData] = useState({});//different format than catalog (& custom?????)
 
     //breakdown of parts/components
     const [type, setType] = useState('');
