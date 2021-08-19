@@ -87,6 +87,9 @@ app.get('/type', route.getType); //for the type description at the top of the pd
 app.get('/custom/*', route.getCustom);
 app.get('/ctype/*', route.getCustomType);//need options for image selection
 
+app.get('/proto/*', route.getProto);
+app.get('/ptype/*', route.getProtoType);//need options for image selection
+
 
 //IMAGES
 app.get('/images/*', route.getImage);

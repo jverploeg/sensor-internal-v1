@@ -129,6 +129,27 @@ const getCustomType = (req, res) => {
     })
 }
 
+const getProto = (req, res) => {
+    let sensor = req.url.slice(7);
+    db.getProto(sensor)
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error)
+    })
+}
+const getProtoType = (req, res) => {
+    let sensor = req.url.slice(7);
+    db.getProtoType(sensor)
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error)
+    })
+}
+
 
 const getImage = (req, res) => {
   let filepath = `D:/DATA/Sensor/webApp/images`;
@@ -164,8 +185,13 @@ module.exports = {
     checkSensor,
     getSensor,
     getType,
+
     getCustom,
     getCustomType,
+
+    getProto,
+    getProtoType,
+
     getImage,
 
     getBullets,
