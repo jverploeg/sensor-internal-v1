@@ -102,6 +102,7 @@ const PDF = (input) => {
         setSensorCode('');
         setSensorData({});
         setCustomData({});
+        setProtoData({});
 
         setType('');
         setTypeD('');
