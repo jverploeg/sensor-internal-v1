@@ -137,7 +137,7 @@ module.exports.getCustomType = async(data) => {
 module.exports.getProto = async(sensor) => {
     //TODO:
     //xproto_code ??? or xproto_part_number??? neither are unique, so need to figure out how we want to modify xproto csv or schema
-    let qString = `SELECT * FROM xproto where xproto_code = '${sensor}'`;
+    let qString = `SELECT * FROM xproto where xproto_part_number = '${sensor}'`;
     try {
         const response = await pool.query(qString);
         return response;

@@ -13,6 +13,7 @@ import convert from '../helpers/convert';
 
 // ASSETS
 import date from '../images/DATECODE1-Model.png';
+import { getProto } from '../../database/model';
 
 // VARIABLES
 const host = `http://192.168.1.118:3000`;
@@ -153,7 +154,7 @@ const PDF = (input) => {
         find(senstype, sensor);
     },[sensor])
 
-    //once code is set & confirmed valid, get data
+    //once code is set & confirmed valid, get data for sensor
     useEffect(() => {
         if(sensorCode.length > 1) {
             if (sensorType === 'catalog') {
@@ -161,8 +162,8 @@ const PDF = (input) => {
             } else if(sensorType === 'custom') {
                 getSensor(sensorCode);
             } else if(sensorType === 'xproto') {
-                //TODO LATER: implement logic for xproto sensors
-                //getProto
+                //getProto(sensorCode);???
+                getSensor(sensorCode);
             }
         }
     },[sensorCode])
@@ -223,6 +224,15 @@ const PDF = (input) => {
             try {
                 const { data } = await axios.get(`${host}/custom/${sensor}`);
                 setCustomData(data[0]);
+            }
+            catch (error) {
+                console.log(error)
+            }
+        } else if(sensorType === 'xproto'){
+            try {
+                const { data } = await axios.get(`${host}/proto/${sensor}`);
+                console.log('proto', data[0])
+                setProtoData(data[0]);
             }
             catch (error) {
                 console.log(error)
