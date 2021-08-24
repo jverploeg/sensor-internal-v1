@@ -41,6 +41,7 @@ const App = () => {
         //getData();
         setPage('Home');//initialize page to start on home
         selected();//highlight home tab
+        console.log('hey')
     },[]);
     //TODO: do we we need both these useEffects below????
     useEffect(() => {

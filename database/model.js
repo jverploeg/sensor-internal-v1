@@ -71,6 +71,16 @@ module.exports.customExists = async(data) => {
         console.log(error)
     }
 }
+module.exports.xprotoExists = async(data) => {
+    let qString = `SELECT * FROM xproto where xproto_part_number = '${data}'`;
+    try {
+        const response = await pool.query(qString);
+        return response;
+    }
+    catch(error) {
+        console.log(error)
+    }
+}
 
 
 
