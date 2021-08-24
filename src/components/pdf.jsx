@@ -13,7 +13,6 @@ import convert from '../helpers/convert';
 
 // ASSETS
 import date from '../images/DATECODE1-Model.png';
-import { getProto } from '../../database/model';
 
 // VARIABLES
 const host = `http://192.168.1.118:3000`;
@@ -31,7 +30,7 @@ const PDF = (input) => {
     } else if(temp === 'b') {
         var sensor = 'M1VE-MRS-E5CP2';//
     } else if(temp === 'c') {
-        var sensor = 'CS1111';//'A47-HS-RTCP2';//'CS1111'
+        var sensor = 'X2100';//'A47-HS-RTCP2';//'CS1111'
     } else if(temp === 'd') {
         var sensor = 'CS1193';//'S38S-MRS-E5T21';//'CS1193'
     } else if(temp === 'e') {
