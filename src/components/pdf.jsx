@@ -30,7 +30,7 @@ const PDF = (input) => {
     } else if(temp === 'b') {
         var sensor = 'M1VE-MRS-E5CP2';//
     } else if(temp === 'c') {
-        var sensor = 'CS1111';//'A47-HS-RTCP2';//'CS1111'
+        var sensor = 'X2161';//'A47-HS-RTCP2';//'CS1111'
     } else if(temp === 'd') {
         var sensor = 'CS1193';//'S38S-MRS-E5T21';//'CS1193'
     } else if(temp === 'e') {
@@ -102,6 +102,7 @@ const PDF = (input) => {
         setSensorCode('');
         setSensorData({});
         setCustomData({});
+        setProtoData({});
 
         setType('');
         setTypeD('');
@@ -152,7 +153,7 @@ const PDF = (input) => {
         find(senstype, sensor);
     },[sensor])
 
-    //once code is set & confirmed valid, get data
+    //once code is set & confirmed valid, get data for sensor
     useEffect(() => {
         if(sensorCode.length > 1) {
             if (sensorType === 'catalog') {
@@ -160,8 +161,8 @@ const PDF = (input) => {
             } else if(sensorType === 'custom') {
                 getSensor(sensorCode);
             } else if(sensorType === 'xproto') {
-                //TODO LATER: implement logic for xproto sensors
-                //getProto
+                //getProto(sensorCode);???
+                getSensor(sensorCode);
             }
         }
     },[sensorCode])
@@ -174,6 +175,8 @@ const PDF = (input) => {
         }
     },[sensorData])
 
+//TODO: COMBINE XPROTO AND CUSTOM STATES AND FUNCTIONS????
+
     //once we have custom data package, need type from char
     useEffect(() => {
         if(customData.part_number) {
@@ -182,6 +185,14 @@ const PDF = (input) => {
         }    
     },[customData])
 
+    //once we have proto data package, need type from char
+    useEffect(() => {
+        if(protoData.xproto_part_number) {
+            setChar(protoData.char);
+            getType(protoData.char);
+        }    
+    },[protoData])
+
     //once we have sensor data package, call breakdown to split into relevant parts
     useEffect(() => {
         if(sensorType === 'catalog' && type.length > 1) {
@@ -189,6 +200,9 @@ const PDF = (input) => {
         }
         if(sensorType === 'custom' && type.length > 1) {
             customBreakdown();
+        }
+        if(sensorType === 'xproto' && type.length > 1) {
+            protoBreakdown();
         }
     },[type]);
     
@@ -200,7 +214,7 @@ const PDF = (input) => {
             }else if(sensorType === 'custom'){
                 getCustomImages();
             }else if(sensorType === 'xproto'){
-                //getProtoImages();
+                getProtoImages();
             }
         }
     },[description])//trigger on description change.(last state to be set in Breakdown)
@@ -226,11 +240,29 @@ const PDF = (input) => {
             catch (error) {
                 console.log(error)
             }
+        } else if(sensorType === 'xproto'){
+            try {
+                const { data } = await axios.get(`${host}/proto/${sensor}`);
+                console.log('proto', data[0])
+                setProtoData(data[0]);
+            }
+            catch (error) {
+                console.log(error)
+            }
         }
     }
 
     const getType = async(type) => {
-        if(sensorType === 'custom') {
+        if(sensorType === 'catalog'){
+            try {
+                const { data } = await axios.get(`${host}/type`, {params: {type}});
+                setType(sensorData.type);
+                setTypeD(data[0].type_description);
+            }
+            catch (error) {
+                console.log(error)
+            }
+        } else if(sensorType === 'custom') {
             try {
                 const { data } = await axios.get(`${host}/ctype/${type}`);
                 setType(data[0].type);
@@ -238,11 +270,10 @@ const PDF = (input) => {
             catch (error) {
                 console.log(error)
             }
-        } else if(sensorType === 'catalog'){
+        } else if(sensorType === 'xproto') {
             try {
-                const { data } = await axios.get(`${host}/type`, {params: {type}});
-                setType(sensorData.type);
-                setTypeD(data[0].type_description);
+                const { data } = await axios.get(`${host}/ptype/${type}`);
+                setType(data[0].type);
             }
             catch (error) {
                 console.log(error)
@@ -278,7 +309,7 @@ const PDF = (input) => {
         getHtml(C);
     }
 
-    const customBreakdown = (sensor) => {
+    const customBreakdown = () => {
         //destructure redefine data/props
         let housing = customData.housing;
         let conn = customData.connection;
@@ -295,6 +326,28 @@ const PDF = (input) => {
         setConnChart(customData.conn_chart);
         setSpecChart(customData.spec_chart);
         setPicture(customData.picture);
+
+        //getHTML
+        getCustomHtml(char, sensorCode);
+    }
+
+    const protoBreakdown = () => {
+        //destructure redefine data/props
+        let housing = protoData.housing;
+        let conn = protoData.connection;
+        let opt = protoData.opt;
+
+        //set states for each component
+        setTypeD('');//follow similar design as custom...
+        setHousing(housing);
+        setConnect(conn);
+        setOption(opt);
+        setRev(protoData.rev);
+        setDescription(protoData.description);
+        //special custom states for inconsistent file-naming
+        setConnChart(sensorCode);
+        setSpecChart(sensorCode);
+        setPicture(sensorCode);
 
         //getHTML
         getCustomHtml(char, sensorCode);
@@ -382,6 +435,28 @@ const PDF = (input) => {
         setImages(images);
     }
     const getCustomImages = async() => {
+        const responses = await Promise.allSettled([
+            axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/mech/${housing}-Mech-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/housing/${housing}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/option/${option}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/connect/${connect}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/conn_charts/${connChart}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/spec_charts/${specChart}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/pictures/${picture}-Model`, { responseType: 'arraybuffer' }),
+        ])
+        let results = [];
+        for(let i = 0; i < responses.length; i++) {
+            if(responses[i].value){
+                results.push(responses[i].value.data)//value is an object
+            } else {
+                results.push(null)
+            }
+        }
+        let images = convert.images(results);
+        setImages(images);
+    }
+    const getProtoImages = async() => {
         const responses = await Promise.allSettled([
             axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
             axios.get(`${host}/images/mech/${housing}-Mech-Model`, { responseType: 'arraybuffer' }),
