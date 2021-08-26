@@ -353,6 +353,13 @@ const PDF = (input) => {
         getCustomHtml(char, sensorCode);
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*(8/26/21)
+        IGNORE XPROTO FOR NOW>>>COME BACK TO AFTER DISCUSSION WITH DAVE and have clear direction moving forward
+    */
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     const getHtml = async(char) => {
         const responses = await Promise.allSettled([
             axios.get(`${host}/html/bullets/${char}`),
