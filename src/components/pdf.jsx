@@ -19,23 +19,23 @@ const host = `http://192.168.1.118:3000`;
 
 const PDF = (input) => {
     //destructure props!!!!!!!!!!!!!!!
-    let temp = input.input;//temp for testing
+    let temp = input.input.toUpperCase();//temp for testing
     //TODO: temp = temp.toUpperCase();
     //let sensor = input.input;
 
     //////////////////TESTING//////////////////////
     //shortcuts for testing random sensors
-    if(temp === "a") {
+    if(temp === 'A') {
         var sensor = 'MFM7-EHS1-F5P21';//
-    } else if(temp === 'b') {
+    } else if(temp === 'B') {
         var sensor = 'M1VE-MRS-E5CP2';//
-    } else if(temp === 'c') {
+    } else if(temp === 'C') {
         var sensor = 'X2161';//'A47-HS-RTCP2';//'CS1111'
-    } else if(temp === 'd') {
+    } else if(temp === 'D') {
         var sensor = 'CS1193';//'S38S-MRS-E5T21';//'CS1193'
-    } else if(temp === 'e') {
+    } else if(temp === 'E') {
         var sensor = 'CS1066';//'S63B-PHS-RGCD3';//'CS1066'
-    } else if(temp === 'f') {
+    } else if(temp === 'F') {
         var sensor = 'A63-37ADQO-LPCP4';//'CS1226'
     } else if(temp === '1') {
         var sensor = 'CS1045';

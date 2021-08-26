@@ -19,7 +19,7 @@ import { ControlCameraOutlined } from '@material-ui/icons';
 import Tables from './tables';
 
 const App = () => {
-    let viewports = ['Home', 'housing', 'char', 'option', 'char_op', 'connection', 'sensor', 'custom', 'xproto']; //array of view options. tables with all have similar setup, home is different
+    let viewports = ['Home', 'Housing', 'Char', 'Option', 'Char_Op', 'Connection', 'Sensor', 'Custom', 'Xproto', 'Settings']; //array of view options. tables with all have similar setup, home is different
 
     //////////////STATE DECLARATION////////////////////////////////////////////////////
     const [page, setPage] = useState({}); //initialize to homepage on initial render
@@ -72,7 +72,7 @@ const App = () => {
     //////////REQUESTS/////////////////////
     const getData = async() => {
         //determine route -> db table based on pageSelection
-        let route = page;
+        let route = page.toLowerCase();
         try {
             const { data } = await axios.get(`${host}/${route}`);
             setData(data);
@@ -90,21 +90,21 @@ const App = () => {
 
     const getColumns = () => {
         var cols = [];
-        if(page === 'housing'){
+        if(page === 'Housing'){
             cols = Tables.housing();
-        } else if(page === 'char'){
+        } else if(page === 'Char'){
             cols = Tables.char();
-        } else if(page === 'option'){
+        } else if(page === 'Option'){
             cols = Tables.option();
-        } else if(page === 'char_op'){
+        } else if(page === 'Char_Op'){
             cols = Tables.char_op();
-        } else if(page === 'connection'){
+        } else if(page === 'Connection'){
             cols = Tables.connection();
-        } else if(page === 'sensor'){
+        } else if(page === 'Sensor'){
             cols = Tables.sensor();
-        } else if(page === 'custom'){
+        } else if(page === 'Custom'){
             cols = Tables.custom();
-        } else if(page === 'xproto'){
+        } else if(page === 'Xproto'){
             cols = Tables.xproto();
         }
         //set the column state now
