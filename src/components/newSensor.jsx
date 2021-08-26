@@ -48,6 +48,7 @@ const NewSensor = (props) => {
         {!!shown ? (
             <Modal
             onSubmit={props.onSubmit}
+            data={props.data}
             //modalRef={(n) => (modal = n)}
             //buttonRef={(n) => (closeButton = n)}
             closeModal={closeModal}
