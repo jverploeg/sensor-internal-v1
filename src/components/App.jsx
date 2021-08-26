@@ -6,13 +6,17 @@ import axios from 'axios';
 // STYLING DEPENDENCIES
 // import { DataGrid } from '@material-ui/data-grid';
 import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@material-ui/data-grid';
+// import Modal from '@material-ui/core/Modal';
+// import { makeStyles } from '@material-ui/core/styles';
+
 
 // SUBCOMPONENTS
 import Search from './search';
+import NewSensor from './newSensor';
 
 // CUSTOM HOOKS
 import useToggle from './toggle';
-import { ControlCameraOutlined } from '@material-ui/icons';
+//import { ControlCameraOutlined } from '@material-ui/icons';
 
 // HELPERS
 //import callDB from '../helpers/appRequests';
@@ -29,10 +33,13 @@ const App = () => {
     const [rows, setRows] = useState([]); // formatted rows from data so dataGrid can be filled correctly
     const [inputCols, setInputCols] = useState([]); // need to make a deep copy of cols and then shift so we dont alter cols 
     // custom state/hooks
-    const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
+    //const [isTextChanged, setIsTextChanged] = useToggle(); //Call the toggle hook which returns, current value and the toggler function
     const [select, setButton] = useState(''); // sets the state for styling currentPage in navbar
     const [deleteShow, setShow] = useState(false);//useToggle();
-    const [deleteRow, setDelete] = useState([]);
+    const [chosenRow, setChosen] = useState([]);
+
+    const [open, setOpen] = useState(false);
+
     /////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -45,7 +52,7 @@ const App = () => {
     //TODO: do we we need both these useEffects below????
     useEffect(() => {
         setShow(false);
-        setDelete([]);
+        setChosen([]);
         if(page !== 'Home'){
             getData();
         }
@@ -53,7 +60,7 @@ const App = () => {
     //get new row values whenever data is modified in database
     useEffect(() => {
         setShow(false);
-        setDelete([]);
+        setChosen([]);
         if(data.length > 1) {
             getColumns();
             getRows();
@@ -62,7 +69,7 @@ const App = () => {
     //on deletion, make sure delete button is hidden
     useEffect(() => {
         setShow(false);
-        setDelete([]);
+        setChosen([]);
     },[rows])
     /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -216,18 +223,18 @@ const App = () => {
         (id) => {
             if(id.length === 0){
                 setShow(false);
-                setDelete([]);
+                setChosen([]);
             }else {
                 setShow(true);
                 let row = id[0];
-                setDelete(row);
+                setChosen(row);
             }
         },
         [rows],
     ); 
 
     const handleDelete = () => {
-        let id = deleteRow;
+        let id = chosenRow;
         //delete entry from database;
         axios.delete(`${host}/${page}/${id}`)//, id)
         .then(response => {
@@ -237,7 +244,7 @@ const App = () => {
           console.log(error);
         });
         //get modified data
-        //update rows state to uncheck selection immediately, reove row immediately, and on page switch
+        //update rows state to uncheck selection immediately, remove row immediately, and on page switch
         let temp = JSON.parse(JSON.stringify(rows));//deep copy allows deletion
         //find id in temp;
         for(let i = 0; i < temp.length; i++){
@@ -248,6 +255,22 @@ const App = () => {
         //update state
         setRows(temp);
     }
+    // const createSimilar = () => {
+    //     //transfer current selection data to a modal with prefilled forms... 
+
+    // }
+    // const handleOpen = () => {
+    //     setOpen(true);
+    // };
+    
+    // const handleClose = () => {
+    //     setOpen(false);
+    // };
+    const onSubmit = (event) => {
+        event.preventDefault(event);
+        console.log(event.target.name.value);
+        console.log(event.target.email.value);
+      };
 
 
 
@@ -305,10 +328,15 @@ const App = () => {
                                 {!!deleteShow && 
                                     <div>
                                         <button onClick={handleDelete}>DELETE</button>
+                                        <NewSensor
+                                            data={rows[chosenRow]}
+                                            onSubmit={onSubmit}
+                                            //fields={columns}DONT NEED
+                                        />
                                     </div>    
                                 }
                         </div>
-                        <div className = "addData">
+                        {/* <div className = "addData">
                             <form id="data-form">
                                 {!!inputCols && inputCols.map((item, index) => (
                                     <input
@@ -322,7 +350,7 @@ const App = () => {
                                 ))}
                             </form>
                             <button type="submit" onClick={handleSubmit}>ADD NEW DATA</button>
-                        </div>
+                        </div> */}
                     </div>
                 }
             </div>
