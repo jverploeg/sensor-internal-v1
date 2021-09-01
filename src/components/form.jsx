@@ -8,7 +8,7 @@ export const Form = ({ data, onSubmit }) => {
     fields.shift();
 
     const [inputs, setInputs] = useState(data); // inputs from submission fields
-    console.log(inputs)
+    console.log(inputs.housing_code)
 
     const handleChange = (e) => {
         setInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
@@ -16,13 +16,15 @@ export const Form = ({ data, onSubmit }) => {
 
   return (
     <form onSubmit={onSubmit}>
-        {!!fields && fields.map((item, index) => (
+        {!!inputs && !!fields && fields.map((item, key) => (
             <input
                 //className="data-input"
                 //id={key}
+                defaultValue={inputs[item]}
                 name={item}
-                placeholder={item}
-                value={inputs.name}
+                //placeholder={item}
+                //placeholder={inputs.name}
+                //value={inputs.name}
                 onChange={handleChange}
             />
         ))}
