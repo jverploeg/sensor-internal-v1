@@ -87,6 +87,7 @@ const PDF = (input) => {
     const [picture, setPicture] = useState('');
 
     //images
+    const [paths, setPaths] = useState({});
     const [images, setImages] = useState({});
 
     //html
@@ -117,6 +118,7 @@ const PDF = (input) => {
         setSpecChart('');
         setPicture('');
 
+        setPaths({});
         setImages({});
 
         setBullets([]);
@@ -209,15 +211,28 @@ const PDF = (input) => {
     //once all part states have been set, fetch images from server
     useEffect(() => {
         if(description.length > 1) {
-            if(sensorType === 'catalog') {
-                getImages();
-            }else if(sensorType === 'custom'){
+            if(sensorType === 'custom'){
                 getCustomImages();
             }else if(sensorType === 'xproto'){
                 getProtoImages();
             }
+            //old version
+            // if(sensorType === 'catalog') {
+            //     getImages();
+            // }else if(sensorType === 'custom'){
+            //     getCustomImages();
+            // }else if(sensorType === 'xproto'){
+            //     getProtoImages();
+            // }
         }
-    },[description])//trigger on description change.(last state to be set in Breakdown)
+    },[description]);//, paths])//trigger on description change.(last state to be set in Breakdown)
+
+    //once all part states have been set, fetch images from server
+    useEffect(() => {
+        if(paths.pic) {
+            getImages();
+        }
+    },[paths]);
     
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -257,10 +272,13 @@ const PDF = (input) => {
             try {
                 const { data } = await axios.get(`${host}/type`, {params: {type}});
                 //get type from char instead of type.... 
-                console.log({data})
+                //console.log({data})
                 //setType(sensorData.type);
                 setType(data[0].type);
                 setTypeD(data[0].type_description);
+
+                //format and set html object with text...
+                getHtml(type);
             }
             catch (error) {
                 console.log(error)
@@ -296,6 +314,9 @@ const PDF = (input) => {
         let Conn = splitOps[1];
         let opt = splitOps[0].slice(C.length); //get accurate option code
 
+        //GET image names from tables????
+        getPaths(H, Conn, opt, C);//housing, connection, option, char
+
         //set states for each component
         setHousing(H);
         setChar(C);
@@ -303,14 +324,54 @@ const PDF = (input) => {
         setOption(opt);
         setRev(sensorData.rev)
         setDescription(sensorData.title)
-        //component-combo image file format
-        setConnChart(Conn + '-' + C);
-        setSpecChart(C + '-' + opt);
-        setPicture(H + '-' + C);
 
-        //format and set html object with text...
-        getHtml(C);
+
+        //component-combo image file format
+
+
+        // //format and set html object with text...
+        // getHtml(C); --> now called in getType... 
     }
+    const getPaths = async(hs, cn, op, ch) => {
+        //console.log('getPaths', {hs, cn, op, ch});
+        //get image name defined in each table
+        const response = await Promise.all([
+            axios.get(`${host}/housing/images`, {params: {hs}}),
+            axios.get(`${host}/option/images`, {params: {op}}),
+            axios.get(`${host}/connection/images`, {params: {cn}})
+            //axios.get(`${host}/char-op/images`, {params: {char,op}}),
+            //axios.get(`${host}/file/housing/${hs}`),
+        ]);
+        //const response = axios.get(`${host}/housing/images`, {params: {hs}});
+        const data = response.map((response) => response.data);
+        // console.log('pathways',{data})
+        // console.log(data[0][0])
+
+        let template = {
+            housing: data[0][0].png_file,
+            mech: data[0][0].mech_file,
+            option: data[1][0].png_file,
+            connection: data[2][0].png_file,
+        }
+        //remove the .png ending of each string so that fetching images is universal for image paths from table filenames & directly delcared from folder
+        for(let key in template) {
+            template[key] = template[key].slice(0, template[key].length - 4);
+        }
+        // setConnChart(Conn + '-' + C);
+        // setSpecChart(C + '-' + opt);
+        // setPicture(H + '-' + C);
+        let c_ch = cn + '-' + ch + '-Model';
+        let sp_ch = ch + '-' + op + '-Model';
+        let pic = hs + '-' + ch + '-Model';
+        template.conn = c_ch;
+        template.spec = sp_ch;
+        template.pic = pic;
+        
+
+        //set the image path state
+        setPaths(template);
+    }
+
 
     const customBreakdown = () => {
         //destructure redefine data/props
@@ -423,16 +484,27 @@ const PDF = (input) => {
 
     //////////////////////////////////////////IMAGES//////////////////////////////////////////////////////////
     const getImages = async() => {
+        //console.log(paths)
         const responses = await Promise.allSettled([
             axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/mech/${housing}-Mech-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/housing/${housing}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/option/${option}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/connect/${connect}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/conn_charts/${connChart}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/spec_charts/${specChart}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/pictures/${picture}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/mech/${paths.mech}`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/housing/${paths.housing}`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/option/${paths.option}`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/connect/${paths.connection}`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/conn_charts/${paths.conn}`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/spec_charts/${paths.spec}`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/pictures/${paths.pic}`, { responseType: 'arraybuffer' }),
         ])
+        // const responses = await Promise.allSettled([
+        //     axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/mech/${housing}-Mech-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/housing/${housing}-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/option/${option}-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/connect/${connect}-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/conn_charts/${connect}-${char}-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/spec_charts/${char}-${option}-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/pictures/${housing}-${char}-Model`, { responseType: 'arraybuffer' }),
+        // ])
         let results = [];
         for(let i = 0; i < responses.length; i++) {
             if(responses[i].status === 'fulfilled'){
@@ -525,17 +597,31 @@ const PDF = (input) => {
                                     </li>
                                 ))}
                             </ul>
-                        </div>    
+                        </div>
+                        {(sensorType === 'catalog') && 
+                            <div className="images">
+                                <img className="type" src={images.type} alt={`type/${type} not found`}/>
+                                <img className="mech" src={images.mech} alt={`mech/${paths.mech} not found`}/>
+                                <img className="housing" src={images.housing} alt={`housing/${paths.housing} not found`}/>
+                                <img className="option" src={images.option} alt={`option/${paths.option} not found`}/>
+                                <img className="connect" src={images.connect} alt={`connect/${paths.connection} not found`}/>
+                                <img className="conn_chart" src={images.conn_chart} alt={`conn_charts/${paths.conn} not found`}/>
+                                <img className="date" src={date}></img>
+                            </div>
+                        }
+                        {(sensorType === 'custom') &&
                         <div className="images">
-                            <img className="type" src={images.type} alt={`type/Type-${type}-Model not found`}/>
-                            <img className="mech" src={images.mech} alt={`mech/${housing}-Mech-Model not found`}/>
-                            <img className="housing" src={images.housing} alt={`housing/${housing}-Model not found`}/>
-                            <img className="option" src={images.option} alt={`option/${option}-Model not found`}/>
-                            <img className="connect" src={images.connect} alt={`connect/${connect}-Model not found`}/>
-                            <img className="conn_chart" src={images.conn_chart} alt={`type/conn_charts/${connChart}-Model not found`}/>
+                            <img className="type" src={images.type} alt={`type/${type} not found`}/>
+                            <img className="mech" src={images.mech} alt={`mech/${housing} not found`}/>
+                            <img className="housing" src={images.housing} alt={`housing/${housing} not found`}/>
+                            <img className="option" src={images.option} alt={`option/${option} not found`}/>
+                            <img className="connect" src={images.connect} alt={`connect/${connect} not found`}/>
+                            <img className="conn_chart" src={images.conn_chart} alt={`conn_charts/${connChart} not found`}/>
                             <img className="date" src={date}></img>
                         </div>
-                        
+                        }   
+
+    
                         <div className="description" id="description" dangerouslySetInnerHTML={convert.createMarkup(htmlRaw)}/>
 
                         <div className='footer'>
@@ -549,6 +635,10 @@ const PDF = (input) => {
                                 <br></br>
                                 <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                             </div>
+                            // <div className="images">
+                            //     <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${paths.spec} not found`}/>
+                            //     <img className="picture" src={images.picture} alt={`pictures/${paths.pic} not found`}/>
+                            // </div>
                         }
                         {(sensorType === 'custom') && 
                             <div className="headerCust" >
@@ -556,11 +646,18 @@ const PDF = (input) => {
                                 {/* <br></br>
                                 <span style={{fontSize:'12pt'}}><i>{description}</i></span> */}
                             </div>
+                            // <div className="images">
+                            //     <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${images.spec_chart} not found`}/>
+                            //     <img className="picture" src={images.picture} alt={`pictures/${images.picture} not found`}/>
+                            // </div>
                         }
+                        
                         <div className="images">
-                            <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${char}-${option}-Model not found`}/>
-                            <img className="picture" src={images.picture} alt={`pictures/${housing}-${char}-Model not found`}/>
+                            <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${images.spec_chart} not found`}/>
+                            <img className="picture" src={images.picture} alt={`pictures/${images.picture} not found`}/>
                         </div>
+
+
                         <div className='footer'>
                             <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * Rev {rev}</i></span>
                         </div>    
