@@ -79,6 +79,8 @@ const App = () => {
     const host = `http://192.168.1.118:3000`;
     //////////REQUESTS/////////////////////
     const getData = async() => {
+        // setShow(false);
+        // setChosen([]);
         //determine route -> db table based on pageSelection
         let route = page.toLowerCase();
         try {

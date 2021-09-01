@@ -275,21 +275,34 @@ $transition-duration: .5s;
     margin-right: 17px;
   }
 
-  .input-block label {
-      display: inline-block;
-      width: 140px;
-      text-align: right;
-      padding-right: 10px;
+  .form{
+      display: flex;
+      flex-direction: column;
   }
+  .input-block{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    height: 75px;
+    width: 350px;
+    padding-bottom: 15px;
+  }
+  .input-label{
+    //width: 140px;
+    //text-align: center;
+    align-self: center;
+    //padding-right: 10px;
+}
   .data-input {
     //display: block;
     //http://jsfiddle.net/4Qsa8/
     //https://css-tricks.com/auto-growing-inputs-textareas/
-    height: 75px;
-    width: 200px;
+    //height: 75px;
+    width: 350px;
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: auto;
+    align-self: center;
     // word-wrap: break-word;
     // word-break: break-all;
     //text-align: right;

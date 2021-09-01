@@ -15,10 +15,10 @@ export const Form = ({ data, onSubmit }) => {
     }    
 
   return (
-    <form onSubmit={onSubmit}>
+    <form className="form" onSubmit={onSubmit}>
         {!!inputs && !!fields && fields.map((item, key) => (
           <div className="input-block">
-            <label>{item}</label>
+            <label className="input-label">{item}</label>
             <textarea
                 className="data-input"
                 //id={key}
