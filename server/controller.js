@@ -61,6 +61,20 @@ const deleteRow = (req, res) => {
     })
 }
 
+//get images from subcomponent tables
+const getHousingImages = (req, res) => {
+    //let housing = req.url.slice
+    let data = req.query.hs; //passing in the housing code (ex MFM7)
+    console.log(data)
+    db.getHousingImages(data)
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error);
+    })
+}
+
 const checkSensor = (req, res) => {
     let pathway = req.url.slice(7); // /valid/ 7
     //get type and code;
@@ -201,6 +215,7 @@ module.exports = {
     getProto,
     getProtoType,
 
+    getHousingImages,
     getImage,
 
     getBullets,

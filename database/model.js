@@ -50,6 +50,20 @@ module.exports.deleteRow = async(path, id) => {
     }
 }
 
+//get image paths/names
+module.exports.getHousingImages = async(data) => {
+    //need image and mech
+    let qString = `SELECT png_file, mech_file from housing where housing_code = '${data}'`;
+    console.log(qString)
+    try {
+        const response = await pool.query(qString);
+        return response;
+    }
+    catch(error) {
+        return error;
+    }
+}
+
 ////////////EXISTENCE/////////////////////////////
 module.exports.sensorExists = async(data) => {
     let qString = `SELECT * FROM sensor where part_number = '${data}'`;

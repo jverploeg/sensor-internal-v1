@@ -87,6 +87,7 @@ const PDF = (input) => {
     const [picture, setPicture] = useState('');
 
     //images
+    const [paths, setPaths] = useState({});
     const [images, setImages] = useState({});
 
     //html
@@ -261,6 +262,9 @@ const PDF = (input) => {
                 //setType(sensorData.type);
                 setType(data[0].type);
                 setTypeD(data[0].type_description);
+
+                //format and set html object with text...
+                getHtml(type);
             }
             catch (error) {
                 console.log(error)
@@ -303,14 +307,29 @@ const PDF = (input) => {
         setOption(opt);
         setRev(sensorData.rev)
         setDescription(sensorData.title)
+
+        //GET image names from tables????
+        getPaths(H, Conn, opt, C);//housing, connection, option, char
+
         //component-combo image file format
         setConnChart(Conn + '-' + C);
         setSpecChart(C + '-' + opt);
         setPicture(H + '-' + C);
 
-        //format and set html object with text...
-        getHtml(C);
+        // //format and set html object with text...
+        // getHtml(C); --> now called in getType... 
     }
+    const getPaths = async(hs, cn, op, ch) => {
+        //get image name defined in each table
+        // const response = await Promise.allSettled([
+        //     axios.get(`${host}/housing/images`, {params: {hs}})//,
+        //     //axios.get(`${host}/file/housing/${hs}`),
+        // ]);
+        const response = axios.get(`${host}/housing/images`, {params: {hs}});
+        //const data = responses.map((response) => response.data);
+        console.log('pathways',{response})
+    }
+
 
     const customBreakdown = () => {
         //destructure redefine data/props

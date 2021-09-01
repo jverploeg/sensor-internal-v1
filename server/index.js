@@ -31,6 +31,7 @@ app.listen(port, () => {
 
 //HOUSING
 app.get('/housing', route.getData);
+app.get('/housing/images', route.getHousingImages);
 app.post('/housing', route.addData);
 app.put('/housing', route.changeData);
 app.delete('/housing/*', route.deleteRow);
