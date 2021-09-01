@@ -31,7 +31,7 @@ app.listen(port, () => {
 
 //HOUSING
 app.get('/housing', route.getData);
-app.get('/housing/images', route.getHousingImages);
+app.get('/housing/images', route.getHousingImage);
 app.post('/housing', route.addData);
 app.put('/housing', route.changeData);
 app.delete('/housing/*', route.deleteRow);
@@ -44,6 +44,7 @@ app.delete('/char/*', route.deleteRow);
 
 //OPTION
 app.get('/option', route.getData);
+app.get('/option/images', route.getOptionImage);
 app.post('/option', route.addData);
 app.put('/option', route.changeData);
 app.delete('/option/*', route.deleteRow);
@@ -57,6 +58,7 @@ app.delete('/char_op/*', route.deleteRow);
 //CONNECTION
 // rename to conn?
 app.get('/connection', route.getData);
+app.get('/connection/images', route.getConnectionImage);
 app.post('/connection', route.addData);
 app.put('/connection', route.changeData);
 app.delete('/connection/*', route.deleteRow);

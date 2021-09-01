@@ -62,11 +62,30 @@ const deleteRow = (req, res) => {
 }
 
 //get images from subcomponent tables
-const getHousingImages = (req, res) => {
-    //let housing = req.url.slice
+const getHousingImage = (req, res) => {
     let data = req.query.hs; //passing in the housing code (ex MFM7)
-    console.log(data)
-    db.getHousingImages(data)
+    db.getHousingImage(data)
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error);
+    })
+}
+const getOptionImage = (req, res) => {
+    let data = req.query.op; //passing in the option code (ex 5K)
+    db.getOptionImage(data)
+    .then(result => {
+        res.status(200).send(result.rows);
+    })
+    .catch(error => {
+        res.status(500).send(error);
+    })
+}
+const getConnectionImage = (req, res) => {
+    //let housing = req.url.slice
+    let data = req.query.cn; //passing in the connection code (ex CD3)
+    db.getConnectionImage(data)
     .then(result => {
         res.status(200).send(result.rows);
     })
@@ -215,7 +234,9 @@ module.exports = {
     getProto,
     getProtoType,
 
-    getHousingImages,
+    getHousingImage,
+    getOptionImage,
+    getConnectionImage,
     getImage,
 
     getBullets,

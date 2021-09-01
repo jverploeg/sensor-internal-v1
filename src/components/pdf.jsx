@@ -118,6 +118,7 @@ const PDF = (input) => {
         setSpecChart('');
         setPicture('');
 
+        setPaths({});
         setImages({});
 
         setBullets([]);
@@ -210,15 +211,28 @@ const PDF = (input) => {
     //once all part states have been set, fetch images from server
     useEffect(() => {
         if(description.length > 1) {
-            if(sensorType === 'catalog') {
-                getImages();
-            }else if(sensorType === 'custom'){
+            if(sensorType === 'custom'){
                 getCustomImages();
             }else if(sensorType === 'xproto'){
                 getProtoImages();
             }
+            //old version
+            // if(sensorType === 'catalog') {
+            //     getImages();
+            // }else if(sensorType === 'custom'){
+            //     getCustomImages();
+            // }else if(sensorType === 'xproto'){
+            //     getProtoImages();
+            // }
         }
-    },[description])//trigger on description change.(last state to be set in Breakdown)
+    },[description]);//, paths])//trigger on description change.(last state to be set in Breakdown)
+
+    //once all part states have been set, fetch images from server
+    useEffect(() => {
+        if(paths.pic) {
+            getImages();
+        }
+    },[paths]);
     
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -258,7 +272,7 @@ const PDF = (input) => {
             try {
                 const { data } = await axios.get(`${host}/type`, {params: {type}});
                 //get type from char instead of type.... 
-                console.log({data})
+                //console.log({data})
                 //setType(sensorData.type);
                 setType(data[0].type);
                 setTypeD(data[0].type_description);
@@ -300,6 +314,9 @@ const PDF = (input) => {
         let Conn = splitOps[1];
         let opt = splitOps[0].slice(C.length); //get accurate option code
 
+        //GET image names from tables????
+        getPaths(H, Conn, opt, C);//housing, connection, option, char
+
         //set states for each component
         setHousing(H);
         setChar(C);
@@ -308,26 +325,51 @@ const PDF = (input) => {
         setRev(sensorData.rev)
         setDescription(sensorData.title)
 
-        //GET image names from tables????
-        getPaths(H, Conn, opt, C);//housing, connection, option, char
 
         //component-combo image file format
-        setConnChart(Conn + '-' + C);
-        setSpecChart(C + '-' + opt);
-        setPicture(H + '-' + C);
+
 
         // //format and set html object with text...
         // getHtml(C); --> now called in getType... 
     }
     const getPaths = async(hs, cn, op, ch) => {
+        console.log('getPaths', {hs, cn, op, ch});
         //get image name defined in each table
-        // const response = await Promise.allSettled([
-        //     axios.get(`${host}/housing/images`, {params: {hs}})//,
-        //     //axios.get(`${host}/file/housing/${hs}`),
-        // ]);
-        const response = axios.get(`${host}/housing/images`, {params: {hs}});
-        //const data = responses.map((response) => response.data);
-        console.log('pathways',{response})
+        const response = await Promise.all([
+            axios.get(`${host}/housing/images`, {params: {hs}}),
+            axios.get(`${host}/option/images`, {params: {op}}),
+            axios.get(`${host}/connection/images`, {params: {cn}})
+            //axios.get(`${host}/char-op/images`, {params: {char,op}}),
+            //axios.get(`${host}/file/housing/${hs}`),
+        ]);
+        //const response = axios.get(`${host}/housing/images`, {params: {hs}});
+        const data = response.map((response) => response.data);
+        // console.log('pathways',{data})
+        // console.log(data[0][0])
+
+        let template = {
+            housing: data[0][0].png_file,
+            mech: data[0][0].mech_file,
+            option: data[1][0].png_file,
+            connection: data[2][0].png_file,
+        }
+        //remove the .png ending of each string so that fetching images is universal for image paths from table filenames & directly delcared from folder
+        for(let key in template) {
+            template[key] = template[key].slice(0, template[key].length - 4);
+        }
+        // setConnChart(Conn + '-' + C);
+        // setSpecChart(C + '-' + opt);
+        // setPicture(H + '-' + C);
+        let c_ch = cn + '-' + ch + '-Model';
+        let sp_ch = ch + '-' + op + '-Model';
+        let pic = hs + '-' + ch + '-Model';
+        template.conn = c_ch;
+        template.spec = sp_ch;
+        template.pic = pic;
+        
+
+        //set the image path state
+        setPaths(template);
     }
 
 
@@ -442,16 +484,27 @@ const PDF = (input) => {
 
     //////////////////////////////////////////IMAGES//////////////////////////////////////////////////////////
     const getImages = async() => {
+        console.log(paths)
         const responses = await Promise.allSettled([
             axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/mech/${housing}-Mech-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/housing/${housing}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/option/${option}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/connect/${connect}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/conn_charts/${connChart}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/spec_charts/${specChart}-Model`, { responseType: 'arraybuffer' }),
-            axios.get(`${host}/images/pictures/${picture}-Model`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/mech/${paths.mech}`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/housing/${paths.housing}`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/option/${paths.option}`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/connect/${paths.connection}`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/conn_charts/${paths.conn}`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/spec_charts/${paths.spec}`, { responseType: 'arraybuffer' }),
+            axios.get(`${host}/images/pictures/${paths.pic}`, { responseType: 'arraybuffer' }),
         ])
+        // const responses = await Promise.allSettled([
+        //     axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/mech/${housing}-Mech-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/housing/${housing}-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/option/${option}-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/connect/${connect}-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/conn_charts/${connect}-${char}-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/spec_charts/${char}-${option}-Model`, { responseType: 'arraybuffer' }),
+        //     axios.get(`${host}/images/pictures/${housing}-${char}-Model`, { responseType: 'arraybuffer' }),
+        // ])
         let results = [];
         for(let i = 0; i < responses.length; i++) {
             if(responses[i].status === 'fulfilled'){
