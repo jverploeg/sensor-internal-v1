@@ -18,11 +18,18 @@ const getData = (req, res) => {
 const addData = (req, res) => {
     //remove the / from the req.url
     let route = req.url.slice(1); // '/route' --> 'route'
-    const entry = req.body;
-    let keys = Object.keys(entry);
-    let values = Object.values(entry);
+    let vals = req.body.params.vString;
+    let cols = req.body.params.cString
+    // console.log(req.body)
+    // let dataString = vals.join();
+    // let colString = cols.join();
+    // console.log(dataString)
+    //console.log(data)
+    // let keys = Object.keys(entry);
+    // let values = Object.values(entry);
 
-    db.addData(route, keys, values)
+    //db.addData(route, keys, values)
+    db.addData(route, vals, cols)
     .then(result => {
         res.status(200).send(result.rows);
     })

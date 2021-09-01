@@ -1,7 +1,7 @@
 // Dependencies
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Form } from './form';
+import Form from './form';
 import FocusTrap from 'focus-trap-react';
 
 

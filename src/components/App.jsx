@@ -228,6 +228,7 @@ const App = () => {
             }else {
                 setShow(true);
                 let row = id[0];
+                console.log({row})
                 setChosen(row);
             }
         },
@@ -248,6 +249,8 @@ const App = () => {
         //update rows state to uncheck selection immediately, remove row immediately, and on page switch
         let temp = JSON.parse(JSON.stringify(rows));//deep copy allows deletion
         //find id in temp;
+        //TODO!!!!!!!!!!!!!!!!!!!!!!!
+        //do we have to iterate if we now the row/ID??????????
         for(let i = 0; i < temp.length; i++){
             if(temp[i].id === id){
                 temp.splice(i,1);
@@ -269,9 +272,36 @@ const App = () => {
     // };
     const onSubmit = (event) => {
         event.preventDefault(event);
-        console.log(event.target.name.value);
-        console.log(event.target.email.value);
-      };
+        console.log(event.target);
+        let data = event.target.children; //HTMLCollection
+        console.log(data)
+        let vals = [];
+        let cols = [];
+        for(let i = 0; i < data.length - 1; i++){ //reduce array length since we removed id earlier
+            // console.log(data[i]) //only care about value???
+            // //lets store in an array for now...
+            // let temp = `'${data[i].value}'`;//''+data[i].value+'';
+            // vals.push(temp);
+            // cols.push(data[i].name);
+            //this is different now that we are using textarea...
+            let focus = data[i].innerText;
+            let val = data[i].children[focus].value;
+            let temp = `'${val}'`;
+            vals.push(temp);
+            cols.push(focus);
+        };
+        let vString = vals.join();
+        let cString = cols.join();
+        console.log(cString, vString)
+        let route = page;
+        axios.post(`${host}/${route}`, {params: {vString, cString}})
+          .then(response => {
+            console.log(response);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    };
 
 
 
@@ -330,7 +360,8 @@ const App = () => {
                                     <div>
                                         <button onClick={handleDelete}>DELETE</button>
                                         <NewSensor
-                                            data={rows[chosenRow]}
+                                            // data={rows[chosenRow]}
+                                            data={rows[chosenRow - 1]}
                                             onSubmit={onSubmit}
                                             //fields={columns}DONT NEED
                                         />

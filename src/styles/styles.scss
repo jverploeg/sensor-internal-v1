@@ -275,6 +275,37 @@ $transition-duration: .5s;
     margin-right: 17px;
   }
 
+  .input-block label {
+      display: inline-block;
+      width: 140px;
+      text-align: right;
+      padding-right: 10px;
+  }
+  .data-input {
+    //display: block;
+    //http://jsfiddle.net/4Qsa8/
+    //https://css-tricks.com/auto-growing-inputs-textareas/
+    height: 75px;
+    width: 200px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    // word-wrap: break-word;
+    // word-break: break-all;
+    //text-align: right;
+}
+// .input-block input { 
+//     display: block;
+//     color: #fff;
+//     background: #000;
+//     width: 100px;
+//     text-align: center;
+//     border: 0;
+//     border-radius: 25px;
+//     padding: 10px;
+//     margin: 10px auto;
+//     white-space: normal;
+//    } 
 
 
 
