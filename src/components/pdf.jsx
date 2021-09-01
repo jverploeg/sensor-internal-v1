@@ -333,7 +333,7 @@ const PDF = (input) => {
         // getHtml(C); --> now called in getType... 
     }
     const getPaths = async(hs, cn, op, ch) => {
-        console.log('getPaths', {hs, cn, op, ch});
+        //console.log('getPaths', {hs, cn, op, ch});
         //get image name defined in each table
         const response = await Promise.all([
             axios.get(`${host}/housing/images`, {params: {hs}}),
@@ -484,7 +484,7 @@ const PDF = (input) => {
 
     //////////////////////////////////////////IMAGES//////////////////////////////////////////////////////////
     const getImages = async() => {
-        console.log(paths)
+        //console.log(paths)
         const responses = await Promise.allSettled([
             axios.get(`${host}/images/type/Type-${type}-Model`, { responseType: 'arraybuffer' }),
             axios.get(`${host}/images/mech/${paths.mech}`, { responseType: 'arraybuffer' }),
@@ -597,17 +597,31 @@ const PDF = (input) => {
                                     </li>
                                 ))}
                             </ul>
-                        </div>    
+                        </div>
+                        {(sensorType === 'catalog') && 
+                            <div className="images">
+                                <img className="type" src={images.type} alt={`type/${type} not found`}/>
+                                <img className="mech" src={images.mech} alt={`mech/${paths.mech} not found`}/>
+                                <img className="housing" src={images.housing} alt={`housing/${paths.housing} not found`}/>
+                                <img className="option" src={images.option} alt={`option/${paths.option} not found`}/>
+                                <img className="connect" src={images.connect} alt={`connect/${paths.connection} not found`}/>
+                                <img className="conn_chart" src={images.conn_chart} alt={`conn_charts/${paths.conn} not found`}/>
+                                <img className="date" src={date}></img>
+                            </div>
+                        }
+                        {(sensorType === 'custom') &&
                         <div className="images">
-                            <img className="type" src={images.type} alt={`type/Type-${type}-Model not found`}/>
-                            <img className="mech" src={images.mech} alt={`mech/${housing}-Mech-Model not found`}/>
-                            <img className="housing" src={images.housing} alt={`housing/${housing}-Model not found`}/>
-                            <img className="option" src={images.option} alt={`option/${option}-Model not found`}/>
-                            <img className="connect" src={images.connect} alt={`connect/${connect}-Model not found`}/>
-                            <img className="conn_chart" src={images.conn_chart} alt={`type/conn_charts/${connChart}-Model not found`}/>
+                            <img className="type" src={images.type} alt={`type/${type} not found`}/>
+                            <img className="mech" src={images.mech} alt={`mech/${housing} not found`}/>
+                            <img className="housing" src={images.housing} alt={`housing/${housing} not found`}/>
+                            <img className="option" src={images.option} alt={`option/${option} not found`}/>
+                            <img className="connect" src={images.connect} alt={`connect/${connect} not found`}/>
+                            <img className="conn_chart" src={images.conn_chart} alt={`conn_charts/${connChart} not found`}/>
                             <img className="date" src={date}></img>
                         </div>
-                        
+                        }   
+
+    
                         <div className="description" id="description" dangerouslySetInnerHTML={convert.createMarkup(htmlRaw)}/>
 
                         <div className='footer'>
@@ -621,6 +635,10 @@ const PDF = (input) => {
                                 <br></br>
                                 <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                             </div>
+                            // <div className="images">
+                            //     <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${paths.spec} not found`}/>
+                            //     <img className="picture" src={images.picture} alt={`pictures/${paths.pic} not found`}/>
+                            // </div>
                         }
                         {(sensorType === 'custom') && 
                             <div className="headerCust" >
@@ -628,11 +646,18 @@ const PDF = (input) => {
                                 {/* <br></br>
                                 <span style={{fontSize:'12pt'}}><i>{description}</i></span> */}
                             </div>
+                            // <div className="images">
+                            //     <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${images.spec_chart} not found`}/>
+                            //     <img className="picture" src={images.picture} alt={`pictures/${images.picture} not found`}/>
+                            // </div>
                         }
+                        
                         <div className="images">
-                            <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${char}-${option}-Model not found`}/>
-                            <img className="picture" src={images.picture} alt={`pictures/${housing}-${char}-Model not found`}/>
+                            <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${images.spec_chart} not found`}/>
+                            <img className="picture" src={images.picture} alt={`pictures/${images.picture} not found`}/>
                         </div>
+
+
                         <div className='footer'>
                             <span style={{fontSize:'10pt'}}><i>Sensor Solutions * V: (970) 879-9900  F: (970) 879-9700 * www.sensorso.com * Rev {rev}</i></span>
                         </div>    
