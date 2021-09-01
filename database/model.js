@@ -99,7 +99,8 @@ module.exports.getSensor = async(data) => {
     }
 }
 module.exports.getType = async(data) => {
-    let qString = `SELECT type_description from char where char_code = '${data}' limit 1`;
+    //need type and type_description for non wiz catalog
+    let qString = `SELECT type, type_description from char where char_code = '${data}' limit 1`;
     try {
         const response = await pool.query(qString);
         return response;

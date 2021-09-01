@@ -105,8 +105,9 @@ const getSensor = (req, res) => {
     })
 }
 
+//non wiz catalog don't always have a type column value 
 const getType = (req, res) => {
-    let data = req.query.type;
+    let data = req.query.type; //passing in the char code (ex 18ADSO)
     db.getType(data)
     .then(result => {
         res.status(200).send(result.rows);

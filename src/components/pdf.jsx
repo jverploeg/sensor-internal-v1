@@ -256,7 +256,10 @@ const PDF = (input) => {
         if(sensorType === 'catalog'){
             try {
                 const { data } = await axios.get(`${host}/type`, {params: {type}});
-                setType(sensorData.type);
+                //get type from char instead of type.... 
+                console.log({data})
+                //setType(sensorData.type);
+                setType(data[0].type);
                 setTypeD(data[0].type_description);
             }
             catch (error) {
