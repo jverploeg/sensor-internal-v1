@@ -272,19 +272,27 @@ const App = () => {
     // };
     const onSubmit = (event) => {
         event.preventDefault(event);
-        //console.log(event.target);
+        console.log(event.target);
         let data = event.target.children; //HTMLCollection
+        console.log(data)
         let vals = [];
         let cols = [];
         for(let i = 0; i < data.length - 1; i++){ //reduce array length since we removed id earlier
-            //console.log(data[i].name, data[i].value) //only care about value???
-            //lets store in an array for now...
-            let temp = `'${data[i].value}'`;//''+data[i].value+'';
+            // console.log(data[i]) //only care about value???
+            // //lets store in an array for now...
+            // let temp = `'${data[i].value}'`;//''+data[i].value+'';
+            // vals.push(temp);
+            // cols.push(data[i].name);
+            //this is different now that we are using textarea...
+            let focus = data[i].innerText;
+            let val = data[i].children[focus].value;
+            let temp = `'${val}'`;
             vals.push(temp);
-            cols.push(data[i].name);
+            cols.push(focus);
         };
         let vString = vals.join();
         let cString = cols.join();
+        console.log(cString, vString)
         let route = page;
         axios.post(`${host}/${route}`, {params: {vString, cString}})
           .then(response => {

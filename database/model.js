@@ -17,7 +17,7 @@ module.exports.addData = async(path, values, cols) => {
     //TODO: FIX, UPDATE FOR LARGER TABLES
     //const text = `INSERT INTO ${path} (${cols}) VALUES('${values[0]}', '${values[1]}', '${values[2]}', '${values[3]}', '${values[4]}')`
     const qString = `INSERT INTO ${path} (${cols}) VALUES(${values})`;
-    console.log(qString)
+    //console.log(qString)
     // async/await
     try {
         const res = await pool.query(qString)

@@ -17,16 +17,32 @@ export const Form = ({ data, onSubmit }) => {
   return (
     <form onSubmit={onSubmit}>
         {!!inputs && !!fields && fields.map((item, key) => (
-            <input
-                //className="data-input"
+          <div className="input-block">
+            <label>{item}</label>
+            <textarea
+                className="data-input"
                 //id={key}
-                defaultValue={inputs[item]}
+                //defaultValue={inputs[item]}
+                value={inputs[item]}
                 name={item}
                 //placeholder={item}
                 //placeholder={inputs.name}
                 //value={inputs.name}
                 onChange={handleChange}
             />
+            {/* <input
+                className="data-input"
+                //id={key}
+                //defaultValue={inputs[item]}
+                value={inputs[item]}
+                name={item}
+                //placeholder={item}
+                //placeholder={inputs.name}
+                //value={inputs.name}
+                onChange={handleChange}
+            /> */}
+          </div>
+
         ))}
       {/* <div className="form-group">
         <label htmlFor="name">Name</label>
