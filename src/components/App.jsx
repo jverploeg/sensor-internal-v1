@@ -13,6 +13,7 @@ import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@mat
 // SUBCOMPONENTS
 import Search from './search';
 import NewSensor from './newSensor';
+import FreshSensor from './freshSensor';
 
 // CUSTOM HOOKS
 import useToggle from './toggle';
@@ -357,7 +358,13 @@ const App = () => {
                             }
     
                         </div>
-                        <div className="delete">
+                        <div className="buttons">
+                                <FreshSensor
+                                    // data={rows[chosenRow]}
+                                    data={rows[0]}//need for column names
+                                    onSubmit={onSubmit}
+                                    //fields={columns}DONT NEED
+                                />
                                 {!!deleteShow && 
                                     <div>
                                         <button onClick={handleDelete}>DELETE</button>
