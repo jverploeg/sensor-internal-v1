@@ -25,7 +25,7 @@ import useToggle from './toggle';
 import Tables from './tables';
 
 const App = () => {
-    let viewports = ['Home', 'Housing', 'Char', 'Option', 'Char_Op', 'Connection', 'Sensor', 'Custom', 'Xproto', 'Settings']; //array of view options. tables with all have similar setup, home is different
+    let viewports = ['Home', 'Housing', 'Char', 'Option', 'Char_Op', 'Connection', 'Sensor', 'Custom'];//, 'Xproto'];//, 'Settings']; //array of view options. tables with all have similar setup, home is different
 
     //////////////STATE DECLARATION////////////////////////////////////////////////////
     const [page, setPage] = useState({}); //initialize to homepage on initial render
