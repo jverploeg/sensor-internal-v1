@@ -267,6 +267,7 @@ const PDF = (input) => {
         }
     }
 
+    
     const getType = async(type) => {
         if(sensorType === 'catalog'){
             try {
