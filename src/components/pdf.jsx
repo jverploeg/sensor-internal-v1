@@ -161,6 +161,7 @@ const PDF = (input) => {
             if (sensorType === 'catalog') {
                 getSensor(sensorCode);
             } else if(sensorType === 'custom') {
+                console.log({sensorType,sensorCode})
                 getSensor(sensorCode);
             } else if(sensorType === 'xproto') {
                 //getProto(sensorCode);???
@@ -249,7 +250,9 @@ const PDF = (input) => {
             }
         } else if(sensorType === 'custom'){
             try {
+                console.log('getting custom sensor', sensor, sensorCode, sensorType)
                 const { data } = await axios.get(`${host}/custom/${sensor}`);
+                console.log(data[0])
                 setCustomData(data[0]);
             }
             catch (error) {
@@ -267,7 +270,7 @@ const PDF = (input) => {
         }
     }
 
-    
+
     const getType = async(type) => {
         if(sensorType === 'catalog'){
             try {
@@ -287,6 +290,7 @@ const PDF = (input) => {
         } else if(sensorType === 'custom') {
             try {
                 const { data } = await axios.get(`${host}/ctype/${type}`);
+                console.log(data)
                 setType(data[0].type);
             }
             catch (error) {

@@ -15,7 +15,7 @@ const Search = () => {
 
     //EVENT HANDLERS
     const handleSubmit = (e) => {
-        console.log(e)
+        //console.log(e)
         e.preventDefault();
         //set search term
         let val = Object.values(inputs);
