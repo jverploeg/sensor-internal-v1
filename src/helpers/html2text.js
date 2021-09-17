@@ -1,8 +1,9 @@
 //function for parsing .html bullets and description files into text
 
-const html2text = (option, char, data) => {
+const html2text = (option, data) => {
     if(option === 1) {
         //bullets
+<<<<<<< HEAD
         if(!data){
             var bullets_html = require(`/Users/jverploeg/Desktop/webApp/images/pdf_bullets/${char}.html`).default;
             var tester = bullets_html.split('\n');
@@ -13,17 +14,25 @@ const html2text = (option, char, data) => {
         tester.pop();
         tester.shift();
         let inputs = JSON.parse(JSON.stringify(tester));
+=======
+        let temp =  data.split('\n');
+        let result = [];
+        temp.pop();
+        temp.shift();
+        let inputs = JSON.parse(JSON.stringify(temp)); //deep copy to modify
+>>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
         for (let i = 0; i < inputs.length; i++){
             //replace any list items
-            var temp = inputs[i].replace(/<[^>]+>/g, '');
-            temp = temp.replace(/\r/g, '');
+            let focus = inputs[i].replace(/<[^>]+>/g, '');
+            focus = focus.replace(/\r/g, '');
             //replace /r formatting
-            if(temp.length > 3){
-                final.push('o     ' + temp);//change 2 spaces to 3? 5 spaces currently
+            if(focus.length > 3){
+                result.push('o     ' + focus);//change 2 spaces to 3? 5 spaces currently
             }
         }
-        return final;
+        return result;
 
+<<<<<<< HEAD
     } else if(option === 2) {
         //description
         const description_html = require(`/Users/jverploeg/Desktop/webApp/images/descriptions/${char}.html`).default;
@@ -53,8 +62,13 @@ const html2text = (option, char, data) => {
         } else {
             var html = data;
         }
+=======
+    }else if(option === 2) {
+        //raw html file
+        
+>>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
         //remove unicode
-        let raw = html.replace(/[\uFFFD]/g, ' ');//additional unicode symbols???
+        let raw = data.replace(/[\uFFFD]/g, ' ');//additional unicode symbols???
         return raw;
     }
 }

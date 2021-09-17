@@ -14,7 +14,9 @@ const Search = () => {
     const [inputs, setInputs] = useState({}); // inputs from submission fields
 
     //EVENT HANDLERS
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        //console.log(e)
+        e.preventDefault();
         //set search term
         let val = Object.values(inputs);
         //setState
@@ -23,6 +25,15 @@ const Search = () => {
         document.getElementById("search-form").reset();
         setInputs({});
     }
+    const handleKeyPress = (event) => {
+        event.preventDefault();
+        console.log(event)
+        //triggered by pressing enter
+        if(event.keyCode === 13){
+            handleSubmit();
+        }
+
+    };
     //EVENT HANDLERS
     const handleChange = (e) => {
         setInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
@@ -31,16 +42,23 @@ const Search = () => {
     return(
         <div>
             <div className = "searchBox">
-                <form id="search-form">
+                <form id="search-form" onSubmit={handleSubmit}>
                         <input
                             className="sensor"
                             name="sensor"
                             placeholder="Sensor Code"
                             value={inputs.name}
                             onChange={handleChange}
+                            //onKeyPress={handleKeyPress}//{(e) => e.key === 'Enter' && handleSubmit()}//andleEnter(e)}
                         />
+                        <button
+                            type="submit"
+                            //onClick={handleSubmit}
+                        >
+                            Search
+                        </button>
                 </form>
-                <button type="submit" onClick={handleSubmit}>Search</button>
+                {/* <button type="submit" onClick={handleSubmit}>Search</button> */}
             </div>
 
             <div className = "results">

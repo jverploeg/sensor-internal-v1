@@ -31,6 +31,7 @@ app.listen(port, () => {
 
 //HOUSING
 app.get('/housing', route.getData);
+app.get('/housing/images', route.getHousingImage);
 app.post('/housing', route.addData);
 app.put('/housing', route.changeData);
 app.delete('/housing/*', route.deleteRow);
@@ -43,6 +44,7 @@ app.delete('/char/*', route.deleteRow);
 
 //OPTION
 app.get('/option', route.getData);
+app.get('/option/images', route.getOptionImage);
 app.post('/option', route.addData);
 app.put('/option', route.changeData);
 app.delete('/option/*', route.deleteRow);
@@ -56,6 +58,7 @@ app.delete('/char_op/*', route.deleteRow);
 //CONNECTION
 // rename to conn?
 app.get('/connection', route.getData);
+app.get('/connection/images', route.getConnectionImage);
 app.post('/connection', route.addData);
 app.put('/connection', route.changeData);
 app.delete('/connection/*', route.deleteRow);
@@ -87,6 +90,13 @@ app.get('/type', route.getType); //for the type description at the top of the pd
 app.get('/custom/*', route.getCustom);
 app.get('/ctype/*', route.getCustomType);//need options for image selection
 
+app.get('/proto/*', route.getProto);
+app.get('/ptype/*', route.getProtoType);//need options for image selection
+
 
 //IMAGES
 app.get('/images/*', route.getImage);
+
+//HTML
+app.get('/html/bullets/*', route.getBullets);
+app.get('/html/description/*', route.getHTML);

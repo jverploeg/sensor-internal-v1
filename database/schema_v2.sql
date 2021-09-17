@@ -129,15 +129,23 @@ CREATE TABLE custom
     part_number         varchar UNIQUE,
     rev                 varchar,
     Title               varchar,
-    closest_housing     varchar,
-    closest_char        varchar,
-    closest_option      varchar,
-    closest_connection  varchar,
+    housing             varchar,
+    char                varchar,
+    option              varchar,
+    connection          varchar,
+    conn_chart          varchar,
+    spec_chart          varchar,
+    picture             varchar,
+
     PRIMARY KEY (custom_id, part_number)
 );
 DROP INDEX if EXISTS custom_key;
 CREATE INDEX custom_key ON custom (part_number);
+<<<<<<< HEAD
 copy custom (custom_sensor_code, part_number, rev, Title, closest_housing, closest_char, closest_option, closest_connection) from '/Users/jverploeg/Desktop/webApp/csv_files/v2/custom_v2.csv'  delimiter ',' csv header;-- encoding 'latin1';
+=======
+copy custom (custom_sensor_code, part_number, rev, Title, housing, char, option, connection, conn_chart, spec_chart, picture) from 'D:\DATA\Sensor\webApp\csv_files\v3\custom_v3.csv'  delimiter ',' csv header;-- encoding 'latin1';
+>>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
 
 ----------------------------------
 
@@ -147,7 +155,7 @@ CREATE TABLE xproto
 (
     xproto_id           integer GENERATED ALWAYS AS IDENTITY,
     xproto_code         varchar, -- UNIQUE,
-    xproto_part_number  varchar, -- UNIQUE, multiple entries with variations...
+    xproto_part_number  varchar UNIQUE, -- deleted/modified duplicates -> multiple entries with variations...
     rev                 varchar,
     Description         varchar, -- NOT NULL,
     notes               varchar,
@@ -157,9 +165,15 @@ CREATE TABLE xproto
     connection          varchar,
     PRIMARY KEY (xproto_id)--, part_number) --, custom_sensor_code)
 );
+<<<<<<< HEAD
 -- DROP INDEX if EXISTS xproto_key;
 -- CREATE INDEX xproto_key ON xproto (xproto_part_number);
 copy xproto (xproto_code, xproto_part_number, rev, Description, notes, housing, char, opt, connection) from '/Users/jverploeg/Desktop/webApp/csv_files/v2/xproto_v2.csv'  delimiter ',' csv header encoding 'latin1';
+=======
+DROP INDEX if EXISTS xproto_key;
+CREATE INDEX xproto_key ON xproto (xproto_part_number);
+copy xproto (xproto_code, xproto_part_number, rev, Description, notes, housing, char, opt, connection) from 'D:\DATA\Sensor\webApp\csv_files\v2\xproto_v2.csv'  delimiter ',' csv header encoding 'latin1';
+>>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
 ----------------------------------------
 
 
