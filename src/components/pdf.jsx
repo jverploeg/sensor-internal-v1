@@ -330,6 +330,7 @@ const PDF = (input) => {
         setOption(opt);
         setRev(sensorData.rev)
         setDescription(sensorData.title)
+        console.log('CHAR',C)
 
 
         //component-combo image file format
@@ -520,6 +521,7 @@ const PDF = (input) => {
             }
         }
         let images = convert.images(results);
+        console.log({images})
         setImages(images);
     }
     const getCustomImages = async() => {
@@ -636,32 +638,36 @@ const PDF = (input) => {
                     </div>
                     <div className="page2" id="page2">
                         {(sensorType === 'catalog') && 
-                            <div className="header" >
-                                <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
-                                <br></br>
-                                <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+                            <div>
+                                <div className="header" >
+                                    <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
+                                    <br></br>
+                                    <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+                                </div>
+                                <div className="images">
+                                    <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${paths.spec} not found`}/>
+                                    <img className="picture" src={images.picture} alt={`pictures/${paths.pic} not found`}/>
+                                </div>
                             </div>
-                            // <div className="images">
-                            //     <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${paths.spec} not found`}/>
-                            //     <img className="picture" src={images.picture} alt={`pictures/${paths.pic} not found`}/>
-                            // </div>
                         }
                         {(sensorType === 'custom') && 
-                            <div className="headerCust" >
-                                <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><i>{description}</i></span>
-                                {/* <br></br>
-                                <span style={{fontSize:'12pt'}}><i>{description}</i></span> */}
+                            <div>
+                                <div className="headerCust" >
+                                    <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+                                    {/* <br></br>
+                                    <span style={{fontSize:'12pt'}}><i>{description}</i></span> */}
+                                </div>
+                                <div className="images">
+                                    <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${images.spec_chart} not found`}/>
+                                    <img className="picture" src={images.picture} alt={`pictures/${images.picture} not found`}/>
+                                </div>
                             </div>
-                            // <div className="images">
-                            //     <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${images.spec_chart} not found`}/>
-                            //     <img className="picture" src={images.picture} alt={`pictures/${images.picture} not found`}/>
-                            // </div>
                         }
                         
-                        <div className="images">
+                        {/* <div className="images">
                             <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${images.spec_chart} not found`}/>
                             <img className="picture" src={images.picture} alt={`pictures/${images.picture} not found`}/>
-                        </div>
+                        </div> */}
 
 
                         <div className='footer'>
