@@ -4,10 +4,7 @@ import axios from 'axios';
 
 
 // STYLING DEPENDENCIES
-// import { DataGrid } from '@material-ui/data-grid';
 import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@material-ui/data-grid';
-// import Modal from '@material-ui/core/Modal';
-// import { makeStyles } from '@material-ui/core/styles';
 
 
 // SUBCOMPONENTS
@@ -17,7 +14,6 @@ import FreshSensor from './freshSensor';
 
 // CUSTOM HOOKS
 import useToggle from './toggle';
-//import { ControlCameraOutlined } from '@material-ui/icons';
 
 
 
