@@ -184,6 +184,7 @@ const PDF = (input) => {
     useEffect(() => {
         if(customData.part_number) {
             setChar(customData.char);
+            //console.log({customData})
             getType(customData.char);
         }    
     },[customData])
