@@ -228,7 +228,7 @@ const App = () => {
             }else {
                 setShow(true);
                 let row = id[0];
-                console.log({row})
+                //console.log({row})
                 setChosen(row);
             }
         },

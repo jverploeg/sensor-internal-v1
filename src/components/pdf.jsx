@@ -330,7 +330,6 @@ const PDF = (input) => {
         setOption(opt);
         setRev(sensorData.rev)
         setDescription(sensorData.title)
-        console.log('CHAR',C)
 
 
         //component-combo image file format
@@ -521,7 +520,7 @@ const PDF = (input) => {
             }
         }
         let images = convert.images(results);
-        console.log({images})
+        //console.log({images})
         setImages(images);
     }
     const getCustomImages = async() => {
