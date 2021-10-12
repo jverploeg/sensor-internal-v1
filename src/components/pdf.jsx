@@ -52,7 +52,7 @@ const PDF = (input) => {
     } else if(temp === '7') {
         var sensor = 'CS1051';
     } else if(temp === '8') {
-        var sensor = 'CS1052';
+        var sensor = 'CS1243';//char 37adsdh does not exist. change closest char to 37adsd
     } else if(temp === '9') {
         var sensor = 'CS1053';
     } else {
