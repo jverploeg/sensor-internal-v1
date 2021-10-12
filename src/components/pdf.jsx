@@ -30,7 +30,7 @@ const PDF = (input) => {
     } else if(temp === 'B') {
         var sensor = 'M1VE-MRS-E5CP2';//
     } else if(temp === 'C') {
-        var sensor = 'X2161';//'A47-HS-RTCP2';//'CS1111'
+        var sensor = 'A47-HS-RTCP2';//'A47-HS-RTCP2';//'CS1111'//'X2161'
     } else if(temp === 'D') {
         var sensor = 'CS1193';//'S38S-MRS-E5T21';//'CS1193'
     } else if(temp === 'E') {
@@ -50,11 +50,11 @@ const PDF = (input) => {
     } else if(temp === '6') {
         var sensor = 'CS1050';
     } else if(temp === '7') {
-        var sensor = 'CS1051';
+        var sensor = 'CS1102';//char PAH2 does not exist. change closest char to PAH.  NOOOOO
     } else if(temp === '8') {
-        var sensor = 'CS1243';//char 37adsdh does not exist. change closest char to 37adsd
+        var sensor = 'CS1243';//char 37adsdh does not exist. change closest char to 37adsd. NOOOOO
     } else if(temp === '9') {
-        var sensor = 'CS1227';//char 37adsdh does not exist. change closest char to 37adsd
+        var sensor = 'CS1227';//char 37adsdh does not exist. change closest char to 37adsd. NOOOOOO
     } else {
         var sensor = temp;
     }
