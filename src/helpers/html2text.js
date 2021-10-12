@@ -22,21 +22,22 @@ const html2text = (option, data) => {
     }else if(option === 2) {
         //raw html file
         //TODO: need to remove unneccessary newline gaps...............
-        console.log({data})
-        let temp =  data.split('\n');
-        console.log({temp})
-        let result = [];
-        //iterate through and remove lines with \t
-        for (let i = 0; i < temp.length; i++){
-            let focus = temp[i];
-            let first = focus.slice(0,1);//focus.slice(0,2);
-            //console.log({first})
-            if(first !== '\t'){
-                result.push(focus);
-            }
-        }
-        let final = result.join('\n');
-        console.log({final})
+        /////////////NO fix html files when issues with description not fitting on page!!!!!!
+        // console.log({data})
+        // let temp =  data.split('\n');
+        // console.log({temp})
+        // let result = [];
+        // //iterate through and remove lines with \t
+        // for (let i = 0; i < temp.length; i++){
+        //     let focus = temp[i];
+        //     let first = focus.slice(0,1);//focus.slice(0,2);
+        //     //console.log({first})
+        //     if(first !== '\t'){
+        //         result.push(focus);
+        //     }
+        // }
+        // let final = result.join('\n');
+        // console.log({final})
         //remove unicode
         let raw = data.replace(/[\uFFFD]/g, ' ');//additional unicode symbols???
         //let raw2 = final.replace(/[\uFFFD]/g, ' ');//additional unicode symbols???
