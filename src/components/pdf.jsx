@@ -161,7 +161,7 @@ const PDF = (input) => {
             if (sensorType === 'catalog') {
                 getSensor(sensorCode);
             } else if(sensorType === 'custom') {
-                console.log({sensorType,sensorCode})
+                //console.log({sensorType,sensorCode})
                 getSensor(sensorCode);
             } else if(sensorType === 'xproto') {
                 //getProto(sensorCode);???
@@ -180,12 +180,14 @@ const PDF = (input) => {
 
 //TODO: COMBINE XPROTO AND CUSTOM STATES AND FUNCTIONS????
 
-    //once we have custom data package, need type from char
+    //once we have custom data package, need type from char --> NOT ANYMORE
+    //custm.type is now part of data packet
     useEffect(() => {
         if(customData.part_number) {
             setChar(customData.char);
             //console.log({customData})
-            getType(customData.char);
+            //getType(customData.char);
+            setType(customData.type);
         }    
     },[customData])
 
@@ -251,9 +253,9 @@ const PDF = (input) => {
             }
         } else if(sensorType === 'custom'){
             try {
-                console.log('getting custom sensor', sensor, sensorCode, sensorType)
+                //console.log('getting custom sensor', sensor, sensorCode, sensorType)
                 const { data } = await axios.get(`${host}/custom/${sensor}`);
-                console.log(data[0])
+                //console.log(data[0])
                 setCustomData(data[0]);
             }
             catch (error) {
