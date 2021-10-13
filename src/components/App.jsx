@@ -363,8 +363,8 @@ const App = () => {
                                     //fields={columns}DONT NEED
                                 />
                                 {!!deleteShow && 
-                                    <div>
-                                        <button onClick={handleDelete}>DELETE</button>
+                                    <div className="buttons">
+                                        <button onClick={handleDelete}>Delete Row</button>
                                         <NewSensor
                                             // data={rows[chosenRow]}
                                             data={rows[chosenRow - 1]}
