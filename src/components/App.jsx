@@ -347,7 +347,7 @@ const App = () => {
                                             rows={rows}
                                             //onEditCellChangeCommitted={handleEditCellChangeCommitted}
                                             onCellEditCommit={handleCellEditCommit}
-                                            checkboxSelection//={handleSelect}
+                                            //checkboxSelection//={handleSelect}
                                             onSelectionModelChange={handleSelect}
                                         />
                                     }
