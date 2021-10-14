@@ -71,12 +71,9 @@ const App = () => {
     //on deletion, make sure delete button is hidden
     useEffect(() => {
         setShow(false);
-<<<<<<< HEAD
         setDelete([]);
         console.log(columns,rows)
-=======
         setChosen([]);
->>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
     },[rows])
     /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -270,13 +267,13 @@ const App = () => {
         setRows(temp);
     }
     // const createSimilar = () => {
-    //     //transfer current selection data to a modal with prefilled forms... 
+    //     //transfer current selection data to a modal with prefilled forms...
 
     // }
     // const handleOpen = () => {
     //     setOpen(true);
     // };
-    
+
     // const handleClose = () => {
     //     setOpen(false);
     // };
@@ -379,7 +376,7 @@ const App = () => {
                                     onSubmit={onSubmit}
                                     //fields={columns}DONT NEED
                                 />
-                                {!!deleteShow && 
+                                {!!deleteShow &&
                                     <div>
                                         <button onClick={handleDelete}>DELETE</button>
                                         <NewSensor
@@ -388,7 +385,7 @@ const App = () => {
                                             onSubmit={onSubmit}
                                             //fields={columns}DONT NEED
                                         />
-                                    </div>    
+                                    </div>
 >>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
                                 }
                         </div>
