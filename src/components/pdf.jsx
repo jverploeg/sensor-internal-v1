@@ -30,7 +30,7 @@ const PDF = (input) => {
     } else if(temp === 'B') {
         var sensor = 'M1VE-MRS-E5CP2';//
     } else if(temp === 'C') {
-        var sensor = 'X2161';//'A47-HS-RTCP2';//'CS1111'
+        var sensor = 'A47-HS-RTCP2';//'A47-HS-RTCP2';//'CS1111'//'X2161'
     } else if(temp === 'D') {
         var sensor = 'CS1193';//'S38S-MRS-E5T21';//'CS1193'
     } else if(temp === 'E') {
@@ -50,11 +50,11 @@ const PDF = (input) => {
     } else if(temp === '6') {
         var sensor = 'CS1050';
     } else if(temp === '7') {
-        var sensor = 'CS1051';
+        var sensor = 'CS1102';//char PAH2 does not exist. change closest char to PAH.  NOOOOO
     } else if(temp === '8') {
-        var sensor = 'CS1052';
+        var sensor = 'CS1243';//char 37adsdh does not exist. change closest char to 37adsd. NOOOOO
     } else if(temp === '9') {
-        var sensor = 'CS1053';
+        var sensor = 'CS1227';//char 37adsdh does not exist. change closest char to 37adsd. NOOOOOO
     } else {
         var sensor = temp;
     }
@@ -175,7 +175,7 @@ const PDF = (input) => {
             if (sensorType === 'catalog') {
                 getSensor(sensorCode);
             } else if(sensorType === 'custom') {
-                console.log({sensorType,sensorCode})
+                //console.log({sensorType,sensorCode})
                 getSensor(sensorCode);
             } else if(sensorType === 'xproto') {
                 //getProto(sensorCode);???
@@ -198,7 +198,8 @@ const PDF = (input) => {
 
 //TODO: COMBINE XPROTO AND CUSTOM STATES AND FUNCTIONS????
 
-    //once we have custom data package, need type from char
+    //once we have custom data package, need type from char --> NOT ANYMORE
+    //custm.type is now part of data packet
     useEffect(() => {
         if(customData.part_number) {
 <<<<<<< HEAD
@@ -207,7 +208,9 @@ const PDF = (input) => {
         }
 =======
             setChar(customData.char);
-            getType(customData.char);
+            //console.log({customData})
+            //getType(customData.char);
+            setType(customData.type);
         }    
 >>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
     },[customData])
@@ -274,9 +277,9 @@ const PDF = (input) => {
             }
         } else if(sensorType === 'custom'){
             try {
-                console.log('getting custom sensor', sensor, sensorCode, sensorType)
+                //console.log('getting custom sensor', sensor, sensorCode, sensorType)
                 const { data } = await axios.get(`${host}/custom/${sensor}`);
-                console.log(data[0])
+                //console.log(data[0])
                 setCustomData(data[0]);
             }
             catch (error) {
@@ -543,6 +546,7 @@ const PDF = (input) => {
             }
         }
         let images = convert.images(results);
+        //console.log({images})
         setImages(images);
     }
     const getCustomImages = async() => {
@@ -737,33 +741,53 @@ const PDF = (input) => {
                         </div>
                     </div>
                     <div className="page2" id="page2">
+<<<<<<< HEAD
                         {(sensorType === 'catalog') &&
                             <div className="header" >
                                 <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
                                 <br></br>
                                 <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+=======
+                        {(sensorType === 'catalog') && 
+                            <div>
+                                <div className="header" >
+                                    <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
+                                    <br></br>
+                                    <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+                                </div>
+                                <div className="images">
+                                    <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${paths.spec} not found`}/>
+                                    <img className="picture" src={images.picture} alt={`pictures/${paths.pic} not found`}/>
+                                </div>
+>>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
                             </div>
-                            // <div className="images">
-                            //     <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${paths.spec} not found`}/>
-                            //     <img className="picture" src={images.picture} alt={`pictures/${paths.pic} not found`}/>
-                            // </div>
                         }
+<<<<<<< HEAD
                         {(sensorType === 'custom') &&
                             <div className="headerCust" >
                                 <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><i>{description}</i></span>
                                 {/* <br></br>
                                 <span style={{fontSize:'12pt'}}><i>{description}</i></span> */}
+=======
+                        {(sensorType === 'custom') && 
+                            <div>
+                                <div className="headerCust" >
+                                    <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><i>{description}</i></span>
+                                    {/* <br></br>
+                                    <span style={{fontSize:'12pt'}}><i>{description}</i></span> */}
+                                </div>
+                                <div className="images">
+                                    <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${images.spec_chart} not found`}/>
+                                    <img className="picture" src={images.picture} alt={`pictures/${images.picture} not found`}/>
+                                </div>
+>>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
                             </div>
-                            // <div className="images">
-                            //     <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${images.spec_chart} not found`}/>
-                            //     <img className="picture" src={images.picture} alt={`pictures/${images.picture} not found`}/>
-                            // </div>
                         }
                         
-                        <div className="images">
+                        {/* <div className="images">
                             <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${images.spec_chart} not found`}/>
                             <img className="picture" src={images.picture} alt={`pictures/${images.picture} not found`}/>
-                        </div>
+                        </div> */}
 
 
                         <div className='footer'>

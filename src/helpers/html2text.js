@@ -65,11 +65,35 @@ const html2text = (option, data) => {
 =======
     }else if(option === 2) {
         //raw html file
+<<<<<<< HEAD
         
 >>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
+=======
+
+>>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
         //remove unicode
         let raw = data.replace(/[\uFFFD]/g, ' ');//additional unicode symbols???
         return raw;
     }
 }
 export default html2text;
+
+        //TODO: need to remove unneccessary newline gaps...............
+        /////////////NO fix html files when issues with description not fitting on page!!!!!!
+
+            // console.log({data})
+            // let temp =  data.split('\n');
+            // console.log({temp})
+            // let result = [];
+            // //iterate through and remove lines with \t
+            // for (let i = 0; i < temp.length; i++){
+            //     let focus = temp[i];
+            //     let first = focus.slice(0,1);//focus.slice(0,2);
+            //     //console.log({first})
+            //     if(first !== '\t'){
+            //         result.push(focus);
+            //     }
+            // }
+            // let final = result.join('\n');
+            // console.log({final})
+            //let raw2 = final.replace(/[\uFFFD]/g, ' ');//additional unicode symbols???

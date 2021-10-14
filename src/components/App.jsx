@@ -4,10 +4,7 @@ import axios from 'axios';
 
 
 // STYLING DEPENDENCIES
-// import { DataGrid } from '@material-ui/data-grid';
 import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@material-ui/data-grid';
-// import Modal from '@material-ui/core/Modal';
-// import { makeStyles } from '@material-ui/core/styles';
 
 
 // SUBCOMPONENTS
@@ -15,9 +12,9 @@ import Search from './search';
 import NewSensor from './newSensor';
 import FreshSensor from './freshSensor';
 
+
 // CUSTOM HOOKS
 import useToggle from './toggle';
-//import { ControlCameraOutlined } from '@material-ui/icons';
 
 
 // HELPERS
@@ -235,7 +232,7 @@ const App = () => {
             }else {
                 setShow(true);
                 let row = id[0];
-                console.log({row})
+                //console.log({row})
                 setChosen(row);
             }
         },
@@ -354,7 +351,7 @@ const App = () => {
                                             rows={rows}
                                             //onEditCellChangeCommitted={handleEditCellChangeCommitted}
                                             onCellEditCommit={handleCellEditCommit}
-                                            checkboxSelection//={handleSelect}
+                                            //checkboxSelection//={handleSelect}
                                             onSelectionModelChange={handleSelect}
                                         />
                                     }
@@ -376,9 +373,15 @@ const App = () => {
                                     onSubmit={onSubmit}
                                     //fields={columns}DONT NEED
                                 />
+<<<<<<< HEAD
                                 {!!deleteShow &&
                                     <div>
                                         <button onClick={handleDelete}>DELETE</button>
+=======
+                                {!!deleteShow && 
+                                    <div className="buttons">
+                                        <button onClick={handleDelete}>Delete Row</button>
+>>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
                                         <NewSensor
                                             // data={rows[chosenRow]}
                                             data={rows[chosenRow - 1]}

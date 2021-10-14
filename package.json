@@ -9,8 +9,13 @@
     "watch": "webpack --watch",
     "help": "webpack --help",
     "server": "nodemon server/index.js",
+<<<<<<< HEAD
     "seed": "psql -U  < database/schema_v1.sql",
     "seed2": "psql -U jverploeg < database/schema_v2.sql"
+=======
+    "seed": "psql -U senadmin < database/schema_v2.sql",
+    "export": "psql -U senadmin < database/backup.sql"
+>>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
   },
   "repository": {
     "type": "git",

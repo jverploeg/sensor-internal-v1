@@ -1,9 +1,18 @@
 $transition-duration: .5s;
 
+.page {
+
+}
+.top {
+    //justify-self: center;
+    text-align: center;
+    border-bottom: 1px solid black;
+}
 .nav-bar {
     display: flex;
     flex-direction: row;
     position:relative;
+    justify-content: center;
 }
 .nav-button {
     object-fit: cover;
@@ -21,6 +30,14 @@ $transition-duration: .5s;
     opacity: 1;
     transition: all $transition-duration;
 }
+.buttons {
+    display: flex;
+    flex-direction: row;
+    position:relative;
+    gap: 10px;
+}
+
+
 // .pdf-preview {
 //     display: flex;
 //     flex-grow: 1;
@@ -198,6 +215,10 @@ $transition-duration: .5s;
     left: 27px;
     top: 650px;//598px;
 }
+
+
+
+//MODAL STYLING
 .modal-cover {
     position: fixed;
     top: 0;

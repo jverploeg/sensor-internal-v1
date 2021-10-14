@@ -318,6 +318,12 @@ const Tables = {
                 editable:true,
             },
             {
+                field: 'type',
+                headerName: 'Type',
+                width: 125,
+                editable:true,
+            },
+            {
                 field: 'housing',
                 headerName: 'Housing',
                 width: 125,
