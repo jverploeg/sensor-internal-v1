@@ -21,12 +21,7 @@ CREATE TABLE housing
 );
 DROP INDEX if EXISTS housing_key;
 CREATE INDEX housing_key ON housing (housing_code);
-<<<<<<< HEAD
-copy housing (housing_code, part_number, rev, Title, web_valid, png_file, mech_file) from '/Users/jverploeg/Desktop/webApp/csv_files/v2/housing_v2.csv'  delimiter ',' csv header;
-
-=======
 copy housing (housing_code, part_number, rev, Title, web_valid, png_file, mech_file) from 'D:\DATA\Sensor\webApp\csv_files\v4\housing.csv'  delimiter ',' csv header;
->>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
 ----------------------------------
 
 ----------CHAR--------------------
@@ -44,11 +39,7 @@ CREATE TABLE char
 );
 DROP INDEX if EXISTS char_key;
 CREATE UNIQUE INDEX char_key ON char (char_code);
-<<<<<<< HEAD
-copy char (char_code, Title, Type, Type_Description, Web_Valid, Bullet_file) from '/Users/jverploeg/Desktop/webApp/csv_files/v2/char_v2.csv'  delimiter ',' csv header;
-=======
 copy char (char_code, Title, Type, Type_Description, Web_Valid, Bullet_file) from 'D:\DATA\Sensor\webApp\csv_files\v4\char.csv'  delimiter ',' csv header;
->>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
 
 
 
@@ -68,11 +59,7 @@ CREATE TABLE option
 );
 DROP INDEX if EXISTS option_key;
 CREATE INDEX option_key ON option (option_code);
-<<<<<<< HEAD
-copy option (option_code, Title, web_valid, png_file) from '/Users/jverploeg/Desktop/webApp/csv_files/v2/option_v2.csv'  delimiter ',' csv header;
-=======
 copy option (option_code, Title, web_valid, png_file) from 'D:\DATA\Sensor\webApp\csv_files\v4\option.csv'  delimiter ',' csv header;
->>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
 ----------------------------------
 
 ----------CHAR OPTION--------------------
@@ -90,11 +77,7 @@ CREATE TABLE char_op
 );
 DROP INDEX if EXISTS char_op_key;
 CREATE INDEX char_op_key ON char_op (char_op_code);
-<<<<<<< HEAD
-copy char_op (char_op_code, option_code, rev, Title, web_valid, png_file) from '/Users/jverploeg/Desktop/webApp/csv_files/v2/char_op_v2.csv'  delimiter ',' csv header;
-=======
 copy char_op (char_op_code, option_code, rev, Title, web_valid, png_file) from 'D:\DATA\Sensor\webApp\csv_files\v4\char_op.csv'  delimiter ',' csv header;
->>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
 ----------------------------------
 
 ----------CONNECTION--------------------
@@ -113,11 +96,7 @@ CREATE TABLE connection
 );
 DROP INDEX if EXISTS connection_key;
 CREATE INDEX connection_key ON connection (connection_id);
-<<<<<<< HEAD
-copy connection (connection_code, web_code, rev, Title, web_valid, part_number, png_file) from '/Users/jverploeg/Desktop/webApp/csv_files/v2/connection_v2.csv'  delimiter ',' csv header;
-=======
 copy connection (connection_code, web_code, rev, Title, web_valid, part_number, png_file) from 'D:\DATA\Sensor\webApp\csv_files\v4\connection.csv'  delimiter ',' csv header;
->>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
 
 ----------------------------------
 
@@ -137,11 +116,7 @@ CREATE TABLE sensor
 );
 DROP INDEX if EXISTS sensor_key;
 CREATE INDEX sensor_key ON sensor (sensor_code);
-<<<<<<< HEAD
-copy sensor (sensor_code, part_number, rev, Title, char, type, wizard_part) from '/Users/jverploeg/Desktop/webApp/csv_files/v2/catalog_v2.csv'  delimiter ',' csv header;
-=======
 copy sensor (sensor_code, part_number, rev, Title, char, type, wizard_part) from 'D:\DATA\Sensor\webApp\csv_files\v4\catalog.csv'  delimiter ',' csv header;
->>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
 ----------------------------------
 
 ----------CUSTOM--------------------
@@ -166,15 +141,7 @@ CREATE TABLE custom
 );
 DROP INDEX if EXISTS custom_key;
 CREATE INDEX custom_key ON custom (part_number);
-<<<<<<< HEAD
-<<<<<<< HEAD
-copy custom (custom_sensor_code, part_number, rev, Title, closest_housing, closest_char, closest_option, closest_connection) from '/Users/jverploeg/Desktop/webApp/csv_files/v2/custom_v2.csv'  delimiter ',' csv header;-- encoding 'latin1';
-=======
-copy custom (custom_sensor_code, part_number, rev, Title, housing, char, option, connection, conn_chart, spec_chart, picture) from 'D:\DATA\Sensor\webApp\csv_files\v3\custom_v3.csv'  delimiter ',' csv header;-- encoding 'latin1';
->>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
-=======
 copy custom (custom_sensor_code, part_number, rev, Title, type, housing, char, option, connection, conn_chart, spec_chart, picture) from 'D:\DATA\Sensor\webApp\csv_files\v4\custom.csv'  delimiter ',' csv header;-- encoding 'latin1';
->>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
 
 ----------------------------------
 
@@ -194,19 +161,9 @@ CREATE TABLE xproto
     connection          varchar,
     PRIMARY KEY (xproto_id)--, part_number) --, custom_sensor_code)
 );
-<<<<<<< HEAD
--- DROP INDEX if EXISTS xproto_key;
--- CREATE INDEX xproto_key ON xproto (xproto_part_number);
-copy xproto (xproto_code, xproto_part_number, rev, Description, notes, housing, char, opt, connection) from '/Users/jverploeg/Desktop/webApp/csv_files/v2/xproto_v2.csv'  delimiter ',' csv header encoding 'latin1';
-=======
 DROP INDEX if EXISTS xproto_key;
 CREATE INDEX xproto_key ON xproto (xproto_part_number);
-<<<<<<< HEAD
-copy xproto (xproto_code, xproto_part_number, rev, Description, notes, housing, char, opt, connection) from 'D:\DATA\Sensor\webApp\csv_files\v2\xproto_v2.csv'  delimiter ',' csv header encoding 'latin1';
->>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
-=======
 copy xproto (xproto_code, xproto_part_number, rev, Description, notes, housing, char, opt, connection) from 'D:\DATA\Sensor\webApp\csv_files\v4\xproto.csv'  delimiter ',' csv header encoding 'latin1';
->>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
 ----------------------------------------
 
 

@@ -68,16 +68,13 @@ const App = () => {
     //on deletion, make sure delete button is hidden
     useEffect(() => {
         setShow(false);
-        setDelete([]);
-        console.log(columns,rows)
         setChosen([]);
     },[rows])
     /////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-    //const host = `http://192.168.1.118:3000`;
-    const host = `http://10.45.1.114:3000`;
+    const host = `http://192.168.1.118:3000`;
     //////////REQUESTS/////////////////////
     const getData = async() => {
         // setShow(false);
@@ -85,8 +82,7 @@ const App = () => {
         //determine route -> db table based on pageSelection
         let route = page.toLowerCase();
         try {
-            const { data } = await axios.get(`/${route}`);
-            console.log(data)
+            const { data } = await axios.get(`${host}/${route}`);
             setData(data);
         }
         catch (error) {
@@ -168,7 +164,7 @@ const App = () => {
     const handleCellEditCommit = React.useCallback(
         ({ id, field, value }) => {
             //update database
-            axios.put(`/${page}`, {id, field, value})
+            axios.put(`${host}/${page}`, {id, field, value})
             .then(response => {
               console.log(response);
             })
@@ -183,7 +179,7 @@ const App = () => {
         //run change submission
         let route = page;
         console.log(inputs)
-        axios.post(`/${route}`, inputs)
+        axios.post(`${host}/${route}`, inputs)
           .then(response => {
             console.log(response);
           })
@@ -242,7 +238,7 @@ const App = () => {
     const handleDelete = () => {
         let id = chosenRow;
         //delete entry from database;
-        axios.delete(`/${page}/${id}`)//, id)
+        axios.delete(`${host}/${page}/${id}`)//, id)
         .then(response => {
             console.log(response);
         })
@@ -359,13 +355,6 @@ const App = () => {
                             }
 
                         </div>
-<<<<<<< HEAD
-                        <div className="delete">
-                                {!!deleteShow &&
-                                    <div>
-                                        <button onClick={handleDelete}>DELETE</button>
-                                    </div>
-=======
                         <div className="buttons">
                                 <FreshSensor
                                     // data={rows[chosenRow]}
@@ -373,15 +362,9 @@ const App = () => {
                                     onSubmit={onSubmit}
                                     //fields={columns}DONT NEED
                                 />
-<<<<<<< HEAD
                                 {!!deleteShow &&
-                                    <div>
-                                        <button onClick={handleDelete}>DELETE</button>
-=======
-                                {!!deleteShow && 
                                     <div className="buttons">
                                         <button onClick={handleDelete}>Delete Row</button>
->>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
                                         <NewSensor
                                             // data={rows[chosenRow]}
                                             data={rows[chosenRow - 1]}
@@ -389,7 +372,6 @@ const App = () => {
                                             //fields={columns}DONT NEED
                                         />
                                     </div>
->>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
                                 }
                         </div>
                         {/* <div className = "addData">

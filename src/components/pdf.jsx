@@ -155,21 +155,7 @@ const PDF = (input) => {
         find(senstype, sensor);
     },[sensor])
 
-<<<<<<< HEAD
-    // //if valid state changes, continue with data retrieval
-    // useEffect(() => {
-    //     if(valid){
-    //         setSensorCode(sensor);//input string
-    //     }
-    //     else{
-    //         setSensorCode('');//set code to empty string
-    //     }
-    // },[sensor,valid])
-
-    //once code is set, get data
-=======
     //once code is set & confirmed valid, get data for sensor
->>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
     useEffect(() => {
         if(sensorCode.length > 1) {
             if (sensorType === 'catalog') {
@@ -184,11 +170,7 @@ const PDF = (input) => {
         }
     },[sensorCode])
 
-<<<<<<< HEAD
-
-=======
     //catalog
->>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
     useEffect(() => {
         if(sensorData.part_number) {
             let segments = sensorCode.split('-');
@@ -202,17 +184,14 @@ const PDF = (input) => {
     //custm.type is now part of data packet
     useEffect(() => {
         if(customData.part_number) {
-<<<<<<< HEAD
-            setChar(customData.closest_char);
-            getType(customData.closest_char);
-        }
-=======
+        //     setChar(customData.closest_char);
+        //     getType(customData.closest_char);
+        // }
             setChar(customData.char);
             //console.log({customData})
             //getType(customData.char);
             setType(customData.type);
-        }    
->>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
+        }
     },[customData])
 
     //once we have proto data package, need type from char
@@ -220,7 +199,7 @@ const PDF = (input) => {
         if(protoData.xproto_part_number) {
             setChar(protoData.char);
             getType(protoData.char);
-        }    
+        }
     },[protoData])
 
     //once we have sensor data package, call breakdown to split into relevant parts
@@ -261,7 +240,7 @@ const PDF = (input) => {
             getImages();
         }
     },[paths]);
-    
+
 
     /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -302,7 +281,7 @@ const PDF = (input) => {
         if(sensorType === 'catalog'){
             try {
                 const { data } = await axios.get(`${host}/type`, {params: {type}});
-                //get type from char instead of type.... 
+                //get type from char instead of type....
                 //console.log({data})
                 //setType(sensorData.type);
                 setType(data[0].type);
@@ -342,7 +321,7 @@ const PDF = (input) => {
         let H = segments[0];
         let C = segments[1];
         let sensor_code = sensorData.sensor_code;
-        let splitOps = sensor_code.split(H); 
+        let splitOps = sensor_code.split(H);
         let Conn = splitOps[1];
         let opt = splitOps[0].slice(C.length); //get accurate option code
 
@@ -362,7 +341,7 @@ const PDF = (input) => {
 
 
         // //format and set html object with text...
-        // getHtml(C); --> now called in getType... 
+        // getHtml(C); --> now called in getType...
     }
     const getPaths = async(hs, cn, op, ch) => {
         //console.log('getPaths', {hs, cn, op, ch});
@@ -398,7 +377,7 @@ const PDF = (input) => {
         template.conn = c_ch;
         template.spec = sp_ch;
         template.pic = pic;
-        
+
 
         //set the image path state
         setPaths(template);
@@ -461,7 +440,7 @@ const PDF = (input) => {
             axios.get(`${host}/html/bullets/${char}`),
             axios.get(`${host}/html/description/${char}`),
         ])
-        
+
         let results = [];
         for(let i = 0; i < responses.length; i++) {
             if(responses[i].status === 'fulfilled'){
@@ -485,7 +464,7 @@ const PDF = (input) => {
             axios.get(`${host}/html/description/${sensor}`),
             axios.get(`${host}/html/description/${char}`),
         ])
-        
+
         let results = [];
         for(let i = 0; i < responses.length; i++) {
             if(responses[i].status === 'fulfilled'){
@@ -593,7 +572,6 @@ const PDF = (input) => {
         let images = convert.images(results);
         setImages(images);
     }
-<<<<<<< HEAD
     /////////////////////////////////////////////
 
 
@@ -663,9 +641,6 @@ const PDF = (input) => {
     }
     /////////////////////////////////////////////
 
-=======
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
->>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
 
 
 
@@ -703,9 +678,7 @@ const PDF = (input) => {
                                 ))}
                             </ul>
                         </div>
-<<<<<<< HEAD
-=======
-                        {(sensorType === 'catalog') && 
+                        {(sensorType === 'catalog') &&
                             <div className="images">
                                 <img className="type" src={images.type} alt={`type/${type} not found`}/>
                                 <img className="mech" src={images.mech} alt={`mech/${paths.mech} not found`}/>
@@ -717,7 +690,6 @@ const PDF = (input) => {
                             </div>
                         }
                         {(sensorType === 'custom') &&
->>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
                         <div className="images">
                             <img className="type" src={images.type} alt={`type/${type} not found`}/>
                             <img className="mech" src={images.mech} alt={`mech/${housing} not found`}/>
@@ -727,13 +699,9 @@ const PDF = (input) => {
                             <img className="conn_chart" src={images.conn_chart} alt={`conn_charts/${connChart} not found`}/>
                             <img className="date" src={date}></img>
                         </div>
-<<<<<<< HEAD
+                        }
 
-=======
-                        }   
 
-    
->>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
                         <div className="description" id="description" dangerouslySetInnerHTML={convert.createMarkup(htmlRaw)}/>
 
                         <div className='footer'>
@@ -741,14 +709,7 @@ const PDF = (input) => {
                         </div>
                     </div>
                     <div className="page2" id="page2">
-<<<<<<< HEAD
                         {(sensorType === 'catalog') &&
-                            <div className="header" >
-                                <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
-                                <br></br>
-                                <span style={{fontSize:'12pt'}}><i>{description}</i></span>
-=======
-                        {(sensorType === 'catalog') && 
                             <div>
                                 <div className="header" >
                                     <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><b>{type_description}</b></span>
@@ -759,17 +720,9 @@ const PDF = (input) => {
                                     <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${paths.spec} not found`}/>
                                     <img className="picture" src={images.picture} alt={`pictures/${paths.pic} not found`}/>
                                 </div>
->>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
                             </div>
                         }
-<<<<<<< HEAD
                         {(sensorType === 'custom') &&
-                            <div className="headerCust" >
-                                <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><i>{description}</i></span>
-                                {/* <br></br>
-                                <span style={{fontSize:'12pt'}}><i>{description}</i></span> */}
-=======
-                        {(sensorType === 'custom') && 
                             <div>
                                 <div className="headerCust" >
                                     <span style={{fontSize:'14pt'}}><b>{sensorCode}  -  </b></span> <span style={{fontSize:'12pt'}}><i>{description}</i></span>
@@ -780,10 +733,9 @@ const PDF = (input) => {
                                     <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${images.spec_chart} not found`}/>
                                     <img className="picture" src={images.picture} alt={`pictures/${images.picture} not found`}/>
                                 </div>
->>>>>>> 289b222a0b0cd236a4dde821a499abaea5a11543
                             </div>
                         }
-                        
+
                         {/* <div className="images">
                             <img className="spec_chart" src={images.spec_chart} alt={`spec_charts/${images.spec_chart} not found`}/>
                             <img className="picture" src={images.picture} alt={`pictures/${images.picture} not found`}/>

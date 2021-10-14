@@ -3,7 +3,6 @@
 const html2text = (option, data) => {
     if(option === 1) {
         //bullets
-<<<<<<< HEAD
         if(!data){
             var bullets_html = require(`/Users/jverploeg/Desktop/webApp/images/pdf_bullets/${char}.html`).default;
             var tester = bullets_html.split('\n');
@@ -14,13 +13,11 @@ const html2text = (option, data) => {
         tester.pop();
         tester.shift();
         let inputs = JSON.parse(JSON.stringify(tester));
-=======
         let temp =  data.split('\n');
         let result = [];
         temp.pop();
         temp.shift();
         let inputs = JSON.parse(JSON.stringify(temp)); //deep copy to modify
->>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
         for (let i = 0; i < inputs.length; i++){
             //replace any list items
             let focus = inputs[i].replace(/<[^>]+>/g, '');
@@ -66,7 +63,7 @@ const html2text = (option, data) => {
     }else if(option === 2) {
         //raw html file
 <<<<<<< HEAD
-        
+
 >>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
 =======
 
