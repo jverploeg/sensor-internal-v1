@@ -1,29 +1,22 @@
 // FUNCTIONAL DEPENDENCIES
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-
-
 // STYLING DEPENDENCIES
 import { DataGrid, GridRowsProp, GridColDef, getInitialGridRowState } from '@material-ui/data-grid';
-
-
 // SUBCOMPONENTS
 import Search from './search';
 import NewSensor from './newSensor';
 import FreshSensor from './freshSensor';
-
-
 // CUSTOM HOOKS
 import useToggle from './toggle';
-
-
 // HELPERS
 //import callDB from '../helpers/appRequests';
 import Tables from './tables';
 
+
+
 const App = () => {
     let viewports = ['Home', 'Housing', 'Char', 'Option', 'Char_Op', 'Connection', 'Sensor', 'Custom'];//, 'Xproto'];//, 'Settings']; //array of view options. tables with all have similar setup, home is different
-
     //////////////STATE DECLARATION////////////////////////////////////////////////////
     const [page, setPage] = useState({}); //initialize to homepage on initial render
     const [data, setData] = useState([]); //data fetched from database
@@ -36,12 +29,8 @@ const App = () => {
     const [select, setButton] = useState(''); // sets the state for styling currentPage in navbar
     const [deleteShow, setShow] = useState(false);//useToggle();
     const [chosenRow, setChosen] = useState([]);
-
     const [open, setOpen] = useState(false);
-
     /////////////////////////////////////////////////////////////////////////////////////
-
-
     /////////////////////RERENDER PAGE ON TRIGGERS////////////////////////////////////////////
     useEffect(() => {
         //getData();
@@ -71,10 +60,9 @@ const App = () => {
         setChosen([]);
     },[rows])
     /////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-    const host = `http://192.168.1.118:3000`;
+    //const host = `http://192.168.1.118:3000`;
+    //const host = `http://10.45.1.114:3000`;
+    const host = `http://localhost:3000`;
     //////////REQUESTS/////////////////////
     const getData = async() => {
         // setShow(false);
@@ -88,14 +76,12 @@ const App = () => {
         catch (error) {
             console.log(error)
         }
-
         /////////////////////////////////////////////////
         //TODO: implement helpers later. these are causing errors right now...
         //let temp = callDB.getData(page);//await callDB.getData(page);
         //console.log('appdata', temp)
         ///////////////////////////////////////////////////////////////////
     }
-
     const getColumns = () => {
         var cols = [];
         if(page === 'Housing'){
@@ -152,9 +138,6 @@ const App = () => {
     */
     ///////////////////////////////////////
 
-
-
-
     ////////EVENT HANDLERS////////////
     // Universal input bar handler
     const handleChange = (e) => {
@@ -174,7 +157,6 @@ const App = () => {
         },
         [rows],
       );
-
     const handleSubmit = () => {
         //run change submission
         let route = page;
@@ -234,7 +216,6 @@ const App = () => {
         },
         [rows],
     );
-
     const handleDelete = () => {
         let id = chosenRow;
         //delete entry from database;
@@ -261,7 +242,6 @@ const App = () => {
     }
     // const createSimilar = () => {
     //     //transfer current selection data to a modal with prefilled forms...
-
     // }
     // const handleOpen = () => {
     //     setOpen(true);
@@ -302,9 +282,6 @@ const App = () => {
             console.log(error);
           });
     };
-
-
-
     //DOM
     return(
         <div className = "page">
@@ -395,5 +372,4 @@ const App = () => {
         </div>
     )
 };
-
 export default App;

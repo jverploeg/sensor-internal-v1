@@ -125,7 +125,7 @@ const checkSensor = (req, res) => {
             res.status(500).send(error)
         })
     } else if(type === 'xproto'){
-        db.xprotoExists(sensor)   
+        db.xprotoExists(sensor)
         .then(result => {
             res.send(result);
         })
@@ -146,7 +146,7 @@ const getSensor = (req, res) => {
     })
 }
 
-//non wiz catalog don't always have a type column value 
+//non wiz catalog don't always have a type column value
 const getType = (req, res) => {
     let data = req.query.type; //passing in the char code (ex 18ADSO)
     db.getType(data)
@@ -202,24 +202,17 @@ const getProtoType = (req, res) => {
 
 
 const getImage = (req, res) => {
-<<<<<<< HEAD
     ///Users/jverploeg/Desktop/webApp/csv_files/v2/
   let filepath = `/Users/jverploeg/Desktop/webApp/images`;
-=======
-  let filepath = `D:/DATA/Sensor/webApp/images`;
-  //let filepath2 = `192.168.1.116/IntWeb`;//`\\qbserver\IntWeb`;
->>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
   let route = req.url.slice(8);
   //combine Absolute path to local storage with endpoint
   let package = `${filepath}/${route}.png`;
   //send image file to client
   res.sendFile(package);
-<<<<<<< HEAD
-=======
-}  
+}
 //require(`D:/DATA/Sensor/webApp/images/pdf_bullets/${file1}.html`).default;
 const getBullets = (req, res) => {
-    let folder = `D:/DATA/Sensor/webApp/images/pdf_bullets/`;
+    let folder = `/Users/jverploeg/Desktop/webApp/images/pdf_bullets/`;
     let file = req.url.slice(14);
       //combine Absolute path to local storage with endpoint
     let package = `${folder}/${file}.html`;
@@ -227,13 +220,12 @@ const getBullets = (req, res) => {
 }
 //require(`D:/DATA/Sensor/webApp/images/descriptions/${file1}.html`)
 const getHTML = (req, res) => {
-    let folder = `D:/DATA/Sensor/webApp/images/descriptions/`;
-    
+    let folder = `/Users/jverploeg/Desktop/webApp/images/descriptions/`;
+
     let file = req.url.slice(17);
       //combine Absolute path to local storage with endpoint
     let package = `${folder}/${file}.html`;
     res.sendFile(package);
->>>>>>> bfc76fed7e1aa3b892e070865117e5f94821f45a
 }
 
 
