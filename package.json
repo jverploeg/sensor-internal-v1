@@ -9,6 +9,7 @@
     "watch": "webpack --watch",
     "help": "webpack --help",
     "server": "nodemon server/index.js",
+    "stop": "node server/index.stop.js",
     "seed": "psql -U senadmin < database/schema_v2.sql",
     "export": "psql -U senadmin < database/backup.sql"
   },

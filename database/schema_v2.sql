@@ -146,25 +146,25 @@ copy custom (custom_sensor_code, part_number, rev, Title, type, housing, char, o
 ----------------------------------
 
 ----------XPROTO--------------------
-DROP TABLE IF EXISTS xproto CASCADE;
-CREATE TABLE xproto
-(
-    xproto_id           integer GENERATED ALWAYS AS IDENTITY,
-    xproto_code         varchar, -- UNIQUE,
-    xproto_part_number  varchar UNIQUE, -- deleted/modified duplicates -> multiple entries with variations...
-    rev                 varchar,
-    Description         varchar, -- NOT NULL,
-    notes               varchar,
-    housing             varchar,
-    char                varchar,
-    opt                 varchar,
-    connection          varchar,
-    PRIMARY KEY (xproto_id)--, part_number) --, custom_sensor_code)
-);
-DROP INDEX if EXISTS xproto_key;
-CREATE INDEX xproto_key ON xproto (xproto_part_number);
-copy xproto (xproto_code, xproto_part_number, rev, Description, notes, housing, char, opt, connection) from 'D:\DATA\Sensor\webApp\csv_files\v4\xproto.csv'  delimiter ',' csv header encoding 'latin1';
-----------------------------------------
+-- DROP TABLE IF EXISTS xproto CASCADE;
+-- CREATE TABLE xproto
+-- (
+--     xproto_id           integer GENERATED ALWAYS AS IDENTITY,
+--     xproto_code         varchar, -- UNIQUE,
+--     xproto_part_number  varchar UNIQUE, -- deleted/modified duplicates -> multiple entries with variations...
+--     rev                 varchar,
+--     Description         varchar, -- NOT NULL,
+--     notes               varchar,
+--     housing             varchar,
+--     char                varchar,
+--     opt                 varchar,
+--     connection          varchar,
+--     PRIMARY KEY (xproto_id)--, part_number) --, custom_sensor_code)
+-- );
+-- DROP INDEX if EXISTS xproto_key;
+-- CREATE INDEX xproto_key ON xproto (xproto_part_number);
+-- copy xproto (xproto_code, xproto_part_number, rev, Description, notes, housing, char, opt, connection) from 'D:\DATA\Sensor\webApp\csv_files\v4\xproto.csv'  delimiter ',' csv header encoding 'latin1';
+-- ----------------------------------------
 
 
 
